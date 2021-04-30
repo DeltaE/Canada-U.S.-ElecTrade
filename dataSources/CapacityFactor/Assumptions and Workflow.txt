@@ -1,0 +1,17 @@
+The following assumptions were made while collecting PV
+-SOURCE: www.rewnewables.ninja
+-Average CF for each province were used
+-The MERRA-2 (global) dataset was used
+-The system loss was set to 10%
+-Tracking was set to none
+-Tilt was set to 35 degrees
+-Azimuth was set to 180 degrees
+-Data from 2019
+
+The following assumption were made while collecting WIND
+-SOURCE: www.rewnewables.ninja
+-Average CF for each province were used
+-The MERRA-2 (global) dataset was used
+-The hum height was set to 80m
+-The turbine model was set to Vestas V90 2000
+-Data from 2019
