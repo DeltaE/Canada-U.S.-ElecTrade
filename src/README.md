@@ -1,7 +1,7 @@
 # Canada-U.S.Model Source Folder
 
 ## Contents
-Inlcuded in this folder are the five items listed below. For more information on OSeMOSYS, see their [GitHub page](https://github.com/OSeMOSYS)
+Inlcuded in this folder are the four items listed below. For more information on OSeMOSYS, see their [GitHub page](https://github.com/OSeMOSYS)
 
 ### 1. OSeMOSYS Model file 
 The OSeMOSYS model used is the [Alternative Storage Code](https://github.com/OSeMOSYS/OSeMOSYS_GNU_MathProg/releases/tag/AlternateStorageCode_v0.1) version created by T. Niet. 
@@ -14,9 +14,6 @@ Used by otoole to create the datafile from the CSVs
 
 ### 4. data folder 
 Contains all data in CSV fomat to be written to a datafile using [otoole](https://github.com/OSeMOSYS/otoole)
-
-### 5. results folder 
-Contains the selectedResults file and tables printed 
 
 ## How to Run 
 1. Update the paramter data in the /data folder 
