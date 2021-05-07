@@ -1,1 +1,3 @@
 src/results/
+dataSources/*_RAW.csv
+dataSources/*_RAW.xlsx
