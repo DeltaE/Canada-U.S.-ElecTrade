@@ -20,6 +20,9 @@ Creates an otoole formatted CSV holding the specified annual demand for the mode
 `Costs.py`  
 Creates an otool formatted CSV holding capital costs, fixed costs, OR variable costs. The script does NOT update all three files during one run. There is a user parameter inside the script to change what file to update. 
 
+`ResidualCapacity.py`
+Creates otoole formatted OperationalLife and ResidualCapacity CSVs
+
 ## Post-Processing Scripts
 
 `W_ProductionAndDemandNOTrade_24_extended.py`
