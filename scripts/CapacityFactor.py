@@ -37,7 +37,7 @@ def main():
     dfWind = renewableNinjaData('WN', regions, seasons, years)
     dfPV = renewableNinjaData('PV', regions, seasons, years)
     #dfHydro = capFactorHydro(regions, seasons, years)
-    dfGas = capFactorGas(regions, seasons, years)
+    dfFossil = read_NREL(regions, seasons, years)
 
     ###########################################
     # Writing Capacity Factor to File 
@@ -50,7 +50,7 @@ def main():
     df = df.append(dfWind)
     df = df.append(dfPV)
     #df = df.append(dfHydro)
-    df = df.append(dfGas)
+    df = df.append(dfFossil)
 
     #Print capactiyFactor dataframe to a csv 
     df.to_csv('..\\src\\data\\CapacityFactor.csv', index=False)
@@ -207,7 +207,8 @@ def monthlyAverageCF(dfIn):
 
 def seasonalAverageCF(dfIn, seasons):
     # PURPOSE: Reduces a dataframe giving one average CF day per month, to one average CF day per season
-    # INPUT: Dataframe giving the average day per month (columns = province, month, hour, value)
+    # INPUT: dfIn: Dataframe giving the average day per month (columns = province, month, hour, value)
+    #        Seasons: Dictionary showing season to month mapping 
     # OUTPUT: Dataframe giving the average day per season (columns = province, season, hour, value)
 
     #Valeus to iterate over 
@@ -292,39 +293,95 @@ def capFactorHydro(regions, seasons, years):
     
     return df
 
-def capFactorGas(regions, seasons, years):
-    # PURPOSE: Populates a hardcoded gas capacity factor for Canada 
-    # INPUT:   Regions: Disctionary showing region to province mapping 
+def read_NREL(regions, seasons, years):
+    # PURPOSE: reads the NREL raw excel data sheet
+    # INPUT:   regions: List holding what regions to print values over
     #          Seasons: Dictionary showing season to month mapping 
-    #          Years: List of years to populate values for 
-    # OUTPUT:  otoole formatted dataframe holding gas capacity factor values 
+    #          years: list holding what years to print data over
+    # OUTPUT:  otoole formatted dataframe holding capacity factor values 
+
+    #global filtering options
+    scenario = 'Moderate'
+    crpYears = 20
+    metric_case = 'Market'
+    
+    # Dictionary key is technology abbreviation in our model
+    # Dictionay value list holds how to filter input data frame 
+    # Max three list values match to columns [technology, techdetail, Alias]
+    technology = {
+        'CL':['Coal', 'IGCCHighCF'] ,
+        'CLCCS':['Coal', 'CCS30HighCF'] ,
+        'NGCC': ['NaturalGas','CCHighCF'],
+        'NGCT': ['NaturalGas','CTHighCF'],
+        'NUC': ['Nuclear'],
+        'BIO': ['Biopower','Dedicated'],
+    }
+
+    #read in file 
+    sourceFile = '..\\dataSources\\NREL_Costs.csv'
+    dfRaw = pd.read_csv(sourceFile, index_col=0)
+
+    #filter out all numbers not associated with atb 2020 study 
+    dfRaw = dfRaw.loc[dfRaw['atb_year'] == 2020]
+
+    #drop all columns not needed
+    dfRaw.drop(['atb_year','core_metric_key','Default'], axis=1, inplace=True)
+
+    #apply global filters
+    dfFiltered = dfRaw.loc[
+        (dfRaw['core_metric_case'] == metric_case) & 
+        (dfRaw['crpyears'] == crpYears) & 
+        (dfRaw['scenario'] == scenario)]
+
+    #apply capacity factor filter
+    dfCF = dfFiltered.loc[dfFiltered['core_metric_parameter'] == 'CF']
+    
+    #List to hold all output data
+    #columns = ['REGION','TECHNOLOGY','TIMESLICE','YEAR','VALUE']
+    data = []
 
     #TimeSlices to print over
     hourList = range(1,25)
-    
-    ########## HARDCODED ###########
-    ######## NEED TO UPDATE ########
-    gasCF = 0.9
-    ################################
 
-    #List to hold all data in to be written to a dataframe
-    data = []
+    #used for numerical indexing over columns shown in cost type for loop
+    colNames = list(dfCF) 
 
-    #Populate output dataframe 
-    for year in years:
-        for region in regions:
-            print(f'{region} Gas {year}')
-            for season in seasons:
-                for hour in hourList: 
+    #Loop over regions and years 
+    for region in regions:
+        for year in years:
 
-                    #create timeslice value 
-                    ts = season + str(hour)
+            #filter based on years
+            dfYear = dfCF.loc[dfCF['core_metric_variable'] == year]
 
-                    #append data to a list 
-                    data.append([region, 'GS', ts, year, gasCF])
-    
-    #write data to a dataframe and return 
-    df = pd.DataFrame(data, columns = ['REGION','TECHNOLOGY','TIMESLICE','YEAR','VALUE'])
+            #loop over technologies that contribute to total cost 
+            for tech, techFilter in technology.items():
+
+                #Filter to get desired technology
+                dfTech = dfYear
+                for i in range(len(techFilter)): 
+                    dfTech = dfTech.loc[dfTech[colNames[i+3]] == techFilter[i]]
+
+                #There should only be one line item left at this point
+                if len(dfTech) > 1:
+                    print(f'There are {len(dfTech)} rows in the {year} {tech} dataframe')
+                    print('DATA NOT WRITTEN!')
+                    exit()
+                elif len(dfTech) < 1:
+                    print(f'{tech} has a capacity factor of one in {year} for the {region} region')
+                    cf = 1
+                else:
+                    #extract capaity factor
+                    cf = dfTech.iloc[0]['value']
+
+                #write data for all timeslices in the year
+                for season in seasons:
+                    for hour in hourList:
+                        ts = season + str(hour)
+
+                        #write data to output list
+                        data.append([region, tech, ts, year, cf])
+                
+    df = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','TIMESLICE','YEAR','VALUE'])
     return df
 
 if __name__ == "__main__":

@@ -23,23 +23,28 @@ def main():
 
     #Cost type
     #ONLY RUN ONE COST TYPE AT A TIME!
+    trigger = 1
     
-    costType = ['CAPEX']
-    outFile = 'CapitalCost.csv'
-    '''
-    costType = ['Fixed O&M']
-    outFile = 'FixedCost.csv'
-    
-    costType = ['Variable O&M', 'Fuel']
-    outFile = 'VariableCost.csv'
-    '''
+    if trigger == 1:
+        costType = ['CAPEX']
+        outFile = 'CapitalCost.csv'
+    elif trigger == 2:
+        costType = ['Fixed O&M']
+        outFile = 'FixedCost.csv'
+    elif trigger == 3:
+        costType = ['Variable O&M', 'Fuel']
+        outFile = 'VariableCost.csv'
+    else:
+        print('Need to select a cost type. SCRIPT NOT RUN!')
+        exit()
+
     ###########################################
     # Cost Calculations
     ###########################################
 
-    #reads the NREL raw datafile and extracts costs 
+    #reads the NREL raw datafile and extracts costs
     dfNREL = read_NREL(costType, regions, years)
-    
+
     #Populate P2G and FC costs
     dfP2G = p2g(costType, regions, years)
     dfFc = fuelCell(costType, regions, years)
@@ -82,8 +87,10 @@ def read_NREL(costType, regions, years):
     # Max three list values match to columns [technology, techdetail, Alias]
     technology = {
         'CL':['Coal', 'IGCCHighCF'] ,
+        'CLCCS':['Coal', 'CCS30HighCF'] ,
         'HYD':['Hydropower', 'NPD4'] ,
-        'GS': ['NaturalGas','CCHighCF'],
+        'NGCC': ['NaturalGas','CCHighCF'],
+        'NGCT': ['NaturalGas','CTHighCF'],
         'WN': ['LandbasedWind','LTRG4'], 
         'PV': ['UtilityPV','KansasCity'],
         'NUC': ['Nuclear'],
