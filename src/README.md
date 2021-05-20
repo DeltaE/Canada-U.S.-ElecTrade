@@ -48,5 +48,5 @@ Condition number of scaled basis            =
 ### Condition Number  
 We consider acceptable condition numbers on the order of 1e+9 or less. See page 151 of the [CPLEX User’s Manual](https://perso.ensta-paris.fr/~diam/ro/online/cplex/cplex1271_pdfs/usrcplex.pdf)
 
-### Ax-b resid
+### Ax-b Residual
 We consider acceptable Ax-b residual numbers to be no larder then the feasibility tolerance used to solve the model. See page 272 of the [CPLEX User’s Manual]. By default the [feasability tolerance](http://www-eio.upc.edu/lceio/manuals/cplex-11/html/refparameterscplex/refparameterscplex47.html) is set to 1e-06. 
