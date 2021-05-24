@@ -46,8 +46,7 @@ def main():
     dfNREL = read_NREL(costType, regions, years)
 
     #Populate P2G and FC costs
-    dfP2G = p2g(costType, regions, years)
-    dfFc = fuelCell(costType, regions, years)
+    dfP2gSystem = p2gSystem(costType, regions, years)
 
     ###########################################
     # Writing Cost to file
@@ -56,8 +55,7 @@ def main():
     #append all csvs together
     df = pd.DataFrame(columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
     df = df.append(dfNREL)
-    df = df.append(dfP2G)
-    df = df.append(dfFc)
+    df = df.append(dfP2gSystem)
 
     #add a mode of operation column for variable cost
     if outFile == 'VariableCost.csv':
@@ -67,7 +65,7 @@ def main():
         df.insert(2,'MODE_OF_OPERATION',modeOperation,True)
     
     #Print capactiyFactor dataframe to a csv 
-    outLocation = '..\\src\\data\\' + outFile
+    outLocation = '../src/data/' + outFile
     df.to_csv(outLocation, index=False)
 
 def read_NREL(costType, regions, years):
@@ -110,7 +108,7 @@ def read_NREL(costType, regions, years):
     }
 
     #read in file 
-    sourceFile = '..\\dataSources\\NREL_Costs.csv'
+    sourceFile = '../dataSources/NREL_Costs.csv'
     dfRaw = pd.read_csv(sourceFile, index_col=0)
 
     #filter out all numbers not associated with atb 2020 study 
@@ -182,8 +180,44 @@ def read_NREL(costType, regions, years):
     df = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
     return df
 
+def p2gSystem(costType, regions, years):
+    # PURPOSE: populates power to gas AND fuel cell capital, fixed, OR variable costs 
+    # INPUT:   costType: List holding what cost we are looking for (names sasme as NREL)
+    #          regions: List holding what regions to print values over
+    #          years: list holding what years to print data over
+    # OUTPUT:  otoole formatted dataframe holding cost values 
+    
+    #read in excel file 
+    sourceFile = '../dataSources/P2G_FC_Costs.xlsx'
+    dfP2g = pd.read_excel(sourceFile, sheet_name='P2G',index_col=0)
+    dfFc = pd.read_excel(sourceFile, sheet_name='FC',index_col=0)
+
+    # list to hold values 
+    dataP2g = []
+    dataFc = []
+
+    # populate lists 
+    for region in regions:
+        for year in years:
+            p2gCost = 0
+            fcCost = 0
+            for cost in costType:
+                p2gCost = p2gCost + dfP2g.loc[year,cost]
+                fcCost = fcCost + dfFc.loc[year,cost]
+            dataP2g.append([region, 'P2G', year, p2gCost])
+            dataFc.append([region, 'FC', year, fcCost])
+    
+    #create a dataframe to hold all data 
+    data = dataP2g
+    data.extend(dataFc)
+
+    #return completed dataframe
+    df = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
+    return df
+
+
 def p2g(costType, regions, years):
-    # PURPOSE: populates power to gas capital, fixed, or variable costs 
+    # PURPOSE: populates power to gas capital, fixed, or variable costs through hardcoded values
     # INPUT:   costType: List holding what cost we are looking for (names sasme as NREL)
     #          regions: List holding what regions to print values over
     #          years: list holding what years to print data over
@@ -214,7 +248,7 @@ def p2g(costType, regions, years):
     return df
 
 def fuelCell(costType, regions, years):
-    # PURPOSE: populates power to gas capital, fixed, or variable costs 
+    # PURPOSE: populates power to gas capital, fixed, or variable costs through hardcoded values
     # INPUT:   costType: List holding what cost we are looking for (names sasme as NREL)
     #          regions: List holding what regions to print values over
     #          years: list holding what years to print data over
@@ -240,7 +274,6 @@ def fuelCell(costType, regions, years):
 
     df = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
     return df
-
 
 if __name__ == "__main__":
     main()
