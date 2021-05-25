@@ -11,62 +11,62 @@ def main():
     # INPUT: none
     # OUTPUT: none
 
-    ###########################################
-    # Model Parameters
-    ###########################################
+    for trigger in range(1,4):
 
-    #Regions to print over 
-    regions = ['W','MW','ME','E']
+        ###########################################
+        # Model Parameters
+        ###########################################
 
-    #Years to Print over
-    years = range(2019,2051,1)
+        #Regions to print over 
+        regions = ['W','MW','ME','E']
 
-    #Cost type
-    #ONLY RUN ONE COST TYPE AT A TIME!
-    trigger = 1
-    
-    if trigger == 1:
-        costType = ['CAPEX']
-        outFile = 'CapitalCost.csv'
-    elif trigger == 2:
-        costType = ['Fixed O&M']
-        outFile = 'FixedCost.csv'
-    elif trigger == 3:
-        costType = ['Variable O&M', 'Fuel']
-        outFile = 'VariableCost.csv'
-    else:
-        print('Need to select a cost type. SCRIPT NOT RUN!')
-        exit()
+        #Years to Print over
+        years = range(2019,2051,1)
 
-    ###########################################
-    # Cost Calculations
-    ###########################################
+        #Cost type
+        if trigger == 1:
+            costType = ['CAPEX']
+            outFile = 'CapitalCost.csv'
+        elif trigger == 2:
+            costType = ['Fixed O&M']
+            outFile = 'FixedCost.csv'
+        elif trigger == 3:
+            costType = ['Variable O&M', 'Fuel']
+            outFile = 'VariableCost.csv'
+        else:
+            print('Need to select a cost type. SCRIPT NOT RUN!')
+            exit()
 
-    #reads the NREL raw datafile and extracts costs
-    dfNREL = read_NREL(costType, regions, years)
+        ###########################################
+        # Cost Calculations
+        ###########################################
 
-    #Populate P2G and FC costs
-    dfP2gSystem = p2gSystem(costType, regions, years)
+        #reads the NREL raw datafile and extracts costs
+        dfNREL = read_NREL(costType, regions, years)
 
-    ###########################################
-    # Writing Cost to file
-    ###########################################
+        #Populate P2G and FC costs
+        dfP2gSystem = p2gSystem(costType, regions, years)
 
-    #append all csvs together
-    df = pd.DataFrame(columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
-    df = df.append(dfNREL)
-    df = df.append(dfP2gSystem)
+        ###########################################
+        # Writing Cost to file
+        ###########################################
 
-    #add a mode of operation column for variable cost
-    if outFile == 'VariableCost.csv':
-        modeOperation = []
-        for i in range(len(df)):
-            modeOperation.append(1)
-        df.insert(2,'MODE_OF_OPERATION',modeOperation,True)
-    
-    #Print capactiyFactor dataframe to a csv 
-    outLocation = '../src/data/' + outFile
-    df.to_csv(outLocation, index=False)
+        #append all csvs together
+        df = pd.DataFrame(columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
+        df = df.append(dfNREL)
+        df = df.append(dfP2gSystem)
+
+        #add a mode of operation column for variable cost
+        if outFile == 'VariableCost.csv':
+            modeOperation = []
+            for i in range(len(df)):
+                modeOperation.append(1)
+            df.insert(2,'MODE_OF_OPERATION',modeOperation,True)
+
+        #Print capactiyFactor dataframe to a csv 
+        outLocation = '../src/data/' + outFile
+        df.to_csv(outLocation, index=False)
+
 
 def read_NREL(costType, regions, years):
     # PURPOSE: reads the NREL raw excel data sheet
