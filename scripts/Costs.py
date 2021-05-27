@@ -18,7 +18,7 @@ def main():
         ###########################################
 
         #Regions to print over 
-        regions = ['W','MW','ME','E']
+        regions = ['CanW','CanMW','CanONT','CanQC','CanATL']
 
         #Years to Print over
         years = range(2019,2051,1)

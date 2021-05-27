@@ -112,7 +112,7 @@ rule CapacityFactor:
 
 rule CapacityToActivity:
 	output:
-		outputDir + 'CapacityToActivityUnit.csv'
+		outputDir + 'data/CapacityToActivityUnit.csv'
 	shell:
 		'python CapacityToActivity.py'
 
@@ -147,7 +147,8 @@ rule ActivityRatio:
 
 rule ReserveMargin:
 	input:
-		inputDir + 'ProvincialAnnualDemand.csv'
+		inputDir + 'ProvincialAnnualDemand.csv',
+		inputDir + 'ProvincialHourlyLoads_TimeAdjusted_AUTO_GENERATED.csv'
 	output:
 		outputDir + 'data/ReserveMargin.csv'
 	shell:
@@ -175,7 +176,8 @@ rule DemandProfile:
 	input:
 		inputDir + 'ProvincialHourlyLoads.xlsx'
 	output:
-		outputDir + 'data/SpecifiedDemandProfile.csv'
+		outputDir + 'data/SpecifiedDemandProfile.csv',
+		inputDir + 'ProvincialHourlyLoads_TimeAdjusted_AUTO_GENERATED.csv'
 	shell:
 		'python SpecifiedDemandProfile.py'
 
@@ -190,6 +192,27 @@ rule StorageLife:
 		outputDir + 'data/OperationalLifeStorage.csv'
 	shell:
 		'python StorageLife.py'
+
+rule EmissionPenalty:
+	input:
+		inputDir + 'EmissionPenaltyByYear.csv'
+	output:
+		outputDir + 'data/EmissionsPenalty.csv'
+	shell:
+		'python EmissionPenalty.py'
+
+rule RETags:
+	output:
+		outputDir + 'data/RETagTechnology.csv'
+	shell:
+		'python RETags.py'
+
+rule TechToFromStorage:
+	output:
+		outputDir + 'data/TechnologyToStorage.csv',
+		outputDir + 'data/TechnologyFromStorage.csv'
+	shell:
+		'python TechToFromStorage.py'
 
 rule otooleConvert:
 	input:

@@ -14,7 +14,7 @@ def main():
     ###EVERYTHING CURRENTLY MAPS TO MODE_OFOPERARION = 1
 
     #Region to loop over
-    regions = ['W','MW','ME','E']
+    regions = ['CanW','CanMW','CanONT','CanQC','CanATL']
 
     #Years to Print over
     years = range(2019,2051,1)

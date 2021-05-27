@@ -14,10 +14,11 @@ def main():
 
     #Dictionary holds Provice to Region mapping 
     regions = {
-        'W':['BC','AB'],
-        'MW':['SAS','MAN'],
-        'ME':['ONT','NB'],
-        'E':['QC','NS','PEI','NL']}
+        'CanW':['BC','AB'],
+        'CanMW':['SAS','MAN'],
+        'CanONT':['ONT'],
+        'CanQC':['QC'],
+        'CanATL':['NB','NS','PEI','NL']}
 
     #Dictionary holds month to season Mapping 
     seasons = {
@@ -53,7 +54,7 @@ def main():
     df = df.append(dfFossil)
 
     #Print capactiyFactor dataframe to a csv 
-    df.to_csv('..\\src\\data\\CapacityFactor.csv', index=False)
+    df.to_csv('../src/data/CapacityFactor.csv', index=False)
     
 def renewableNinjaData(tech, regions, seasons, years):
     # PURPOSE: Takes a folder of CSVs created by renewable Ninja and formats a dataframe to hold all capacity factor values 
@@ -132,7 +133,7 @@ def readRenewableNinjaCSV(csvName, province):
     # OUTPUT: Dataframe with the columns: Province, Month, Day, Hour, CF Value 
 
     #Path to file to read
-    sourceFile = '..\\dataSources\\CapacityFactor\\' + csvName
+    sourceFile = '../dataSources/CapacityFactor/' + csvName
 
     #read in csv
     df = pd.read_csv(sourceFile, header=None, skiprows=[0,1,2,3])
@@ -318,7 +319,7 @@ def read_NREL(regions, seasons, years):
     }
 
     #read in file 
-    sourceFile = '..\\dataSources\\NREL_Costs.csv'
+    sourceFile = '../dataSources/NREL_Costs.csv'
     dfRaw = pd.read_csv(sourceFile, index_col=0)
 
     #filter out all numbers not associated with atb 2020 study 

@@ -15,7 +15,7 @@ def main():
     ### EVERYTHING IS CO2 EMISSIONS
 
     #Region to loop over
-    regions = ['W','MW','ME','E']
+    regions = ['CanW','CanMW','CanONT','CanQC','CanATL']
 
     #Years to Print over
     years = range(2019,2051,1)

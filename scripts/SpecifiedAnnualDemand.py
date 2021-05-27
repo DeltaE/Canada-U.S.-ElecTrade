@@ -14,10 +14,11 @@ def main():
 
     #Dictionary holds Provice to Region mapping 
     regions = {
-        'W':['BC','AB'],
-        'MW':['SAS','MAN'],
-        'ME':['ONT','NB'],
-        'E':['QC','NS','PEI','NL']}
+        'CanW':['BC','AB'],
+        'CanMW':['SAS','MAN'],
+        'CanONT':['ONT'],
+        'CanQC':['QC'],
+        'CanATL':['NB','NS','PEI','NL']}
 
     #Years to Print over
     years = range(2019,2051,1)

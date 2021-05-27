@@ -14,10 +14,11 @@ def main():
 
     #Dictionary holds Provice to Region mapping 
     regions = {
-        'W':['BC','AB'],
-        'MW':['SAS','MAN'],
-        'ME':['ONT','NB'],
-        'E':['QC','NS','PEI','NL']}
+        'CanW':['BC','AB'],
+        'CanMW':['SAS','MAN'],
+        'CanONT':['ONT'],
+        'CanQC':['QC'],
+        'CanATL':['NB','NS','PEI','NL']}
 
     #Dictionary holds month to season Mapping 
     seasons = {
@@ -36,11 +37,14 @@ def main():
     #generate master load dataframe
     dfLoad = getLoadValues()
 
+    #save load dataframe for use in other scripts
+    dfLoad.to_csv('../dataSources/ProvincialHourlyLoads_TimeAdjusted_AUTO_GENERATED.csv', index=False)
+
     #Master list to output
     #Region, fuel, timeslice, year, value
     load = []
 
-    # Looping years here isnt super efficient. But it isnt a very long script 
+    # Looping years here isnt super inefficient. But it isnt a very long script 
     # and it make the output csv easy to read 
     for year in years:
 
@@ -84,7 +88,7 @@ def main():
 ###########################################
 
 def getLoadValues():
-    # PURPOSE: Takes hourly load value excel sheet and converts it into a mater df
+    # PURPOSE: Takes hourly load value excel sheet and converts it into a master df
     # INPUT: none
     # OUTPUT: Dataframe with the columns: Province, Month, Day, Hour, Load Value 
     #Dictionary to hold timezone shifting values 

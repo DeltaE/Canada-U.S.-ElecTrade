@@ -12,7 +12,7 @@ def main():
     # OUTPUT: none
 
     #Regions to print over 
-    regions = ['W','MW','ME','E']
+    regions = ['CanW','CanMW','CanONT','CanQC','CanATL']
 
     #Dictory to hold storage ype and op life in years
     storages = {'TANK':30}

@@ -14,10 +14,11 @@ def main():
 
     #Dictionary holds Provice to Region mapping 
     regions = {
-        'W':['BC','AB'],
-        'MW':['SAS','MAN'],
-        'ME':['ONT','NB'],
-        'E':['QC','NS','PEI','NL']}
+        'CanW':['BC','AB'],
+        'CanMW':['SAS','MAN'],
+        'CanONT':['ONT'],
+        'CanQC':['QC'],
+        'CanATL':['NB','NS','PEI','NL']}
 
     #Dictionary holds month to season Mapping 
     seasons = {
@@ -75,7 +76,7 @@ def main():
     # Writing Availability Factor to File 
     ###########################################
 
-    df.to_csv('..\\src\\data\\AvailabilityFactor.csv', index=False)
+    df.to_csv('../src/data/AvailabilityFactor.csv', index=False)
 
 if __name__ == "__main__":
     main()

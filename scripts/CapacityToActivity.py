@@ -14,7 +14,7 @@ def main():
     ## ASSUMES ALL CAPACITIES IN GW AND ALL ENNERGY IN PJ
 
     # Regions to print over
-    regions = ['W','MW','ME','E']
+    regions = ['CanW','CanMW','CanONT','CanQC','CanATL']
 
     # Techs to print over
     techs = ['HYD','WN','BIO','PV','NGCC','NGCT','NUC','CL','CLCCS','FC','P2G','OI']
