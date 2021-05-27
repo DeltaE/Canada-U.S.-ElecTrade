@@ -11,14 +11,15 @@ def main():
     # INPUT: none
     # OUTPUT: none
 
+    ###########################################
+    # Model Parameters
+    ###########################################
+
+    # Regions to print over
+    dfRegions = pd.read_csv('../src/data/REGION.csv')
+    regions = dfRegions['VALUE'].tolist()
+
     for trigger in range(1,4):
-
-        ###########################################
-        # Model Parameters
-        ###########################################
-
-        #Regions to print over 
-        regions = ['CanW','CanMW','CanONT','CanQC','CanATL']
 
         #Years to Print over
         years = range(2019,2051,1)

@@ -13,8 +13,9 @@ def main():
 
     ## WRITES TO MODE_OF_OPERATION 1
 
-    #Region to loop over
-    regions = ['CanW','CanMW','CanONT','CanQC','CanATL']
+    # Regions to print over
+    dfRegions = pd.read_csv('../src/data/REGION.csv')
+    regions = dfRegions['VALUE'].tolist()
 
     #TechnologyToStorage (Technology, Storage)
     techToStorage = {

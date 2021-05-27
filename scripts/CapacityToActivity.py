@@ -14,7 +14,8 @@ def main():
     ## ASSUMES ALL CAPACITIES IN GW AND ALL ENNERGY IN PJ
 
     # Regions to print over
-    regions = ['CanW','CanMW','CanONT','CanQC','CanATL']
+    dfRegions = pd.read_csv('../src/data/REGION.csv')
+    regions = dfRegions['VALUE'].tolist()
 
     # Techs to print over
     techs = ['HYD','WN','BIO','PV','NGCC','NGCT','NUC','CL','CLCCS','FC','P2G','OI']

@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import numpy as np
 import datetime
+from collections import defaultdict
 
 def main():
     # PURPOSE: Creates otoole formatted ReserveMargin, ReserveMarginTagFuel, and 
@@ -13,14 +14,15 @@ def main():
     # Model Parameters
     ###########################################
 
-    # Region Dictionary
-    regions = {
-        'CanW':['BC','AB'],
-        'CanMW':['SAS','MAN'],
-        'CanONT':['ONT'],
-        'CanQC':['QC'],
-        'CanATL':['NB','NS','PEI','NL']
-        }
+    #Dictionary for region to province mappings
+    regions = defaultdict(list)
+
+    # Read in regionalization file 
+    df = pd.read_csv('../dataSources/Regionalization.csv')
+    for i in range(len(df)):    
+        region = df['REGION'].iloc[i]
+        province = df['PROVINCE'].iloc[i]
+        regions[region].append(province)
     
     # holds baselione reserve margin for each province based on NERC
     # 10 percent for hydro dominated provinces

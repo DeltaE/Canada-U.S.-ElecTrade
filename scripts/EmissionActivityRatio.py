@@ -14,8 +14,9 @@ def main():
     ### EVERYTHING CURRENTLY MAPS TO MODE_OFOPERARION = 1
     ### EVERYTHING IS CO2 EMISSIONS
 
-    #Region to loop over
-    regions = ['CanW','CanMW','CanONT','CanQC','CanATL']
+    # Regions to print over
+    dfRegions = pd.read_csv('../src/data/REGION.csv')
+    regions = dfRegions['VALUE'].tolist()
 
     #Years to Print over
     years = range(2019,2051,1)
