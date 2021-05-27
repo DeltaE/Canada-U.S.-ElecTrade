@@ -18,8 +18,8 @@ def main():
     #Years to Print over
     years = range(2019,2051,1)
 
-    #Dictory to hold storage ype and cost in $/GW
-    storages = {'TANK':11673152}
+    #Dictory to hold storage ype and cost in M$/GW
+    storages = {'TANK':11.673152}
 
     #List to hold all output data
     #columns = region, storage, year, value

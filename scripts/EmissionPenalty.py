@@ -35,7 +35,7 @@ def main():
     #print all values 
     for region in regions:
         for year in years:
-            penalty = dfRaw.loc[year,'PENALTY ($/tonne)']
+            penalty = dfRaw.loc[year,'PENALTY (M$/Mtonne)']
             dataOut.append([region, 'CO2', year, penalty])
     
     #write to a csv
