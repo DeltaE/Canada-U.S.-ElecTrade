@@ -16,8 +16,9 @@ Used by otoole to create the datafile from the CSVs
 Contains all data in CSV fomat to be written to a datafile using [otoole](https://github.com/OSeMOSYS/otoole)
 
 ## How to Run 
-1. Update the paramter data in the /data folder 
-2. Run the otoole command: `otoole convert datapackage datafile datapackage.json <dataFileName.txt>`
+1. Update data in the `/dataSources` folder
+2. Navigate to the `/scripts` folder in the command line 
+3. Run the command `snakemake dataFile` from the command line to generate an OSeMOSYS compatiable datafile
 3. In the dataFile, remove the parameter `StorageLevelStart`
 4. In the dataFile, add the parameter `param default 999999999 : StorageMaxCapacity := ;`
 
