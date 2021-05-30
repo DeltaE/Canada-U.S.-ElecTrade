@@ -1,0 +1,260 @@
+#####################################
+## REQUIRED FILES 
+#####################################
+
+osemosysFiles = [
+	'AccumulatedAnnualDemand.csv',
+	'AnnualEmissionLimit.csv',
+	'AnnualExogenousEmission.csv',
+	'AvailabilityFactor.csv',
+	'CapacityFactor.csv',
+	'CapacityOfOneTechnologyUnit.csv',
+	'CapacityToActivityUnit.csv',
+	'CapitalCost.csv',
+	'CapitalCostStorage.csv',
+	'Conversionld.csv',
+	'Conversionlh.csv',
+	'Conversionls.csv',
+	'DAILYTIMEBRACKET.csv',
+	'DaysInDayType.csv',
+	'DaySplit.csv',
+	'DAYTYPE.csv',
+	'default_values.csv',
+	'DepreciationMethod.csv',
+	'DiscountRate.csv',
+	'DiscountRateStorage.csv',
+	'EMISSION.csv',
+	'EmissionActivityRatio.csv',
+	'FixedCost.csv',
+	'FUEL.csv',
+	'InputActivityRatio.csv',
+	'MinStorageCharge.csv',
+	'MODE_OF_OPERATION.csv',
+	'ModelPeriodEmissionLimit.csv',
+	'ModelPeriodExogenousEmission.csv',
+	'OutputActivityRatio.csv',
+	'OperationalLife.csv',
+	'REMinProductionTarget.csv',
+	'REGION.csv',
+	'ReserveMargin.csv',
+	'ReserveMarginTagFuel.csv',
+	'ReserveMarginTagTechnology.csv',
+	'ResidualCapacity.csv',
+	'ResidualStorageCapacity.csv',
+	'RETagFuel.csv',
+	'RETagTechnology.csv',
+	'SEASON.csv',
+	'SpecifiedAnnualDemand.csv',
+	'SpecifiedDemandProfile.csv',
+	'STORAGE.csv',
+	'StorageLevelStart.csv',
+	'StorageMaxChargeRate.csv',
+	'StorageMaxDischargeRate.csv',
+	'TECHNOLOGY.csv',
+	'TechnologyFromStorage.csv',
+	'TechnologyToStorage.csv',
+	'TIMESLICE.csv',
+	'TotalAnnualMaxCapacity.csv',
+	'TotalAnnualMaxCapacityInvestment.csv',
+	'TotalAnnualMinCapacity.csv',
+	'TotalAnnualMinCapacityInvestment.csv',
+	'TotalTechnologyAnnualActivityLowerLimit.csv',
+	'TotalTechnologyAnnualActivityUpperLimit.csv',
+	'TotalTechnologyModelPeriodActivityLowerLimit.csv',
+	'TotalTechnologyModelPeriodActivityUpperLimit.csv',
+	'TradeRoute.csv',
+	'VariableCost.csv',
+	'YEAR.csv',
+	'YearSplit.csv'
+]
+
+provinces = ['BC','AB','SAS','MAN','ONT','QC','NB','NL','NS','PEI']
+
+#####################################
+## TARGETS
+#####################################
+
+fileName = 'Canada'
+inputDir = '../dataSources/'
+outputDir = '../src/'
+
+rule all:
+	input: 
+		outputDir + fileName + '.txt'
+
+rule dataFile:
+	input:
+		outputDir + fileName + '.txt'
+
+rule lpFile:
+	input: 
+		outputDir + fileName + '.lp'
+
+#####################################
+## INTERMEDIATE RULES
+#####################################
+
+rule AvailabilityFactor:
+	input:
+		inputDir + 'Regionalization.csv'
+	output:
+		outputDir + 'data/AvailabilityFactor.csv'
+	shell:
+		'python AvailabilityFactor.py'
+
+rule CapacityFactor:
+	input:
+		inputDir + 'Regionalization.csv',
+		inputDir + 'NREL_Costs.csv',
+		expand(inputDir + 'CapacityFactor/PV_{province}.csv', province = provinces),
+		expand(inputDir + 'CapacityFactor/WN_{province}.csv', province = provinces)
+	output:
+		outputDir + 'data/CapacityFactor.csv'
+	shell:
+		'python CapacityFactor.py'
+
+rule CapacityToActivity:
+	input:
+		outputDir + 'data/REGION.csv'
+	output:
+		outputDir + 'data/CapacityToActivityUnit.csv'
+	shell:
+		'python CapacityToActivity.py'
+
+rule Costs:
+	input:
+		inputDir + 'NREL_Costs.csv',
+		inputDir + 'P2G_FC_Costs.xlsx',
+		outputDir + 'data/REGION.csv'
+	output:
+		outputDir + 'data/CapitalCost.csv',
+		outputDir + 'data/FixedCost.csv',
+		outputDir + 'data/VariableCost.csv'
+	shell:
+		'python Costs.py'
+
+rule EmissionActivityRatio:
+	input:
+		inputDir + 'EmissionActivityRatioByTechnology.csv',
+		outputDir + 'data/REGION.csv'
+	output:
+		outputDir + 'data/EmissionActivityRatio.csv'
+	shell:
+		'python EmissionActivityRatio.py'
+
+rule ActivityRatio:
+	input:
+		inputDir + 'InputActivityRatioByTechnology.csv', 
+		inputDir + 'OutputActivityRatioByTechnology.csv',
+		outputDir + 'data/REGION.csv'
+	output:
+		outputDir + 'data/InputActivityRatio.csv',
+		outputDir + 'data/OutputActivityRatio.csv'
+	shell:
+		'python InOutActivityRatio.py'
+
+rule ReserveMargin:
+	input:
+		inputDir + 'Regionalization.csv',
+		inputDir + 'ProvincialAnnualDemand.csv',
+		inputDir + 'ProvincialHourlyLoads_TimeAdjusted_AUTO_GENERATED.csv'
+	output:
+		outputDir + 'data/ReserveMargin.csv'
+	shell:
+		'python ReserveMargin.py'
+
+rule ResidualCapacity:
+	input:
+		inputDir + 'Regionalization.csv',
+		inputDir + 'OperationalLifeTechnology.csv',
+		inputDir + 'ResidualCapacitiesByProvince.csv'
+	output:
+		outputDir + 'data/ResidualCapacity.csv',
+		outputDir + 'data/OperationalLife.csv'
+	shell:
+		'python ResidualCapacity.py'
+
+rule AnnualDemand:
+	input:
+		inputDir + 'Regionalization.csv',
+		inputDir + 'ProvincialAnnualDemand.csv'
+	output:
+		outputDir + 'data/SpecifiedAnnualDemand.csv'
+	shell:
+		'python SpecifiedAnnualDemand.py'
+
+rule DemandProfile:
+	input:
+		inputDir + 'Regionalization.csv',
+		inputDir + 'ProvincialHourlyLoads.xlsx'
+	output:
+		outputDir + 'data/SpecifiedDemandProfile.csv',
+		inputDir + 'ProvincialHourlyLoads_TimeAdjusted_AUTO_GENERATED.csv'
+	shell:
+		'python SpecifiedDemandProfile.py'
+
+rule StorageCost:
+	input:
+		outputDir + 'data/REGION.csv'
+	output:
+		outputDir + 'data/CapitalCostStorage.csv'
+	shell:
+		'python StorageCosts.py'
+
+rule StorageLife:
+	input:
+		outputDir + 'data/REGION.csv'
+	output:
+		outputDir + 'data/OperationalLifeStorage.csv'
+	shell:
+		'python StorageLife.py'
+
+rule EmissionPenalty:
+	input:
+		outputDir + 'data/REGION.csv',
+		inputDir + 'EmissionPenaltyByYear.csv'
+	output:
+		outputDir + 'data/EmissionsPenalty.csv'
+	shell:
+		'python EmissionPenalty.py'
+
+rule RETags:
+	input:
+		outputDir + 'data/REGION.csv'
+	output:
+		outputDir + 'data/RETagTechnology.csv'
+	shell:
+		'python RETags.py'
+
+rule TechToFromStorage:
+	input:
+		outputDir + 'data/REGION.csv'
+	output:
+		outputDir + 'data/TechnologyToStorage.csv',
+		outputDir + 'data/TechnologyFromStorage.csv'
+	shell:
+		'python TechToFromStorage.py'
+
+rule otooleConvert:
+	input:
+		datapackage = outputDir + 'datapackage.json',
+		csvFiles = expand(outputDir + 'data/{osemosysFile}', osemosysFile = osemosysFiles)
+	output:
+		outputDir + fileName + '.txt'
+	shell:
+		'otoole convert datapackage datafile {input.datapackage} {output}'
+
+rule createLP:
+	input:
+		modelFile = outputDir + 'Osemosys_TacoMod.txt',
+		dataFile = outputDir + fileName + '.txt'
+	output:
+		outputDir + fileName + '.lp'
+	shell:
+		'glpsol -m {input.modelFile} -d {input.dataFile} --wlp {output} --check'
+
+
+#####################################
+## CLEANING RULES
+#####################################
+

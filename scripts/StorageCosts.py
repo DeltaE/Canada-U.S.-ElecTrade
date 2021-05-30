@@ -11,14 +11,15 @@ def main():
     # INPUT: none
     # OUTPUT: none
 
-    #Regions to print over 
-    regions = ['W','MW','ME','E']
+    # Regions to print over
+    dfRegions = pd.read_csv('../src/data/REGION.csv')
+    regions = dfRegions['VALUE'].tolist()
 
     #Years to Print over
     years = range(2019,2051,1)
 
-    #Dictory to hold storage ype and cost in $/GW
-    storages = {'TANK':11673152}
+    #Dictory to hold storage ype and cost in M$/GW
+    storages = {'TANK':11.673152}
 
     #List to hold all output data
     #columns = region, storage, year, value

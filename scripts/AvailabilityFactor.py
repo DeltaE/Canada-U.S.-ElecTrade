@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import numpy as np
 import datetime
+from collections import defaultdict
 
 def main():
     # PURPOSE: Creates otoole formatted AvailabilityFactor.csv datafile for Hydro
@@ -12,12 +13,15 @@ def main():
     # Model Parameters
     ###########################################
 
-    #Dictionary holds Provice to Region mapping 
-    regions = {
-        'W':['BC','AB'],
-        'MW':['SAS','MAN'],
-        'ME':['ONT','NB'],
-        'E':['QC','NS','PEI','NL']}
+    #Dictionary for region to province mappings
+    regions = defaultdict(list)
+
+    # Read in regionalization file 
+    df = pd.read_csv('../dataSources/Regionalization.csv')
+    for i in range(len(df)):    
+        region = df['REGION'].iloc[i]
+        province = df['PROVINCE'].iloc[i]
+        regions[region].append(province)
 
     #Dictionary holds month to season Mapping 
     seasons = {
@@ -75,7 +79,7 @@ def main():
     # Writing Availability Factor to File 
     ###########################################
 
-    df.to_csv('..\\src\\data\\AvailabilityFactor.csv', index=False)
+    df.to_csv('../src/data/AvailabilityFactor.csv', index=False)
 
 if __name__ == "__main__":
     main()

@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import numpy as np
 import datetime
+from collections import defaultdict
 
 def main():
     # PURPOSE: Creates otoole formatted SpecifiedDemandProfile csv file 
@@ -12,12 +13,15 @@ def main():
     # Model Parameters
     ###########################################
 
-    #Dictionary holds Provice to Region mapping 
-    regions = {
-        'W':['BC','AB'],
-        'MW':['SAS','MAN'],
-        'ME':['ONT','NB'],
-        'E':['QC','NS','PEI','NL']}
+    #Dictionary for region to province mappings
+    regions = defaultdict(list)
+
+    # Read in regionalization file 
+    df = pd.read_csv('../dataSources/Regionalization.csv')
+    for i in range(len(df)):    
+        region = df['REGION'].iloc[i]
+        province = df['PROVINCE'].iloc[i]
+        regions[region].append(province)
 
     #Dictionary holds month to season Mapping 
     seasons = {
@@ -36,11 +40,14 @@ def main():
     #generate master load dataframe
     dfLoad = getLoadValues()
 
+    #save load dataframe for use in other scripts
+    dfLoad.to_csv('../dataSources/ProvincialHourlyLoads_TimeAdjusted_AUTO_GENERATED.csv', index=False)
+
     #Master list to output
     #Region, fuel, timeslice, year, value
     load = []
 
-    # Looping years here isnt super efficient. But it isnt a very long script 
+    # Looping years here isnt super inefficient. But it isnt a very long script 
     # and it make the output csv easy to read 
     for year in years:
 
@@ -84,7 +91,7 @@ def main():
 ###########################################
 
 def getLoadValues():
-    # PURPOSE: Takes hourly load value excel sheet and converts it into a mater df
+    # PURPOSE: Takes hourly load value excel sheet and converts it into a master df
     # INPUT: none
     # OUTPUT: Dataframe with the columns: Province, Month, Day, Hour, Load Value 
     #Dictionary to hold timezone shifting values 

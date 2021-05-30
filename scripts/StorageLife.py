@@ -11,8 +11,9 @@ def main():
     # INPUT: none
     # OUTPUT: none
 
-    #Regions to print over 
-    regions = ['W','MW','ME','E']
+    # Regions to print over
+    dfRegions = pd.read_csv('../src/data/REGION.csv')
+    regions = dfRegions['VALUE'].tolist()
 
     #Dictory to hold storage ype and op life in years
     storages = {'TANK':30}

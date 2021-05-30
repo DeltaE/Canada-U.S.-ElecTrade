@@ -3,82 +3,119 @@
 ## Contents
 Inlcuded in this folder are the scripts used to pre-process and post-process data 
 
+## Snakemake 
+A [snakemake](https://snakemake.readthedocs.io/en/stable/) workflow has been implemented to eaisly create new datafiles when itterating through scenarios. To generate the datafile, run the command:
+1. Navigate to the `scripts/` directory in the command line  
+2. Execute the command `snakemake dataFile`  
+3. Manually replace the datafile parameter StorageLevelStart as described [here](https://github.com/DeltaE/Canada-U.S.-ElecTrade/tree/main/src)  
+
 ## Pre-Processing Scripts
+Below are the pre-processing scripts that are run through the snakemake workflow. Each heading lists the parameter that is generated through the script. 
 
 ### Availability Factor
 - Script: `AvailabilityFactor.py`  
 - Purpose: Creates an otoole formatted CSV holding availability factors for Hydro. If Hydro Availability Factors are used, be sure to remove hydro capacity factor  
-- DataFiles: None. Capacity and Generation Values are hardcoded into the script  
+- DataFiles: `dataSources/Regionalization.csv`. Capacity and Generation Values are hardcoded into the script  
 
 ### Capacity Factor
 - Script: `CapacityFactor.py`  
 - Purpose: Creates an otoole formatted CSV holding capacity for all technologies. If Hydro Capacity Factors are used, be sure to remove hydro availabilty factor  
-- DataFiles: `dataSources/NREL_Costs.csv`, `dataSources/CapacityFactor`. FC and P2G values are hardcoded in  
-
-### Specified Demand Profile 
-- Script: `SpecifiedDemandProfile.py`  
-- Purpose: Creates an otoole formatted CSV holding the specified demand profile for the model. Accounts for time zones and daylight saving time    
-- DataFiles: `dataSources/ProvincialHourlyLoads.csv`  
-
-### Specified Annual Demand
-- Script: `SpecifiedAnnualDemand.py`  
-- Purpose: Creates an otoole formatted CSV holding the specified annual demand for the model
-- DataFiles: `dataSources/ProvincialAnnualDemand.csv`
-
-### Capital Costs
-- Script: `Costs.py` 
-- Purpose: Creates an otool formatted CSV holding capital costs. A user parameter changes if you print capital, fixed, or variable costs  
-- DataFiles: `dataSources/NREL_Costs.csv`, `dataSources/P2G_FC_Costs.xlsx` 
-
-### Fixed Costs
-- Script: `Costs.py` 
-- Purpose: Creates an otool formatted CSV holding fixed costs. A user parameter changes if you print capital, fixed, or variable costs  
-- DataFiles: `dataSources/NREL_Costs.csv`, `dataSources/P2G_FC_Costs.xlsx`  
-
-### Variable Costs
-- Script: `Costs.py` 
-- Purpose: Creates an otool formatted CSV holding variable costs. A user parameter changes if you print capital, fixed, or variable costs  
-- DataFiles: `dataSources/NREL_Costs.csv`, `dataSources/P2G_FC_Costs.xlsx` 
-
-### Residual Capacity
-- Script: `ResidualCapacity.py`
-- Purpose: Creates an otoole formatted OperationalLife **AND** ResidualCapacity CSVs  
-- DataFiles: `dataSources/OperationalLifeTechnology.csv`, `dataSources/ResidualCapacitiesByProvince`  
-
-### Input Activity Ratio
-- Script: `InOutActivityRatio.py`  
-- Purpose: Creates otoole formatted InputActivityRatio **AND** OutputActivityRatio CSVs  
-- DataFiles: `dataSources/InputActivityRatioByTechnology.csv`, `dataSources/OutputActivityRatioByTechnology.csv`
-
-### Output Activity Ratio
-- Script: `InOutActivityRatio.py`  
-- Purpose: Creates otoole formatted InputActivityRatio **AND** OutputActivityRatio CSVs  
-- DataFiles: `dataSources/InputActivityRatioByTechnology.csv`, `dataSources/OutputActivityRatioByTechnology.csv`
+- DataFiles: `dataSources/Regionalization.csv`,`dataSources/NREL_Costs.csv`, `dataSources/CapacityFactor`. FC and P2G values are hardcoded in  
 
 ### Capacity to Activity Unit
 - Script: `CapacityToActivity.py`  
 - Purpose: Creates otoole formatted CapacityToActivityUnit CSV. Assumes all usints are in GW and PJ  
-- DataFiles: None. GW -> PJ conversion factor hardcoded in  
+- DataFiles: `src/data/REGION.csv`. GW -> PJ conversion factor hardcoded in  
 
-### Emission Activity Ratio
-- Script: `EmissionActivityRatio.py`  
-- Purpose: Creates otoole formatted Emission Activity Ratio CSV  
-- DataFiles: `dataSources/EmissionActivityRatioByTechnology.csv`  
-
-### Reserve Margin
-- Script: `ReserveMargin.py`
-- Purpose: Creates an otoole formatted ReserveMargin file
-- DataFiles: None. Reserve margins are hardcoded in 
+### Capital Costs
+- Script: `Costs.py` 
+- Purpose: Creates an otool formatted CSV holding capital costs. Capital, fixed, and variable costs are all updated with this script
+- DataFiles: `src/data/REGION.csv`, `dataSources/NREL_Costs.csv`, `dataSources/P2G_FC_Costs.xlsx` 
 
 ### Capital Cost Storage
 - Script: `StorageCosts.py`
 - Purpose: Creates an otoole formatted CapitalCostStorage CSV
-- DataFiles: None. Capital Cost hardcoded in
+- DataFiles: `src/data/REGION.csv`. Capital Cost hardcoded in
+
+### Emission Activity Ratio
+- Script: `EmissionActivityRatio.py`  
+- Purpose: Creates otoole formatted Emission Activity Ratio CSV  
+- DataFiles: `src/data/REGION.csv`, `dataSources/EmissionActivityRatioByTechnology.csv` 
+
+### Emissions Penalty
+- Script: `EmissionPenalty.py`  
+- Purpose: Creates otoole formatted EmissionsPenalty CSV  
+- DataFiles: `src/data/REGION.csv`, `dataSources/EmissionPenaltyByYear.csv` 
+
+### Fixed Costs
+- Script: `Costs.py` 
+- Purpose: Creates an otool formatted CSV holding fixed costs. Capital, fixed, and variable costs are all updated with this script
+- DataFiles: `src/data/REGION.csv`, `dataSources/NREL_Costs.csv`, `dataSources/P2G_FC_Costs.xlsx`  
+
+### Input Activity Ratio
+- Script: `InOutActivityRatio.py`  
+- Purpose: Creates otoole formatted InputActivityRatio **AND** OutputActivityRatio CSVs  
+- DataFiles: `src/data/REGION.csv`, `dataSources/InputActivityRatioByTechnology.csv`, `dataSources/OutputActivityRatioByTechnology.csv`
+
+### Operational Life
+- Script: `ResidualCapacity.py`
+- Purpose: Creates an otoole formatted OperationalLife **AND** ResidualCapacity CSVs  
+- DataFiles: `dataSources/Regionalization.csv`, `dataSources/OperationalLifeTechnology.csv`, `dataSources/ResidualCapacitiesByProvince`  
 
 ### Operational Life Storage
 - Script: `StorageCosts.py`
 - Purpose: Creates an otoole formatted OperationalLifeStorage CSV
-- DataFiles: None. Storage Capital Cost Hardcoded in
+- DataFiles: `src/data/REGION.csv`. Storage Capital Cost Hardcoded in
+
+### Output Activity Ratio
+- Script: `InOutActivityRatio.py`  
+- Purpose: Creates otoole formatted InputActivityRatio **AND** OutputActivityRatio CSVs  
+- DataFiles: `src/data/REGION.csv`, `dataSources/InputActivityRatioByTechnology.csv`, `dataSources/OutputActivityRatioByTechnology.csv`
+
+### Region
+- Script: `Regionalization.py`
+- Purpose: Creates otoole formatted REGIONS set file
+- DataFiles: `dataSource/Regionalization.csv`
+
+### Reserve Margin
+- Script: `ReserveMargin.py`  
+- Purpose: Creates an otoole formatted ReserveMargin file  
+- DataFiles: `dataSources/Regionalization.csv`, `dataSources/ProvincialAnnualDemand.csv`. NERC Reserve margins are hardcoded in   
+
+### Residual Capacity
+- Script: `ResidualCapacity.py`  
+- Purpose: Creates an otoole formatted OperationalLife **AND** ResidualCapacity CSVs  
+- DataFiles: `dataSources/Regionalization.csv`, `dataSources/OperationalLifeTechnology.csv`, `dataSources/ResidualCapacitiesByProvince`  
+
+### RE Tag Technology
+- Script: `RETags.py`  
+- Purpose: Creates an otoole formatted RETagTechnology CSVs  
+- DataFiles: `src/data/REGION.csv`. Technologies hardcoded in  
+
+### Specified Demand Profile 
+- Script: `SpecifiedDemandProfile.py`  
+- Purpose: Creates an otoole formatted CSV holding the specified demand profile for the model. Accounts for time zones and daylight saving time    
+- DataFiles: `dataSources/Regionalization.csv`, `dataSources/ProvincialHourlyLoads.csv`  
+
+### Specified Annual Demand
+- Script: `SpecifiedAnnualDemand.py`  
+- Purpose: Creates an otoole formatted CSV holding the specified annual demand for the model
+- DataFiles: `dataSources/Regionalization.csv`, `dataSources/ProvincialAnnualDemand.csv`
+
+### Technology From Storage
+- Script: `TechToFromStorage.py`  
+- Purpose: Creates  otoole formatted CSVs holding TechnologyToStorage and TechnologyFromStorage  
+- DataFiles: `src/data/REGION.csv`. Technologies hardcoded in  
+
+### Technology To Storage
+- Script: `TechToFromStorage.py`  
+- Purpose: Creates  otoole formatted CSV holding TechnologyToStorage
+- DataFiles: `src/data/REGION.csv`. Technologies hardcoded in
+
+### Variable Costs
+- Script: `Costs.py` 
+- Purpose: Creates an otool formatted CSV holding variable costs. Capital, fixed, and variable costs are all updated with this script
+- DataFiles: `dataSources/NREL_Costs.csv`, `dataSources/P2G_FC_Costs.xlsx` 
 
 ## Post-Processing Scripts
 

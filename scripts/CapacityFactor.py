@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import numpy as np
 import datetime
+from collections import defaultdict
 
 def main():
     # PURPOSE: Creates otoole formatted CapacityFactor.csv datafile 
@@ -12,12 +13,15 @@ def main():
     # Model Parameters
     ###########################################
 
-    #Dictionary holds Provice to Region mapping 
-    regions = {
-        'W':['BC','AB'],
-        'MW':['SAS','MAN'],
-        'ME':['ONT','NB'],
-        'E':['QC','NS','PEI','NL']}
+    #Dictionary for region to province mappings
+    regions = defaultdict(list)
+
+    # Read in regionalization file 
+    df = pd.read_csv('../dataSources/Regionalization.csv')
+    for i in range(len(df)):    
+        region = df['REGION'].iloc[i]
+        province = df['PROVINCE'].iloc[i]
+        regions[region].append(province)
 
     #Dictionary holds month to season Mapping 
     seasons = {
@@ -53,7 +57,7 @@ def main():
     df = df.append(dfFossil)
 
     #Print capactiyFactor dataframe to a csv 
-    df.to_csv('..\\src\\data\\CapacityFactor.csv', index=False)
+    df.to_csv('../src/data/CapacityFactor.csv', index=False)
     
 def renewableNinjaData(tech, regions, seasons, years):
     # PURPOSE: Takes a folder of CSVs created by renewable Ninja and formats a dataframe to hold all capacity factor values 
@@ -132,7 +136,7 @@ def readRenewableNinjaCSV(csvName, province):
     # OUTPUT: Dataframe with the columns: Province, Month, Day, Hour, CF Value 
 
     #Path to file to read
-    sourceFile = '..\\dataSources\\CapacityFactor\\' + csvName
+    sourceFile = '../dataSources/CapacityFactor/' + csvName
 
     #read in csv
     df = pd.read_csv(sourceFile, header=None, skiprows=[0,1,2,3])
@@ -318,7 +322,7 @@ def read_NREL(regions, seasons, years):
     }
 
     #read in file 
-    sourceFile = '..\\dataSources\\NREL_Costs.csv'
+    sourceFile = '../dataSources/NREL_Costs.csv'
     dfRaw = pd.read_csv(sourceFile, index_col=0)
 
     #filter out all numbers not associated with atb 2020 study 
