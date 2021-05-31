@@ -14,18 +14,23 @@ def main():
     # Model Parameters
     ###########################################
 
-    #Dictionary for region to province mappings
-    regions = defaultdict(list)
+    # Regions to print over
+    dfRegions = pd.read_csv('../src/data/REGION.csv')
+    regions = dfRegions['VALUE'].tolist()
 
-    # Read in regionalization file 
-    df = pd.read_csv('../dataSources/Regionalization.csv')
+    #Dictionary for subregion to province mappings
+    subregions = defaultdict(list)
+
+    # Read in regionalization file to get provincial seperation
+    df = pd.read_excel('../dataSources/Regionalization.xlsx', sheet_name='CAN')
     for i in range(len(df)):    
-        region = df['REGION'].iloc[i]
+        subregion = df['REGION'].iloc[i]
         province = df['PROVINCE'].iloc[i]
-        regions[region].append(province)
+        subregions[subregion].append(province)
 
     #Years to Print over
-    years = range(2019,2051,1)
+    dfYears = pd.read_csv('../src/data/YEAR.csv')
+    years = dfYears['VALUE'].tolist()
 
     ###########################################
     # Operational Life
@@ -47,8 +52,10 @@ def main():
 
     #save operational life to list
     for region in regions:
-      for tech, value in opLife.items():
-        opLifeData.append([region,tech,value])
+      for subregion in subregions:
+        for tech, value in opLife.items():
+          techName = 'PWR' + tech + 'CAN' + subregion + '01'
+          opLifeData.append([region,techName,value])
 
     #write operational life to a csv
     dfOut = pd.DataFrame(opLifeData,columns=['REGION','TECHNOLOGY','VALUE'])
@@ -82,19 +89,24 @@ def main():
     resCapData = []
 
     #populate data list 
-    for region, provinces in regions.items():
-      dfProvince = pd.DataFrame() #Reset dataframe
-      for province in provinces:
-        dfTemp = dfResCap.loc[dfResCap['PROVINCE'] == province]
-        dfProvince = dfProvince.append(dfTemp, ignore_index=True)
-      for tech in techs:
-        for year in years:
-            dfFiltered = dfProvince.loc[(dfProvince['TECHNOLOGY'] == tech) &
-                                        (dfProvince['RETIREMENT'] >= year) &
-                                        (dfProvince['COMISSION'] <= year) ]
-            resCap = dfFiltered['CAPACITY (MW)'].sum()
-            resCap = resCap / 1000 #MW -> GW
-            resCapData.append([region, tech, year, resCap])
+    for region in regions:
+      for subregion, provinces in subregions.items():
+        dfProvince = pd.DataFrame() #Reset dataframe
+        for province in provinces:
+          dfTemp = dfResCap.loc[dfResCap['PROVINCE'] == province]
+          dfProvince = dfProvince.append(dfTemp, ignore_index=True)
+        for tech in techs:
+          for year in years:
+              dfFiltered = dfProvince.loc[(dfProvince['TECHNOLOGY'] == tech) &
+                                          (dfProvince['RETIREMENT'] >= year) &
+                                          (dfProvince['COMISSION'] <= year) ]
+              resCap = dfFiltered['CAPACITY (MW)'].sum()
+              resCap = resCap / 1000 #MW -> GW
+
+              #create correct name
+              techName = 'PWR' + tech + 'CAN' + subregion + '01'
+
+              resCapData.append([region, techName, year, resCap])
 
     #wrirte to a csv 
     dfOut = pd.DataFrame(resCapData,columns=['REGION','TECHNOLOGY','YEAR','VALUE'])

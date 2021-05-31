@@ -1,7 +1,4 @@
 import pandas as pd
-import os
-import numpy as np
-import datetime
 from collections import defaultdict
 
 def main():
@@ -13,18 +10,23 @@ def main():
     # Model Parameters
     ###########################################
 
-    #Dictionary for region to province mappings
-    regions = defaultdict(list)
-
-    # Read in regionalization file 
-    df = pd.read_csv('../dataSources/Regionalization.csv')
-    for i in range(len(df)):    
-        region = df['REGION'].iloc[i]
-        province = df['PROVINCE'].iloc[i]
-        regions[region].append(province)
-
     #Years to Print over
-    years = range(2019,2051,1)
+    dfYears = pd.read_csv('../src/data/YEAR.csv')
+    years = dfYears['VALUE'].tolist()
+
+    # Regions to print over
+    dfRegions = pd.read_csv('../src/data/REGION.csv')
+    regions = dfRegions['VALUE'].tolist()
+
+    #Dictionary for subregion to province mappings
+    subregions = defaultdict(list)
+
+    # Read in regionalization file to get provincial seperation
+    df = pd.read_excel('../dataSources/Regionalization.xlsx', sheet_name='CAN')
+    for i in range(len(df)):    
+        subregion = df['REGION'].iloc[i]
+        province = df['PROVINCE'].iloc[i]
+        subregions[subregion].append(province)
 
     ###########################################
     # Calculate demand  
@@ -38,11 +40,13 @@ def main():
     #Region, fuel, year, value
     demand = []
     
-    for region, provinces in regions.items(): 
-        dfRegion = df[regions[region]]
-        sumDemand = dfRegion.loc[:,:].sum(axis=1)
-        for year in years:
-            demand.append([region, 'ELC', year, sumDemand[year]])
+    for region in regions:
+        for subregion, provinces in subregions.items(): 
+            dfRegion = df[subregions[subregion]]
+            sumDemand = dfRegion.loc[:,:].sum(axis=1)
+            for year in years:
+                fuelName = 'ELC' + 'CAN' + subregion + '02'
+                demand.append([region, fuelName, year, sumDemand[year]])
 
     ###########################################
     # Writing Demand Files 

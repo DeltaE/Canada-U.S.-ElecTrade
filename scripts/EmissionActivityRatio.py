@@ -15,11 +15,17 @@ def main():
     ### EVERYTHING IS CO2 EMISSIONS
 
     # Regions to print over
-    dfRegions = pd.read_csv('../src/data/REGION.csv')
-    regions = dfRegions['VALUE'].tolist()
+    df = pd.read_csv('../src/data/REGION.csv')
+    regions = df['VALUE'].tolist()
+
+    # Subregions to print over
+    df = pd.read_excel('../dataSources/Regionalization.xlsx', sheet_name='CAN')
+    subregions = df['REGION'].tolist()
+    subregions = list(set(subregions)) # removes duplicates
 
     #Years to Print over
-    years = range(2019,2051,1)
+    dfYears = pd.read_csv('../src/data/YEAR.csv')
+    years = dfYears['VALUE'].tolist()
 
     ###########################################
     # Compile Emission Activity Ratio
@@ -36,10 +42,12 @@ def main():
 
     #print all values 
     for region in regions:
-        for tech in techList:
-            for year in years:
-                activityRatio = dfRaw.loc[year,tech]
-                dataOut.append([region, tech, 'CO2', 1, year, activityRatio])
+        for year in years:
+            for subregion in subregions:
+                for tech in techList:
+                    activityRatio = dfRaw.loc[year,tech]
+                    techName = 'PWR' + tech + 'CAN' + subregion + '01'
+                    dataOut.append([region, techName, 'CO2', 1, year, activityRatio])
     
     #write to a csv
     dfOut = pd.DataFrame(dataOut,columns=['REGION','TECHNOLOGY','EMISSION','MODE_OF_OPERATION','YEAR','VALUE'])

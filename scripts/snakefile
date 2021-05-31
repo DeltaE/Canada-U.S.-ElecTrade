@@ -94,9 +94,26 @@ rule lpFile:
 ## INTERMEDIATE RULES
 #####################################
 
+rule ConfigFile:
+	input:
+		inputDir + 'Regionalization.xlsx',
+		inputDir + 'Trade.csv'
+	output:
+		inputDir + 'techList_AUTO_GENERATED.csv',
+		outputDir + 'data/YEAR.csv',
+		outputDir + 'data/REGION.csv',
+		outputDir + 'data/EMISSION.csv',
+		outputDir + 'data/STORAGE.csv',
+		outputDir + 'data/TECHNOLOGY.csv',
+		outputDir + 'data/FUEL.csv'
+	shell:
+		'python config.py'
+
 rule AvailabilityFactor:
 	input:
-		inputDir + 'Regionalization.csv'
+		inputDir + 'Regionalization.xlsx',
+		outputDir + 'data/YEAR.csv',
+		outputDir + 'data/REGION.csv'
 	output:
 		outputDir + 'data/AvailabilityFactor.csv'
 	shell:
@@ -104,10 +121,12 @@ rule AvailabilityFactor:
 
 rule CapacityFactor:
 	input:
-		inputDir + 'Regionalization.csv',
+		inputDir + 'Regionalization.xlsx',
+		outputDir + 'data/YEAR.csv',
+		outputDir + 'data/REGION.csv',
 		inputDir + 'NREL_Costs.csv',
-		expand(inputDir + 'CapacityFactor/PV_{province}.csv', province = provinces),
-		expand(inputDir + 'CapacityFactor/WN_{province}.csv', province = provinces)
+		expand(inputDir + 'CapacityFactor/SPV_{province}.csv', province = provinces),
+		expand(inputDir + 'CapacityFactor/WND_{province}.csv', province = provinces)
 	output:
 		outputDir + 'data/CapacityFactor.csv'
 	shell:
@@ -115,7 +134,8 @@ rule CapacityFactor:
 
 rule CapacityToActivity:
 	input:
-		outputDir + 'data/REGION.csv'
+		outputDir + 'data/REGION.csv',
+		outputDir + 'data/TECHNOLOGY.csv'
 	output:
 		outputDir + 'data/CapacityToActivityUnit.csv'
 	shell:
@@ -123,9 +143,11 @@ rule CapacityToActivity:
 
 rule Costs:
 	input:
+		inputDir + 'Regionalization.xlsx',
+		outputDir + 'data/YEAR.csv',
+		outputDir + 'data/REGION.csv',
 		inputDir + 'NREL_Costs.csv',
-		inputDir + 'P2G_FC_Costs.xlsx',
-		outputDir + 'data/REGION.csv'
+		inputDir + 'P2G_FC_Costs.xlsx'
 	output:
 		outputDir + 'data/CapitalCost.csv',
 		outputDir + 'data/FixedCost.csv',
@@ -136,6 +158,8 @@ rule Costs:
 rule EmissionActivityRatio:
 	input:
 		inputDir + 'EmissionActivityRatioByTechnology.csv',
+		inputDir + 'Regionalization.xlsx',
+		outputDir + 'data/YEAR.csv',
 		outputDir + 'data/REGION.csv'
 	output:
 		outputDir + 'data/EmissionActivityRatio.csv'
@@ -146,26 +170,35 @@ rule ActivityRatio:
 	input:
 		inputDir + 'InputActivityRatioByTechnology.csv', 
 		inputDir + 'OutputActivityRatioByTechnology.csv',
-		outputDir + 'data/REGION.csv'
+		inputDir + 'Regionalization.xlsx',
+		outputDir + 'data/YEAR.csv',
+		outputDir + 'data/REGION.csv',
+		inputDir + 'techList_AUTO_GENERATED.csv'
 	output:
 		outputDir + 'data/InputActivityRatio.csv',
 		outputDir + 'data/OutputActivityRatio.csv'
 	shell:
 		'python InOutActivityRatio.py'
 
-rule ReserveMargin:
-	input:
-		inputDir + 'Regionalization.csv',
-		inputDir + 'ProvincialAnnualDemand.csv',
-		inputDir + 'ProvincialHourlyLoads_TimeAdjusted_AUTO_GENERATED.csv'
-	output:
-		outputDir + 'data/ReserveMargin.csv'
-	shell:
-		'python ReserveMargin.py'
+
+#rule ReserveMargin:
+#	input:
+#		inputDir + 'Regionalization.xlsx',
+#		inputDir + 'ProvincialAnnualDemand.csv',
+#		inputDir + 'ProvincialHourlyLoads_TimeAdjusted_AUTO_GENERATED.csv'
+#	output:
+#		outputDir + 'data/ReserveMargin.csv'
+#		outputDir + 'data/ReserveMarginTagTechnology.csv'
+#		outputDir + 'data/ReserveMarginTagFuel.csv'
+#	shell:
+#		'python ReserveMargin.py'
+
 
 rule ResidualCapacity:
 	input:
-		inputDir + 'Regionalization.csv',
+		inputDir + 'Regionalization.xlsx',
+		outputDir + 'data/YEAR.csv',
+		outputDir + 'data/REGION.csv',
 		inputDir + 'OperationalLifeTechnology.csv',
 		inputDir + 'ResidualCapacitiesByProvince.csv'
 	output:
@@ -176,7 +209,9 @@ rule ResidualCapacity:
 
 rule AnnualDemand:
 	input:
-		inputDir + 'Regionalization.csv',
+		inputDir + 'Regionalization.xlsx',
+		outputDir + 'data/YEAR.csv',
+		outputDir + 'data/REGION.csv',
 		inputDir + 'ProvincialAnnualDemand.csv'
 	output:
 		outputDir + 'data/SpecifiedAnnualDemand.csv'
@@ -185,7 +220,9 @@ rule AnnualDemand:
 
 rule DemandProfile:
 	input:
-		inputDir + 'Regionalization.csv',
+		inputDir + 'Regionalization.xlsx',
+		outputDir + 'data/YEAR.csv',
+		outputDir + 'data/REGION.csv',
 		inputDir + 'ProvincialHourlyLoads.xlsx'
 	output:
 		outputDir + 'data/SpecifiedDemandProfile.csv',
@@ -195,7 +232,10 @@ rule DemandProfile:
 
 rule StorageCost:
 	input:
-		outputDir + 'data/REGION.csv'
+		inputDir + 'Regionalization.xlsx',
+		outputDir + 'data/YEAR.csv',
+		outputDir + 'data/REGION.csv',
+		inputDir + 'techList_AUTO_GENERATED.csv'
 	output:
 		outputDir + 'data/CapitalCostStorage.csv'
 	shell:
@@ -203,7 +243,10 @@ rule StorageCost:
 
 rule StorageLife:
 	input:
-		outputDir + 'data/REGION.csv'
+		inputDir + 'Regionalization.xlsx',
+		outputDir + 'data/YEAR.csv',
+		outputDir + 'data/REGION.csv',
+		inputDir + 'techList_AUTO_GENERATED.csv'
 	output:
 		outputDir + 'data/OperationalLifeStorage.csv'
 	shell:
@@ -211,6 +254,7 @@ rule StorageLife:
 
 rule EmissionPenalty:
 	input:
+		outputDir + 'data/YEAR.csv',
 		outputDir + 'data/REGION.csv',
 		inputDir + 'EmissionPenaltyByYear.csv'
 	output:
@@ -220,7 +264,9 @@ rule EmissionPenalty:
 
 rule RETags:
 	input:
-		outputDir + 'data/REGION.csv'
+		inputDir + 'Regionalization.xlsx',
+		outputDir + 'data/YEAR.csv',
+		outputDir + 'data/REGION.csv',
 	output:
 		outputDir + 'data/RETagTechnology.csv'
 	shell:
@@ -228,7 +274,10 @@ rule RETags:
 
 rule TechToFromStorage:
 	input:
-		outputDir + 'data/REGION.csv'
+		inputDir + 'Regionalization.xlsx',
+		outputDir + 'data/YEAR.csv',
+		outputDir + 'data/REGION.csv',
+		inputDir + 'techList_AUTO_GENERATED.csv'
 	output:
 		outputDir + 'data/TechnologyToStorage.csv',
 		outputDir + 'data/TechnologyFromStorage.csv'

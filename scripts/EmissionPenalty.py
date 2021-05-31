@@ -15,11 +15,12 @@ def main():
     ### EVERYTHING IS CO2 EMISSIONS
 
     # Regions to print over
-    dfRegions = pd.read_csv('../src/data/REGION.csv')
-    regions = dfRegions['VALUE'].tolist()
+    df = pd.read_csv('../src/data/REGION.csv')
+    regions = df['VALUE'].tolist()
 
     #Years to Print over
-    years = range(2019,2051,1)
+    dfYears = pd.read_csv('../src/data/YEAR.csv')
+    years = dfYears['VALUE'].tolist()
 
     ###########################################
     # Compile Emission Activity Ratio
