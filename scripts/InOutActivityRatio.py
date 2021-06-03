@@ -138,7 +138,7 @@ def main():
                         masterOARList.append([region, techName, outFuel, 1, year, oar])
                         masterOARList.append([region, techName, outFuel, 2, year, oar])
                     # edge case of storage. This is super hacked together... will need to update
-                    if tech == 'P2G' or tech == 'FCL':
+                    elif tech == 'P2G' or tech == 'FCL':
                         # P2G will only have input activity ratio 
                         if tech == 'P2G':
                             inFuel = 'ELC' + 'CAN' + subregion + '02'

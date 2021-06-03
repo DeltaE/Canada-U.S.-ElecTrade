@@ -53,6 +53,9 @@ def main():
         #Populate P2G and FC costs
         dfP2gSystem = p2gSystem(costType, regions, subregions, years)
 
+        #Populate Trade costs
+        trade = tradeCosts(costType, regions, years)
+
         ###########################################
         # Writing Cost to file
         ###########################################
@@ -61,6 +64,7 @@ def main():
         df = pd.DataFrame(columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
         df = df.append(dfNREL)
         df = df.append(dfP2gSystem)
+        df = df.append(trade)
 
         #add a mode of operation column for variable cost
         if outFile == 'VariableCost.csv':
@@ -237,6 +241,50 @@ def p2gSystem(costType, regions, subregions, years):
     #return completed dataframe
     df = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
     return df
+
+def tradeCosts(costType, regions, years):
+    # PURPOSE: populates trade capital, fixed, OR variable costs 
+    # INPUT:   costType: List holding what cost we are looking for (names sasme as NREL)
+    #          regions: List holding what regions to print values over
+    #          subregions: List holding what subregions to print values over
+    #          years: list holding what years to print data over
+    # OUTPUT:  otoole formatted dataframe holding cost values for trade 
+
+    # Read in the trade csv file which contains costs
+    df = pd.read_csv('../dataSources/Trade.csv')
+
+    #Cost data only populated on mode 1 data rows
+    df = df.loc[df['MODE'] == 1]
+
+    # get list of all the technologies
+    techList = df['TECHNOLOGY'].tolist()
+    #techList = list(set(techList)) #remove duplicates
+
+    #List to hold all output data 
+    # columns = region, technology, year, value
+    data = []
+
+    #populate data
+    for region in regions:
+        for tech in techList:
+
+            #remove all rows except for our technology
+            costdf = df.loc[df['TECHNOLOGY']==tech]
+            costdf.reset_index()
+
+            #reset costs
+            trnCost = 0
+
+            #get costs
+            for cost in costType:
+                trnCost = trnCost + float(costdf[cost].iloc[0])
+
+            #save same value for all years 
+            for year in years:
+                data.append([region,tech,year,trnCost])
+
+    dfOut = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
+    return dfOut
 
 if __name__ == "__main__":
     main()

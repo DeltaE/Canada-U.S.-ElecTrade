@@ -76,7 +76,7 @@ def main():
         print(f'Hydro {year}')
         for region in regions:
             for subregion in subregions:
-                techName = 'RWN' + 'HYD' + 'CAN' + subregion + '01'
+                techName = 'PWR' + 'HYD' + 'CAN' + subregion + '01'
                 outData.append([region, techName, year, af[subregion]])
 
     ###########################################

@@ -57,6 +57,18 @@ def main():
           techName = 'PWR' + tech + 'CAN' + subregion + '01'
           opLifeData.append([region,techName,value])
 
+    # get trade tech names and save operational life values
+    dfTrade = pd.read_csv('../dataSources/Trade.csv')
+
+    # get list of all the trade technologies
+    techListTrade = dfTrade['TECHNOLOGY'].tolist()
+    techListTrade = list(set(techListTrade)) #remove duplicates
+
+    # hardcode in operational life of 100 years 
+    for region in regions:
+      for tech in techListTrade:
+        opLifeData.append([region,tech,100])
+
     #write operational life to a csv
     dfOut = pd.DataFrame(opLifeData,columns=['REGION','TECHNOLOGY','VALUE'])
     dfOut.to_csv('../src/data/OperationalLife.csv', index=False)
@@ -105,8 +117,17 @@ def main():
 
               #create correct name
               techName = 'PWR' + tech + 'CAN' + subregion + '01'
-
               resCapData.append([region, techName, year, resCap])
+    
+    # get trade residual capacity -- we are assuming no capacity in transmission is being decommisioned 
+    for region in regions:
+      for tech in techListTrade:
+        dfResCapTrd = dfTrade.loc[(dfTrade['TECHNOLOGY'] == tech) & 
+                                  (dfTrade['MODE'] == 1)]
+        dfResCapTrd.reset_index()
+        resCapTrd = dfResCapTrd['CAPACITY (GW)'].iloc[0]
+        for year in years:
+          resCapData.append([region, tech, year, resCapTrd])
 
     #wrirte to a csv 
     dfOut = pd.DataFrame(resCapData,columns=['REGION','TECHNOLOGY','YEAR','VALUE'])

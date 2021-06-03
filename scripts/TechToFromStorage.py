@@ -49,11 +49,11 @@ def main():
                 #Tech to storage
                 techName = 'PWR' + techToStorage[storage] + 'CAN' + subregion + '01'
                 storageName = 'STO' + storage + 'CAN' + subregion
-                toStorageData.append([region, techName, storageName, 1, 1])
+                toStorageData.append([region, techName, storageName, 1.0, 1])
                 #Tech from storage
                 techName = 'PWR' + techFromStorage[storage] + 'CAN' + subregion + '01'
                 storageName = 'STO' + storage + 'CAN' + subregion
-                fromStorageData.append([region, techName, storageName, 1, 1])
+                fromStorageData.append([region, techName, storageName, 1.0, 1])
     
     #write tech to storage
     dfOut = pd.DataFrame(toStorageData,columns=['REGION','TECHNOLOGY','STORAGE', 'MODE_OF_OPERATION','VALUE'])

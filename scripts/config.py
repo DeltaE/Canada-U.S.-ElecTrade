@@ -261,6 +261,7 @@ def getTRNtechs():
     #Read in the trade csv datafile 
     df = pd.read_csv('../dataSources/Trade.csv')
     outList = df['TECHNOLOGY'].tolist()
+    outList = list(set(outList)) # remove duplicates
     
     # Return list of rnw Technologes
     return outList
