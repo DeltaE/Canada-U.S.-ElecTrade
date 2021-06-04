@@ -1,6 +1,4 @@
 import pandas as pd
-import os
-import numpy as np
 
 ####################################################
 ## ASSUMES ALL PROVINCES USE THE SAME COST VALUES ##
@@ -16,14 +14,20 @@ def main():
     ###########################################
 
     # Regions to print over
-    dfRegions = pd.read_csv('../src/data/REGION.csv')
-    regions = dfRegions['VALUE'].tolist()
+    df = pd.read_csv('../src/data/REGION.csv')
+    regions = df['VALUE'].tolist()
+
+    # Subregions to print over
+    df = pd.read_excel('../dataSources/Regionalization.xlsx', sheet_name='CAN')
+    subregions = df['REGION'].tolist()
+    subregions = list(set(subregions)) # removes duplicates
+
+    #Years to Print over
+    dfYears = pd.read_csv('../src/data/YEAR.csv')
+    years = dfYears['VALUE'].tolist()
 
     #Trigger used to print capital, fixed and variable costs one at a time
     for trigger in range(1,4):
-
-        #Years to Print over
-        years = range(2019,2051,1)
 
         #Cost type
         if trigger == 1:
@@ -44,10 +48,13 @@ def main():
         ###########################################
 
         #reads the NREL raw datafile and extracts costs
-        dfNREL = read_NREL(costType, regions, years)
+        dfNREL = read_NREL(costType, regions, subregions, years)
 
         #Populate P2G and FC costs
-        dfP2gSystem = p2gSystem(costType, regions, years)
+        dfP2gSystem = p2gSystem(costType, regions, subregions, years)
+
+        #Populate Trade costs
+        trade = tradeCosts(costType, regions, years)
 
         ###########################################
         # Writing Cost to file
@@ -57,6 +64,7 @@ def main():
         df = pd.DataFrame(columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
         df = df.append(dfNREL)
         df = df.append(dfP2gSystem)
+        df = df.append(trade)
 
         #add a mode of operation column for variable cost
         if outFile == 'VariableCost.csv':
@@ -70,10 +78,11 @@ def main():
         df.to_csv(outLocation, index=False)
 
 
-def read_NREL(costType, regions, years):
+def read_NREL(costType, regions, subregions, years):
     # PURPOSE: reads the NREL raw excel data sheet
     # INPUT:   costType: List holding how to filter core_metric_parameter column
     #          regions: List holding what regions to print values over
+    #          subregions: List holding what subregions to print values over
     #          years: list holding what years to print data over
     # OUTPUT:  otoole formatted dataframe holding cost values 
 
@@ -86,14 +95,14 @@ def read_NREL(costType, regions, years):
     # Dictionay value list holds how to filter input data frame 
     # Max three list values match to columns [technology, techdetail, Alias]
     technology = {
-        'CL':['Coal', 'IGCCHighCF'] ,
-        'CLCCS':['Coal', 'CCS30HighCF'] ,
+        'COA':['Coal', 'IGCCHighCF'] ,
+        'COC':['Coal', 'CCS30HighCF'] ,
         'HYD':['Hydropower', 'NPD4'] ,
-        'NGCC': ['NaturalGas','CCHighCF'],
-        'NGCT': ['NaturalGas','CTHighCF'],
-        'WN': ['LandbasedWind','LTRG4'], 
-        'PV': ['UtilityPV','KansasCity'],
-        'NUC': ['Nuclear'],
+        'CCG': ['NaturalGas','CCHighCF'],
+        'CTG': ['NaturalGas','CTHighCF'],
+        'WND': ['LandbasedWind','LTRG4'], 
+        'SPV': ['UtilityPV','KansasCity'],
+        'URN': ['Nuclear'],
         'BIO': ['Biopower','Dedicated'],
     }
 
@@ -140,52 +149,57 @@ def read_NREL(costType, regions, years):
 
     #Loop over regions and years 
     for region in regions:
-        for year in years:
+        for subregion in subregions:
+            for year in years:
 
-            #filter based on years
-            dfYear = dfCost.loc[dfCost['core_metric_variable'] == year]
+                #filter based on years
+                dfYear = dfCost.loc[dfCost['core_metric_variable'] == year]
 
-            #loop over technologies that contribute to total cost 
-            for tech, techFilter in technology.items():
+                #loop over technologies that contribute to total cost 
+                for tech, techFilter in technology.items():
 
-                #Filter to get desired technology
-                dfTech = dfYear
-                for i in range(len(techFilter)): 
-                    dfTech = dfTech.loc[dfTech[colNames[i+3]] == techFilter[i]]
+                    #Filter to get desired technology
+                    dfTech = dfYear
+                    for i in range(len(techFilter)): 
+                        dfTech = dfTech.loc[dfTech[colNames[i+3]] == techFilter[i]]
 
-                #reset total cost 
-                totalCost=0
+                    #reset total cost 
+                    totalCost=0
 
-                # For variable costs, we need to add variable cost and fuel cost
-                for cost in costType:
-                    dfEnd = dfTech.loc[dfTech['core_metric_parameter'] == cost]
+                    # For variable costs, we need to add variable cost and fuel cost
+                    for cost in costType:
+                        dfEnd = dfTech.loc[dfTech['core_metric_parameter'] == cost]
 
-                    #There should only be one (capital/fixed) or two (variable) line items left at this point 
-                    if len(dfEnd) > 1:
-                        print(f'There are {len(dfTech)} rows in the {year} {tech} dataframe for {costType[0]}')
-                        print('DATA NOT WRITTEN!')
-                        exit()
-                    elif len(dfEnd) < 1:
-                        #print(f'{tech} has a {cost} cost of zero in {year} for the {region} region')
-                        totalCost = totalCost
-                    else:
-                        #calculate total cost
-                        #handels edge case of nuclear fuel cost given in $/MWh
-                        if tech == 'NUC' and cost == 'Fuel':
-                            totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion['Variable O&M']
+                        #There should only be one (capital/fixed) or two (variable) line items left at this point 
+                        if len(dfEnd) > 1:
+                            print(f'There are {len(dfTech)} rows in the {year} {tech} dataframe for {costType[0]}')
+                            print('DATA NOT WRITTEN!')
+                            exit()
+                        elif len(dfEnd) < 1:
+                            #print(f'{tech} has a {cost} cost of zero in {year} for the {region} region')
+                            totalCost = totalCost
                         else:
-                            totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion[cost]
+                            #calculate total cost
+                            #handels edge case of nuclear fuel cost given in $/MWh
+                            if tech == 'URN' and cost == 'Fuel':
+                                totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion['Variable O&M']
+                            else:
+                                totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion[cost]
 
-                #write data to output list
-                data.append([region, tech, year, totalCost])
+                    #construct technology name
+                    techName = 'PWR' + tech + 'CAN' + subregion + '01'
+
+                    #write data to output list
+                    data.append([region, techName, year, totalCost])
                 
     df = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
     return df
 
-def p2gSystem(costType, regions, years):
+def p2gSystem(costType, regions, subregions, years):
     # PURPOSE: populates power to gas AND fuel cell capital, fixed, OR variable costs 
     # INPUT:   costType: List holding what cost we are looking for (names sasme as NREL)
     #          regions: List holding what regions to print values over
+    #          subregions: List holding what subregions to print values over
     #          years: list holding what years to print data over
     # OUTPUT:  otoole formatted dataframe holding cost values 
     
@@ -201,13 +215,24 @@ def p2gSystem(costType, regions, years):
     # populate lists 
     for region in regions:
         for year in years:
-            p2gCost = 0
-            fcCost = 0
-            for cost in costType:
-                p2gCost = p2gCost + dfP2g.loc[year,cost]
-                fcCost = fcCost + dfFc.loc[year,cost]
-            dataP2g.append([region, 'P2G', year, p2gCost])
-            dataFc.append([region, 'FC', year, fcCost])
+            for subregion in subregions:
+
+                #reset costs
+                p2gCost = 0
+                fcCost = 0
+
+                #get costs
+                for cost in costType:
+                    p2gCost = p2gCost + dfP2g.loc[year,cost]
+                    fcCost = fcCost + dfFc.loc[year,cost]
+                
+                #create tech names
+                p2gName = 'PWR' + 'P2G' + 'CAN' + subregion + '01'
+                fcName = 'PWR' + 'FCL' + 'CAN' + subregion + '01'
+
+                # save data
+                dataP2g.append([region, p2gName, year, p2gCost])
+                dataFc.append([region, fcName, year, fcCost])
     
     #create a dataframe to hold all data 
     data = dataP2g
@@ -216,6 +241,50 @@ def p2gSystem(costType, regions, years):
     #return completed dataframe
     df = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
     return df
+
+def tradeCosts(costType, regions, years):
+    # PURPOSE: populates trade capital, fixed, OR variable costs 
+    # INPUT:   costType: List holding what cost we are looking for (names sasme as NREL)
+    #          regions: List holding what regions to print values over
+    #          subregions: List holding what subregions to print values over
+    #          years: list holding what years to print data over
+    # OUTPUT:  otoole formatted dataframe holding cost values for trade 
+
+    # Read in the trade csv file which contains costs
+    df = pd.read_csv('../dataSources/Trade.csv')
+
+    #Cost data only populated on mode 1 data rows
+    df = df.loc[df['MODE'] == 1]
+
+    # get list of all the technologies
+    techList = df['TECHNOLOGY'].tolist()
+    #techList = list(set(techList)) #remove duplicates
+
+    #List to hold all output data 
+    # columns = region, technology, year, value
+    data = []
+
+    #populate data
+    for region in regions:
+        for tech in techList:
+
+            #remove all rows except for our technology
+            costdf = df.loc[df['TECHNOLOGY']==tech]
+            costdf.reset_index()
+
+            #reset costs
+            trnCost = 0
+
+            #get costs
+            for cost in costType:
+                trnCost = trnCost + float(costdf[cost].iloc[0])
+
+            #save same value for all years 
+            for year in years:
+                data.append([region,tech,year,trnCost])
+
+    dfOut = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
+    return dfOut
 
 if __name__ == "__main__":
     main()

@@ -12,23 +12,40 @@ def main():
     # OUTPUT: none
 
     # Regions to print over
-    dfRegions = pd.read_csv('../src/data/REGION.csv')
-    regions = dfRegions['VALUE'].tolist()
+    df = pd.read_csv('../src/data/REGION.csv')
+    regions = df['VALUE'].tolist()
+
+    # Subregions to print over
+    df = pd.read_excel('../dataSources/Regionalization.xlsx', sheet_name='CAN')
+    subregions = df['REGION'].tolist()
+    subregions = list(set(subregions)) # removes duplicates
 
     #Years to Print over
-    years = range(2019,2051,1)
+    dfYears = pd.read_csv('../src/data/YEAR.csv')
+    years = dfYears['VALUE'].tolist()
+
+    #Read in master list of technologies and get storage names
+    dfGeneration_raw = pd.read_csv('../dataSources/techList_AUTO_GENERATED.csv')
+    dfGeneration = dfGeneration_raw.loc[dfGeneration_raw['GENERATION'] == 'STO']
+    storages = dfGeneration['VALUE'].tolist()
 
     #Dictory to hold storage ype and cost in M$/GW
-    storages = {'TANK':11.673152}
+    storageCosts = {'TNK':11.673152}
 
-    #List to hold all output data
+    ##############################
+    ## Populate data
+    ##############################
+
     #columns = region, storage, year, value
     data = []
 
-    for storage, cost in storages.items():
-        for region in regions:
-            for year in years:
-                data.append([region,storage,year,cost])
+    for region in regions:
+        for year in years:
+            for subregion in subregions:
+                for storage in storages:
+                    stoName = 'STO' + storage + 'CAN' + subregion
+                    cost = storageCosts[storage]
+                    data.append([region,stoName,year,cost])
 
     df = pd.DataFrame(data, columns=['REGION','STORAGE','YEAR','VALUE'])
     df.to_csv('../src/data/CapitalCostStorage.csv', index=False)

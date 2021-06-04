@@ -1,7 +1,4 @@
 import pandas as pd
-import os
-import numpy as np
-import datetime
 from collections import defaultdict
 
 def main():
@@ -13,16 +10,6 @@ def main():
     # Model Parameters
     ###########################################
 
-    #Dictionary for region to province mappings
-    regions = defaultdict(list)
-
-    # Read in regionalization file 
-    df = pd.read_csv('../dataSources/Regionalization.csv')
-    for i in range(len(df)):    
-        region = df['REGION'].iloc[i]
-        province = df['PROVINCE'].iloc[i]
-        regions[region].append(province)
-
     #Dictionary holds month to season Mapping 
     seasons = {
         'W':[1, 2, 3],
@@ -31,7 +18,22 @@ def main():
         'F':[10, 11, 12]}
 
     #Years to Print over
-    years = range(2019,2051,1)
+    dfYears = pd.read_csv('../src/data/YEAR.csv')
+    years = dfYears['VALUE'].tolist()
+
+    # Regions to print over
+    dfRegions = pd.read_csv('../src/data/REGION.csv')
+    regions = dfRegions['VALUE'].tolist()
+
+    #Dictionary for subregion to province mappings
+    subregions = defaultdict(list)
+
+    # Read in regionalization file to get provincial seperation
+    df = pd.read_excel('../dataSources/Regionalization.xlsx', sheet_name='CAN')
+    for i in range(len(df)):    
+        subregion = df['REGION'].iloc[i]
+        province = df['PROVINCE'].iloc[i]
+        subregions[subregion].append(province)
 
     ###########################################
     # Availability Factor Calculations
@@ -54,31 +56,34 @@ def main():
   
     #calculate capacity factor for each province 
     af = {}
-    for region in regions:
+    for subregion in subregions:
         generation = 0 #TWh
         capacity = 0 #TW
-        #calcualte totals for region 
-        for province in regions[region]:
+        #calcualte totals for subregion 
+        for province in subregions[subregion]:
             capacity = capacity + inData[province][0]
             generation = generation + inData[province][2]
         
         #save total capacity factor
-        af[region] = (generation*(1000/8760))/capacity
+        af[subregion] = (generation*(1000/8760))/capacity
     
-    #set up output dataframe 
-    df = pd.DataFrame(columns = ['REGION','TECHNOLOGY','YEAR','VALUE'])
+    #list to save data to 
+    #columns = region, technology, year, value
+    outData = []
 
-    #Populate output dataframe 
+    #Populate output lsit 
     for year in years:
         print(f'Hydro {year}')
         for region in regions:
-            newRow = {'REGION':region,'TECHNOLOGY':'HYD','YEAR':year,'VALUE':af[region]}
-            df = df.append(newRow, ignore_index=True)
+            for subregion in subregions:
+                techName = 'PWR' + 'HYD' + 'CAN' + subregion + '01'
+                outData.append([region, techName, year, af[subregion]])
 
     ###########################################
     # Writing Availability Factor to File 
     ###########################################
 
+    df = pd.DataFrame(outData, columns = ['REGION','TECHNOLOGY','YEAR','VALUE'])
     df.to_csv('../src/data/AvailabilityFactor.csv', index=False)
 
 if __name__ == "__main__":
