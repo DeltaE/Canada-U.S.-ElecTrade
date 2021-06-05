@@ -14,87 +14,155 @@ def main():
     ###EVERYTHING CURRENTLY MAPS TO MODE_OFOPERARION = 1
 
     # Regions to print over
-    dfRegions = pd.read_csv('../src/data/REGION.csv')
-    regions = dfRegions['VALUE'].tolist()
+    df = pd.read_csv('../src/data/REGION.csv')
+    regions = df['VALUE'].tolist()
+
+    # Subregions to print over
+    df = pd.read_excel('../dataSources/Regionalization.xlsx', sheet_name='CAN')
+    subregions = df['REGION'].tolist()
+    subregions = list(set(subregions)) # removes duplicates
 
     #Years to Print over
-    years = range(2019,2051,1)
+    dfYears = pd.read_csv('../src/data/YEAR.csv')
+    years = dfYears['VALUE'].tolist()
 
-    # Technology to Fuel Mapping for INPUT acticity ratio
-    inputTechToFuel = {
-        'HYD': 'Hydro_F',
-        'WN': 'Wind_F',
-        'BIO': 'Bio_F',
-        'CL': 'Coal_F',
-        'PV': 'Solar_F',
-        'NUC':'Nuc_F',
-        'FC':'H2',
+    ###########################################
+    # Get Min and Rnw techs
+    ###########################################
+
+    #Read in master list of technologies
+    dfGeneration_raw = pd.read_csv('../dataSources/techList_AUTO_GENERATED.csv')
+
+    #Populate techs by type dictionary
+    dfGeneration = dfGeneration_raw.loc[dfGeneration_raw['GENERATION'] == 'RNW']
+    rnwTechs = dfGeneration['VALUE'].tolist()
+    dfGeneration = dfGeneration_raw.loc[dfGeneration_raw['GENERATION'] == 'MIN']
+    minTechs = dfGeneration['VALUE'].tolist()
+    dfGeneration = dfGeneration_raw.loc[dfGeneration_raw['GENERATION'] == 'PWR']
+    pwrTechs = dfGeneration['VALUE'].tolist()
+
+    ###########################################
+    # Tech to Fuel Mapping
+    ###########################################
+    techToFuel = {
+        'BIO':'BIO',
+        'CCG':'GAS',
+        'CTG':'GAS',
+        'COA':'COA',
+        'COC':'COA',
+        'HYD':'HYD',
+        'SPV':'SPV',
+        'URN':'URN',
+        'WND':'WND',
         'P2G':'ELC',
-        'NGCT':'NG_F',
-        'NGCC':'NG_F',
-        'CLCCS': 'Coal_F',
-        'OI':'Oil_F',
-    }
-
-    # Technology to Fuel Mapping for OUTPUT acticity ratio
-    outputTechToFuel = {
-        'HYD': 'ELC',
-        'WN': 'ELC',
-        'BIO': 'ELC',
-        'CL': 'ELC',
-        'PV': 'ELC',
-        'NUC':'ELC',
-        'FC':'ELC',
-        'P2G':'H2',
-        'NGCT':'ELC',
-        'NGCC':'ELC',
-        'CLCCS': 'ELC',
-        'OI':'ELC',
-        'MIN_HYD': 'Hydro_F',
-        'MIN_WN': 'Wind_F',
-        'MIN_BIO': 'Bio_F',
-        'MIN_CL': 'Coal_F',
-        'MIN_PV': 'Solar_F',
-        'MIN_NUC': 'Nuc_F',
-        'MIN_NG': 'NG_F',
-        'MIN_OI': 'Oil_F'
+        'FCL':'HY2'
     }
 
     ###########################################
-    # Compile Activity Ratios
+    # IAR and OAR of One
     ###########################################
 
-    inFileNames = ['InputActivityRatioByTechnology.csv', 'OutputActivityRatioByTechnology.csv']
-    outFileNames = ['InputActivityRatio.csv', 'OutputActivityRatio.csv']
+    #coumns = Region, Tech, Fuel, Mode, Year, Value
+    masterIARList = []
+    masterOARList = []
 
-    for i in range(len(inFileNames)):
+    # OAR Renweable Generations
+    for region in regions:
+        for year in years:
+            for subregion in subregions:
+                for tech in rnwTechs:
+                    techName = 'RNW' + tech + 'CAN' + subregion
+                    fuelOut = tech + 'CAN' + subregion
+                    masterOARList.append([region, techName, fuelOut, 1, year, 1])
     
-        #read in raw operational life values
-        dfRaw = pd.read_csv(f'../dataSources/{inFileNames[i]}', index_col=0)
+    # OAR Domestic Mining
+    for region in regions:
+        for year in years:
+            for tech in minTechs:
+                techName = 'MIN' + tech + 'CAN'
+                fuelOut = tech + 'CAN'
+                masterOARList.append([region, techName, fuelOut, 1, year, 1])
 
-        #get correct dictionary of techs -> fuels
-        if outFileNames[i] == 'InputActivityRatio.csv':
-            techToFuel = inputTechToFuel
-        else:
-            techToFuel = outputTechToFuel
+    # IAR and OAR International Mining
+    for region in regions:
+        for year in years:
+            for tech in minTechs:
+                techName = 'MIN' + tech + 'INT'
+                fuelIn = tech
+                fuelOut = tech + 'INT'
+                masterIARList.append([region, techName, fuelIn, 1, year, 1])
+                masterOARList.append([region, techName, fuelOut, 1, year, 1])
 
-        #list to hold all output values 
-        dataOut = []
+    # IAR and OAR for PWRTRN technologies
+    for region in regions:
+        for year in years:
+            for subregion in subregions:
+                techName = 'PWR' + 'TRN' + 'CAN' + subregion
+                fuelIn = 'ELC' + 'CAN' + subregion + '01'
+                fuelOut = 'ELC' + 'CAN' + subregion + '02'
+                masterIARList.append([region, techName, fuelIn, 1, year, 1])
+                masterOARList.append([region, techName, fuelOut, 1, year, 1])
 
-        #get list of technologies to print over
-        techList = list(dfRaw)
+    # IAR and OAR for TRN technologies
+    df = pd.read_csv('../dataSources/Trade.csv')
+    for region in regions:
+        for year in years:
+            for i in range(len(df)):
+                techName = df.iloc[i]['TECHNOLOGY']
+                inFuel = df.iloc[i]['INFUEL']
+                outFuel = df.iloc[i]['OUTFUEL']
+                iar = df.iloc[i]['IAR']
+                oar = df.iloc[i]['OAR']
+                mode = df.iloc[i]['MODE']
+                masterIARList.append([region, techName, inFuel, mode, year, iar])
+                masterOARList.append([region, techName, outFuel, mode, year, oar])
 
-        #print all values 
-        for region in regions:
-            for tech in techList:
-                for year in years:
-                    activityRatio = dfRaw.loc[year,tech]
-                    fuel = techToFuel[tech]
-                    dataOut.append([region, tech, fuel, 1, year, activityRatio])
-        
-        #write to a csv
-        dfOut = pd.DataFrame(dataOut,columns=['REGION','TECHNOLOGY','FUEL','MODE_OF_OPERATION','YEAR','VALUE'])
-        dfOut.to_csv(f'../src/data/{outFileNames[i]}', index=False)
+    # IAR and OAR for RNW PWR technologies
+    dfIAR = pd.read_csv('../dataSources/InputActivityRatioByTechnology.csv', index_col=0)
+    dfOAR = pd.read_csv('../dataSources/OutputActivityRatioByTechnology.csv', index_col=0)
+    for region in regions:
+        for year in years:
+            for subregion in subregions:
+                for tech in pwrTechs:
+                    techName = 'PWR' + tech + 'CAN' + subregion + '01'
+                    iar = dfIAR.loc[year,tech]
+                    oar = dfOAR.loc[year,tech]
+                    fuelName = techToFuel[tech]
+                    # if has international imports
+                    if fuelName in minTechs:
+                        inFuelModeOne = fuelName + 'CAN'
+                        inFuelModeTwo = fuelName + 'INT'
+                        outFuel = 'ELC' + 'CAN' + subregion + '01'
+                        masterIARList.append([region, techName, inFuelModeOne, 1, year, iar])
+                        masterIARList.append([region, techName, inFuelModeTwo, 2, year, iar])
+                        masterOARList.append([region, techName, outFuel, 1, year, oar])
+                        masterOARList.append([region, techName, outFuel, 2, year, oar])
+                    # edge case of storage. This is super hacked together... will need to update
+                    elif tech == 'P2G' or tech == 'FCL':
+                        # P2G will only have input activity ratio 
+                        if tech == 'P2G':
+                            inFuel = 'ELC' + 'CAN' + subregion + '02'
+                            outFuel = 'HY2' + 'CAN' + subregion + '01'
+                            masterIARList.append([region, techName, inFuel, 1, year, iar])
+                            masterOARList.append([region, techName, outFuel, 1, year, 0])
+                        # P2G will only have output activity ratio 
+                        elif tech == 'FCL':
+                            inFuel = 'HY2' + 'CAN' + subregion + '01'
+                            outFuel = 'ELC' + 'CAN' + subregion + '02'
+                            masterIARList.append([region, techName, inFuel, 1, year, 0])
+                            masterOARList.append([region, techName, outFuel, 1, year, oar])
+                    # Renewables
+                    else:
+                        inFuel = fuelName + 'CAN' + subregion
+                        outFuel = 'ELC' + 'CAN' + subregion + '01'
+                        masterIARList.append([region, techName, inFuel, 1, year, iar])
+                        masterOARList.append([region, techName, outFuel, 1, year, oar])
+
+    #write IAR and OAR to files 
+    dfOut = pd.DataFrame(masterIARList,columns=['REGION','TECHNOLOGY','FUEL','MODE_OF_OPERATION','YEAR','VALUE'])
+    dfOut.to_csv(f'../src/data/InputActivityRatio.csv', index=False)
+    dfOut = pd.DataFrame(masterOARList,columns=['REGION','TECHNOLOGY','FUEL','MODE_OF_OPERATION','YEAR','VALUE'])
+    dfOut.to_csv(f'../src/data/OutputActivityRatio.csv', index=False)
 
 if __name__ == "__main__":
     main()

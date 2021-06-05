@@ -14,15 +14,23 @@ def main():
     # Model Parameters
     ###########################################
 
-    #Dictionary for region to province mappings
-    regions = defaultdict(list)
+    # Regions to print over
+    dfRegions = pd.read_csv('../src/data/REGION.csv')
+    regions = dfRegions['VALUE'].tolist()
 
-    # Read in regionalization file 
-    df = pd.read_csv('../dataSources/Regionalization.csv')
+    #Dictionary for subregion to province mappings
+    subregions = defaultdict(list)
+
+    # Read in regionalization file to get provincial seperation
+    df = pd.read_excel('../dataSources/Regionalization.xlsx', sheet_name='CAN')
     for i in range(len(df)):    
-        region = df['REGION'].iloc[i]
+        subregion = df['REGION'].iloc[i]
         province = df['PROVINCE'].iloc[i]
-        regions[region].append(province)
+        subregions[subregion].append(province)
+
+    #Years to Print over
+    dfYears = pd.read_csv('../src/data/YEAR.csv')
+    years = dfYears['VALUE'].tolist()
     
     # holds baselione reserve margin for each province based on NERC
     # 10 percent for hydro dominated provinces
@@ -46,7 +54,7 @@ def main():
     fuelTag = ['ELC']
 
     # List of technologies to tag
-    techTag = ['HYD','BIO','NGCC','NGCT','NUC','CL','CLCCS','FC']
+    techTags = ['HYD','BIO','CCG','CTG','URN','COA','COC','WND', 'SPV']
 
     #Dictionary holds month to season Mapping 
     seasons = {
@@ -69,7 +77,7 @@ def main():
     peakSquishFactor = {} 
 
     #Filter demand dataframe for provinces in each region 
-    for region, provinces in regions.items():
+    for subregion, provinces in subregions.items():
         dfRegion = pd.DataFrame(columns = ['PROVINCE','MONTH','DAY','HOUR','VALUE'])
 
         #Lists to hold regional actual and max loads
@@ -107,7 +115,7 @@ def main():
 
         #save the peak squishing factor
         #This needs to be added to every 
-        peakSquishFactor[region] = peakSquish
+        peakSquishFactor[subregion] = peakSquish
 
     ##############################################
     # CALCULATE WEIGHTED BASELINE RESERVE MARGIN
@@ -119,9 +127,9 @@ def main():
 
     # List to hold region reserve margins
     #Region, year, value
-    reserveMargin = []
+    reserveMarginRaw = []
 
-    for region, provinces in regions.items():
+    for subregion, provinces in subregions.items():
         for year in years: 
             totalDemand = 0
             regionReserveMargin = 0
@@ -135,11 +143,52 @@ def main():
                 regionReserveMargin = regionReserveMargin + (dfDemand.loc[year, province] / totalDemand) * provincialReserveMargin[province]
             
             #add in squishing factor
-            regionReserveMargin = regionReserveMargin + peakSquishFactor[region]
+            regionReserveMargin = regionReserveMargin + peakSquishFactor[subregion]
 
             #save adjusted regional reserve margin
-            reserveMargin.append([region, year, regionReserveMargin])
+            reserveMarginRaw.append([subregion, year, regionReserveMargin])
 
+    #To include reserve margin in osemosys global naming scheme, we:
+    # Gave a value of 1 for all regions and years of reserve margin 
+    # assigned the regional reserve margin value to ELCCAN<subregion>01 in reserve margin tag fuel
+    # assign a value of one to all relevant PWR<technology>CAN<subregion>01
+
+    #Reserve Margin = Region, year, value
+    reserveMargin = []
+    for region in regions:
+        for year in years:
+            reserveMargin.append([region, year, 1])
+
+    #reserve margin Tag Fuel = Region, Fuel, Year, Value
+    reserveMarginTagFuel = []
+    for region in regions:
+        for i in range(len(reserveMarginRaw)):
+            fuelName = 'ELC' + 'CAN' + reserveMarginRaw[i][0] + '01'
+            year = reserveMarginRaw[i][1]
+            rm = reserveMarginRaw[i][2]
+            reserveMarginTagFuel.append([region, fuelName, year, rm])
+    
+    #reserve margin Tag Technology = Region, Technology, Year, Value
+    reserveMarginTagTech = []
+    for region in regions:
+        for subregion in subregions:
+            for year in years:
+                for tech in techTags:
+                    techName = 'PWR' + tech + 'CAN' +subregion + '01'
+                    reserveMarginTagTech.append([region, techName, year, 1])
+
+    #write out all files
+    dfReserveMargin = pd.DataFrame(reserveMargin,columns=['REGION','YEAR','VALUE'])
+    dfReserveMargin.to_csv('../src/data/ReserveMargin.csv', index=False)
+
+    dfReserveMarginFuel = pd.DataFrame(reserveMarginTagFuel,columns=['REGION','FUEL','YEAR','VALUE'])
+    dfReserveMarginFuel.to_csv('../src/data/ReserveMarginTagFuel.csv', index=False)
+
+    dfReserveMarginTech = pd.DataFrame(reserveMarginTagTech,columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
+    dfReserveMarginTech.to_csv('../src/data/ReserveMarginTagTechnology.csv', index=False)
+
+    # Reference code before switching over to osemosys gloabl naming 
+    '''
     dfWeightedReserveMargin = pd.DataFrame(reserveMargin,columns=['REGION','YEAR','VALUE'])
 
     #reserve margin Tag Fuel = Region, Fuel, Year, Value
@@ -165,6 +214,8 @@ def main():
 
     dfReserveMarginTech = pd.DataFrame(reserveMarginTagTech,columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
     dfReserveMarginTech.to_csv('../src/data/ReserveMarginTagTechnology.csv', index=False)
+
+    '''
 
 if __name__ == "__main__":
     main()  

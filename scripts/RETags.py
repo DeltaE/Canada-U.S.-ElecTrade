@@ -1,6 +1,4 @@
 import pandas as pd
-import os
-import numpy as np
 
 def main():
     # PURPOSE: Creates otoole formatted RETagTechnology
@@ -12,14 +10,20 @@ def main():
     ###########################################
 
     # Regions to print over
-    dfRegions = pd.read_csv('../src/data/REGION.csv')
-    regions = dfRegions['VALUE'].tolist()
+    df = pd.read_csv('../src/data/REGION.csv')
+    regions = df['VALUE'].tolist()
+
+    # Subregions to print over
+    df = pd.read_excel('../dataSources/Regionalization.xlsx', sheet_name='CAN')
+    subregions = df['REGION'].tolist()
+    subregions = list(set(subregions)) # removes duplicates
 
     #Years to Print over
-    years = range(2019,2051,1)
+    dfYears = pd.read_csv('../src/data/YEAR.csv')
+    years = dfYears['VALUE'].tolist()
 
     #Techs to tag
-    techs = ['HYD','WN','BIO','PV']
+    techs = ['HYD','WND','BIO','SPV']
 
     ###########################################
     # Compile RE Tags
@@ -31,9 +35,11 @@ def main():
 
     #print all values 
     for region in regions:
-        for tech in techs:
-            for year in years:
-                dataOut.append([region, tech, year, 1])
+        for year in years:
+            for subregion in subregions:
+                for tech in techs:
+                    techName = 'PWR' + tech + 'CAN' + subregion + '01'
+                    dataOut.append([region, techName, year, 1])
     
     #write to a csv
     dfOut = pd.DataFrame(dataOut,columns=['REGION','TECHNOLOGY','YEAR','VALUE'])

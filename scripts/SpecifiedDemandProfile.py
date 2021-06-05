@@ -1,6 +1,4 @@
 import pandas as pd
-import os
-import numpy as np
 import datetime
 from collections import defaultdict
 
@@ -13,16 +11,6 @@ def main():
     # Model Parameters
     ###########################################
 
-    #Dictionary for region to province mappings
-    regions = defaultdict(list)
-
-    # Read in regionalization file 
-    df = pd.read_csv('../dataSources/Regionalization.csv')
-    for i in range(len(df)):    
-        region = df['REGION'].iloc[i]
-        province = df['PROVINCE'].iloc[i]
-        regions[region].append(province)
-
     #Dictionary holds month to season Mapping 
     seasons = {
         'W':[1, 2, 3],
@@ -31,7 +19,22 @@ def main():
         'F':[10, 11, 12]}
 
     #Years to Print over
-    years = range(2019,2051,1)
+    dfYears = pd.read_csv('../src/data/YEAR.csv')
+    years = dfYears['VALUE'].tolist()
+
+    # Regions to print over
+    dfRegions = pd.read_csv('../src/data/REGION.csv')
+    regions = dfRegions['VALUE'].tolist()
+
+    #Dictionary for subregion to province mappings
+    subregions = defaultdict(list)
+
+    # Read in regionalization file to get provincial seperation
+    df = pd.read_excel('../dataSources/Regionalization.xlsx', sheet_name='CAN')
+    for i in range(len(df)):    
+        subregion = df['REGION'].iloc[i]
+        province = df['PROVINCE'].iloc[i]
+        subregions[subregion].append(province)
 
     ###########################################
     # Calculate profile  
@@ -47,37 +50,41 @@ def main():
     #Region, fuel, timeslice, year, value
     load = []
 
-    # Looping years here isnt super inefficient. But it isnt a very long script 
+    # Looping years here isnt super efficient. But it isnt a very long script 
     # and it make the output csv easy to read 
-    for year in years:
+    for region in regions:
+        for year in years:
 
-        #filter dataframe by region
-        for region, provinces in regions.items(): 
-            dfRegion = pd.DataFrame() #reset df
-            for province in provinces:
-                dfProvince = dfLoad.loc[dfLoad['PROVINCE'] == province]
-                dfRegion = dfRegion.append(dfProvince, ignore_index=True)
+            #filter dataframe by subregion
+            for subregion, provinces in subregions.items(): 
+                dfsubregion = pd.DataFrame() #reset df
+                for province in provinces:
+                    dfProvince = dfLoad.loc[dfLoad['PROVINCE'] == province]
+                    dfsubregion = dfsubregion.append(dfProvince, ignore_index=True)
 
-            #Get total load for year so we can normalize 
-            totalLoad = dfRegion['VALUE'].sum()
+                #Get total load for year so we can normalize 
+                totalLoad = dfsubregion['VALUE'].sum()
 
-            #filter dataframe by season
-            for season, months in seasons.items():
-                dfSeason = pd.DataFrame() #reset df
-                for month in months: 
-                    dfMonth = dfRegion.loc[dfRegion['MONTH'] == month]
-                    dfSeason = dfSeason.append(dfMonth, ignore_index=True)
+                #filter dataframe by season
+                for season, months in seasons.items():
+                    dfSeason = pd.DataFrame() #reset df
+                    for month in months: 
+                        dfMonth = dfsubregion.loc[dfsubregion['MONTH'] == month]
+                        dfSeason = dfSeason.append(dfMonth, ignore_index=True)
 
-                #filter dataframe by timeslice 
-                for hour in range(1,25):
-                    ts = season + str(hour)
-                    dfFilter = dfSeason.loc[dfSeason['HOUR'] == hour]
-                    profileValue = dfFilter['VALUE'].sum() / totalLoad
-                    #pd.set_option('display.max_rows', dfFilter.shape[0]+1)
-                    #print(dfFilter)
+                    #filter dataframe by timeslice 
+                    for hour in range(1,25):
+                        ts = season + str(hour)
+                        dfFilter = dfSeason.loc[dfSeason['HOUR'] == hour]
+                        profileValue = dfFilter['VALUE'].sum() / totalLoad
+                        #pd.set_option('display.max_rows', dfFilter.shape[0]+1)
+                        #print(dfFilter)
 
-                    #save profile value 
-                    load.append([region, 'ELC', ts, year, profileValue])
+                        #Assign fuel name
+                        fuelName = 'ELC' + 'CAN' + subregion + '02'
+
+                        #save profile value 
+                        load.append([region, fuelName, ts, year, profileValue])
 
     ###########################################
     # Writing Demand Files 
@@ -168,7 +175,7 @@ def daylightSavings(inData):
                 average = (inData[i][4] + inData[i+1][4]) / 2
                 inData[i+1][4] = average
                 rowsToRemove.append(i)
-                print(f'hour averaged for {inData[i][0]} on month {inData[i][1]}, day {inData[i][2]}, hour {inData[i][3]}')
+                #print(f'hour averaged for {inData[i][0]} on month {inData[i][1]}, day {inData[i][2]}, hour {inData[i][3]}')
 
     #Remove the rows in reverse order so we are counting starting from the start of the list
     for i in reversed(rowsToRemove):
@@ -179,11 +186,11 @@ def daylightSavings(inData):
         #first condition if data marks the load as zero 
         if (inData[i][4] < 1): 
             inData[i][4] = inData[i-1][4]
-            print(f'hour modified for {inData[i][0]} on month {inData[i][1]}, day {inData[i][2]}, hour {inData[i][3]}')
+            #print(f'hour modified for {inData[i][0]} on month {inData[i][1]}, day {inData[i][2]}, hour {inData[i][3]}')
         #second adn third conditions for if data just skips the time step 
         elif (int(inData[i+1][3]) - int(inData[i][3]) == 2) or (int(inData[i][3]) - int(inData[i+1][3]) == 22):
             rowsToAdd.append(i)
-            print(f'hour added for {inData[i][0]} on month {inData[i][1]}, day {inData[i][2]}, hour {inData[i][3]}')
+            #print(f'hour added for {inData[i][0]} on month {inData[i][1]}, day {inData[i][2]}, hour {inData[i][3]}')
 
     #Add the rows in reverse order so we are counting starting from the start of the list
     for i in reversed(rowsToAdd):

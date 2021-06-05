@@ -1,6 +1,4 @@
 import pandas as pd
-import os
-import numpy as np
 
 def main():
     # PURPOSE: Creates otoole formatted TechnologyTo/FromStorage CSVs
@@ -11,20 +9,28 @@ def main():
     # Model Parameters
     ###########################################
 
-    ## WRITES TO MODE_OF_OPERATION 1
-
     # Regions to print over
-    dfRegions = pd.read_csv('../src/data/REGION.csv')
-    regions = dfRegions['VALUE'].tolist()
+    df = pd.read_csv('../src/data/REGION.csv')
+    regions = df['VALUE'].tolist()
+
+    # Subregions to print over
+    df = pd.read_excel('../dataSources/Regionalization.xlsx', sheet_name='CAN')
+    subregions = df['REGION'].tolist()
+    subregions = list(set(subregions)) # removes duplicates
+
+    #Read in master list of technologies and get storage names
+    dfGeneration_raw = pd.read_csv('../dataSources/techList_AUTO_GENERATED.csv')
+    dfGeneration = dfGeneration_raw.loc[dfGeneration_raw['GENERATION'] == 'STO']
+    storages = dfGeneration['VALUE'].tolist()
 
     #TechnologyToStorage (Technology, Storage)
     techToStorage = {
-        'P2G':'TANK',
+        'TNK':'P2G'
     }
 
     #TechnologyToStorage (Technology, Storage)
     techFromStorage = {
-        'FC':'TANK',
+        'TNK':'FCL'
     }
 
     ###########################################
@@ -38,10 +44,16 @@ def main():
 
     #print all values 
     for region in regions:
-        for tech,storage in techToStorage.items():
-            toStorageData.append([region, tech, storage, 1, 1])
-        for tech,storage in techFromStorage.items():
-            fromStorageData.append([region, tech, storage, 1, 1])
+        for subregion in subregions:
+            for storage in storages:
+                #Tech to storage
+                techName = 'PWR' + techToStorage[storage] + 'CAN' + subregion + '01'
+                storageName = 'STO' + storage + 'CAN' + subregion
+                toStorageData.append([region, techName, storageName, 1.0, 1])
+                #Tech from storage
+                techName = 'PWR' + techFromStorage[storage] + 'CAN' + subregion + '01'
+                storageName = 'STO' + storage + 'CAN' + subregion
+                fromStorageData.append([region, techName, storageName, 1.0, 1])
     
     #write tech to storage
     dfOut = pd.DataFrame(toStorageData,columns=['REGION','TECHNOLOGY','STORAGE', 'MODE_OF_OPERATION','VALUE'])
