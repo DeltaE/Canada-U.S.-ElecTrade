@@ -10,7 +10,7 @@ def main():
     ###########################################
 
     # Regions to print over
-    df = pd.read_csv('../src/data/REGION.csv')
+    df = pd.read_csv('../src/data/Canada/REGION.csv')
     regions = df['VALUE'].tolist()
 
     # Subregions to print over
@@ -57,11 +57,11 @@ def main():
     
     #write tech to storage
     dfOut = pd.DataFrame(toStorageData,columns=['REGION','TECHNOLOGY','STORAGE', 'MODE_OF_OPERATION','VALUE'])
-    dfOut.to_csv('../src/data/TechnologyToStorage.csv', index=False)
+    dfOut.to_csv('../src/data/Canada/TechnologyToStorage.csv', index=False)
 
     #write tech from storage
     dfOut = pd.DataFrame(fromStorageData,columns=['REGION','TECHNOLOGY','STORAGE', 'MODE_OF_OPERATION','VALUE'])
-    dfOut.to_csv('../src/data/TechnologyFromStorage.csv', index=False)
+    dfOut.to_csv('../src/data/Canada/TechnologyFromStorage.csv', index=False)
 
 if __name__ == "__main__":
     main()

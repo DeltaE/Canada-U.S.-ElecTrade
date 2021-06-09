@@ -10,7 +10,7 @@ def main():
     ###########################################
 
     # Regions to print over
-    df = pd.read_csv('../src/data/REGION.csv')
+    df = pd.read_csv('../src/data/Canada/REGION.csv')
     regions = df['VALUE'].tolist()
 
     # Subregions to print over
@@ -19,7 +19,7 @@ def main():
     subregions = list(set(subregions)) # removes duplicates
 
     #Years to Print over
-    dfYears = pd.read_csv('../src/data/YEAR.csv')
+    dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
     years = dfYears['VALUE'].tolist()
 
     #Techs to tag
@@ -43,7 +43,7 @@ def main():
     
     #write to a csv
     dfOut = pd.DataFrame(dataOut,columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
-    dfOut.to_csv('../src/data/RETagTechnology.csv', index=False)
+    dfOut.to_csv('../src/data/Canada/RETagTechnology.csv', index=False)
 
 if __name__ == "__main__":
     main()

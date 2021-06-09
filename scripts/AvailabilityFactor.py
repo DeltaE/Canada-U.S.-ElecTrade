@@ -18,11 +18,11 @@ def main():
         'F':[10, 11, 12]}
 
     #Years to Print over
-    dfYears = pd.read_csv('../src/data/YEAR.csv')
+    dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
     years = dfYears['VALUE'].tolist()
 
     # Regions to print over
-    dfRegions = pd.read_csv('../src/data/REGION.csv')
+    dfRegions = pd.read_csv('../src/data/Canada/REGION.csv')
     regions = dfRegions['VALUE'].tolist()
 
     #Dictionary for subregion to province mappings
@@ -84,7 +84,7 @@ def main():
     ###########################################
 
     df = pd.DataFrame(outData, columns = ['REGION','TECHNOLOGY','YEAR','VALUE'])
-    df.to_csv('../src/data/AvailabilityFactor.csv', index=False)
+    df.to_csv('../src/data/Canada/AvailabilityFactor.csv', index=False)
 
 if __name__ == "__main__":
     main()

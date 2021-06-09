@@ -14,11 +14,11 @@ def main():
     ## ASSUMES ALL CAPACITIES IN GW AND ALL ENNERGY IN PJ
 
     # Regions to print over
-    df = pd.read_csv('../src/data/REGION.csv')
+    df = pd.read_csv('../src/data/Canada/REGION.csv')
     regions = df['VALUE'].tolist()
 
     #Technologies to print over
-    df = pd.read_csv('../src/data/TECHNOLOGY.csv')
+    df = pd.read_csv('../src/data/Canada/TECHNOLOGY.csv')
     technologis = df['VALUE'].tolist()
 
     '''
@@ -75,7 +75,7 @@ def main():
 
     #write to csv
     dfout = pd.DataFrame(data,columns=['REGION','TECHNOLOGY','VALUE'])
-    dfout.to_csv('../src/data/CapacityToActivityUnit.csv', index=False)
+    dfout.to_csv('../src/data/Canada/CapacityToActivityUnit.csv', index=False)
 
 if __name__ == "__main__":
     main()  

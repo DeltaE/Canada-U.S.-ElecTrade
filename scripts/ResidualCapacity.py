@@ -15,7 +15,7 @@ def main():
     ###########################################
 
     # Regions to print over
-    dfRegions = pd.read_csv('../src/data/REGION.csv')
+    dfRegions = pd.read_csv('../src/data/Canada/REGION.csv')
     regions = dfRegions['VALUE'].tolist()
 
     #Dictionary for subregion to province mappings
@@ -29,7 +29,7 @@ def main():
         subregions[subregion].append(province)
 
     #Years to Print over
-    dfYears = pd.read_csv('../src/data/YEAR.csv')
+    dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
     years = dfYears['VALUE'].tolist()
 
     ###########################################
@@ -71,7 +71,7 @@ def main():
 
     #write operational life to a csv
     dfOut = pd.DataFrame(opLifeData,columns=['REGION','TECHNOLOGY','VALUE'])
-    dfOut.to_csv('../src/data/OperationalLife.csv', index=False)
+    dfOut.to_csv('../src/data/Canada/OperationalLife.csv', index=False)
 
     ###########################################
     # Residual Capacity
@@ -131,7 +131,7 @@ def main():
 
     #wrirte to a csv 
     dfOut = pd.DataFrame(resCapData,columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
-    dfOut.to_csv('../src/data/ResidualCapacity.csv', index=False)
+    dfOut.to_csv('../src/data/Canada/ResidualCapacity.csv', index=False)
 
 if __name__ == "__main__":
     main()

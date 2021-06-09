@@ -14,7 +14,7 @@ def main():
     ###########################################
 
     # Regions to print over
-    df = pd.read_csv('../src/data/REGION.csv')
+    df = pd.read_csv('../src/data/Canada/REGION.csv')
     regions = df['VALUE'].tolist()
 
     # Subregions to print over
@@ -23,7 +23,7 @@ def main():
     subregions = list(set(subregions)) # removes duplicates
 
     #Years to Print over
-    dfYears = pd.read_csv('../src/data/YEAR.csv')
+    dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
     years = dfYears['VALUE'].tolist()
 
     #Trigger used to print capital, fixed and variable costs one at a time
@@ -74,7 +74,7 @@ def main():
             df.insert(2,'MODE_OF_OPERATION',modeOperation,True)
 
         #Print capactiyFactor dataframe to a csv 
-        outLocation = '../src/data/' + outFile
+        outLocation = '../src/data/Canada/' + outFile
         df.to_csv(outLocation, index=False)
 
 

@@ -15,7 +15,7 @@ def main():
     ### EVERYTHING IS CO2 EMISSIONS
 
     # Regions to print over
-    df = pd.read_csv('../src/data/REGION.csv')
+    df = pd.read_csv('../src/data/Canada/REGION.csv')
     regions = df['VALUE'].tolist()
 
     # Subregions to print over
@@ -24,7 +24,7 @@ def main():
     subregions = list(set(subregions)) # removes duplicates
 
     #Years to Print over
-    dfYears = pd.read_csv('../src/data/YEAR.csv')
+    dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
     years = dfYears['VALUE'].tolist()
 
     ###########################################
@@ -51,7 +51,7 @@ def main():
     
     #write to a csv
     dfOut = pd.DataFrame(dataOut,columns=['REGION','TECHNOLOGY','EMISSION','MODE_OF_OPERATION','YEAR','VALUE'])
-    dfOut.to_csv('../src/data/EmissionActivityRatio.csv', index=False)
+    dfOut.to_csv('../src/data/Canada/EmissionActivityRatio.csv', index=False)
 
 if __name__ == "__main__":
     main()

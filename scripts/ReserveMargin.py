@@ -15,7 +15,7 @@ def main():
     ###########################################
 
     # Regions to print over
-    dfRegions = pd.read_csv('../src/data/REGION.csv')
+    dfRegions = pd.read_csv('../src/data/Canada/REGION.csv')
     regions = dfRegions['VALUE'].tolist()
 
     #Dictionary for subregion to province mappings
@@ -29,7 +29,7 @@ def main():
         subregions[subregion].append(province)
 
     #Years to Print over
-    dfYears = pd.read_csv('../src/data/YEAR.csv')
+    dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
     years = dfYears['VALUE'].tolist()
     
     # holds baselione reserve margin for each province based on NERC
@@ -179,13 +179,13 @@ def main():
 
     #write out all files
     dfReserveMargin = pd.DataFrame(reserveMargin,columns=['REGION','YEAR','VALUE'])
-    dfReserveMargin.to_csv('../src/data/ReserveMargin.csv', index=False)
+    dfReserveMargin.to_csv('../src/data/Canada/ReserveMargin.csv', index=False)
 
     dfReserveMarginFuel = pd.DataFrame(reserveMarginTagFuel,columns=['REGION','FUEL','YEAR','VALUE'])
-    dfReserveMarginFuel.to_csv('../src/data/ReserveMarginTagFuel.csv', index=False)
+    dfReserveMarginFuel.to_csv('../src/data/Canada/ReserveMarginTagFuel.csv', index=False)
 
     dfReserveMarginTech = pd.DataFrame(reserveMarginTagTech,columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
-    dfReserveMarginTech.to_csv('../src/data/ReserveMarginTagTechnology.csv', index=False)
+    dfReserveMarginTech.to_csv('../src/data/Canada/ReserveMarginTagTechnology.csv', index=False)
 
     # Reference code before switching over to osemosys gloabl naming 
     '''

@@ -14,7 +14,7 @@ def main():
     ###EVERYTHING CURRENTLY MAPS TO MODE_OFOPERARION = 1
 
     # Regions to print over
-    df = pd.read_csv('../src/data/REGION.csv')
+    df = pd.read_csv('../src/data/Canada/REGION.csv')
     regions = df['VALUE'].tolist()
 
     # Subregions to print over
@@ -23,7 +23,7 @@ def main():
     subregions = list(set(subregions)) # removes duplicates
 
     #Years to Print over
-    dfYears = pd.read_csv('../src/data/YEAR.csv')
+    dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
     years = dfYears['VALUE'].tolist()
 
     ###########################################
@@ -160,9 +160,9 @@ def main():
 
     #write IAR and OAR to files 
     dfOut = pd.DataFrame(masterIARList,columns=['REGION','TECHNOLOGY','FUEL','MODE_OF_OPERATION','YEAR','VALUE'])
-    dfOut.to_csv(f'../src/data/InputActivityRatio.csv', index=False)
+    dfOut.to_csv(f'../src/data/Canada/InputActivityRatio.csv', index=False)
     dfOut = pd.DataFrame(masterOARList,columns=['REGION','TECHNOLOGY','FUEL','MODE_OF_OPERATION','YEAR','VALUE'])
-    dfOut.to_csv(f'../src/data/OutputActivityRatio.csv', index=False)
+    dfOut.to_csv(f'../src/data/Canada/OutputActivityRatio.csv', index=False)
 
 if __name__ == "__main__":
     main()

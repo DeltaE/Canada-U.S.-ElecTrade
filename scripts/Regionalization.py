@@ -26,7 +26,7 @@ def main():
 
     #write to a csv
     dfOut = pd.DataFrame(dataOut,columns=['VALUE'])
-    dfOut.to_csv('../src/data/REGION.csv', index=False)
+    dfOut.to_csv('../src/data/Canada/REGION.csv', index=False)
 
 if __name__ == "__main__":
     main()

@@ -10,7 +10,7 @@ def main():
     # OUTPUT: none
 
     # Regions to print over
-    df = pd.read_csv('../src/data/REGION.csv')
+    df = pd.read_csv('../src/data/Canada/REGION.csv')
     regions = df['VALUE'].tolist()
 
     # Subregions to print over
@@ -38,7 +38,7 @@ def main():
                 data.append([region,stoName,life])
 
     df = pd.DataFrame(data, columns=['REGION','STORAGE','VALUE'])
-    df.to_csv('../src/data/OperationalLifeStorage.csv', index=False)
+    df.to_csv('../src/data/Canada/OperationalLifeStorage.csv', index=False)
     
 if __name__ == "__main__":
     main()
