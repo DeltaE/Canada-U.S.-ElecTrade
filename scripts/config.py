@@ -21,9 +21,6 @@ def main():
     # Emission Types
     emissions = ['CO2']
 
-    # Storages
-    storages = ['TNK'] #Tank
-
     # PWR Technologies
     techsMaster = [
         'BIO', # Biomass
@@ -35,8 +32,8 @@ def main():
         'SPV', # Solar
         'URN', # Nuclear
         'WND', # Wind
-        'P2G', # Power to Gas
-        'FCL'  # Fuel Cell
+        #'P2G', # Power to Gas
+        #'FCL'  # Fuel Cell
     ]
 
     #RWN Technologies
@@ -56,7 +53,7 @@ def main():
 
     #STO Technologies
     stoTechs = [
-        'TNK' #Tank
+        #'TNK' #Tank
     ]
 
     #Countries and subregions in the model
@@ -115,7 +112,7 @@ def main():
     ####################################
 
     #get storages for each region 
-    stoList = getSTO(countries, storages)
+    stoList = getSTO(countries, stoTechs)
 
     dfOut = pd.DataFrame(stoList, columns=['VALUE'])
     dfOut.to_csv('../src/data/Canada/STORAGE.csv', index=False)
@@ -349,6 +346,9 @@ def getSTO(regions, storages):
 
     # list to hold technologies
     outList = []
+
+    if not storages:
+        return storages
 
     # Loop to create all technology names
     for region, subregions in regions.items():

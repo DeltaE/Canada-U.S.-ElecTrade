@@ -40,6 +40,9 @@ def main():
     #get list of technologies to print over
     techList = list(dfRaw)
 
+    #Techs that operate on two modes of operation 
+    modeTwoTechs = ['CCG','CCG','COA','COC','URN']
+
     #print all values 
     for region in regions:
         for year in years:
@@ -48,6 +51,8 @@ def main():
                     activityRatio = dfRaw.loc[year,tech]
                     techName = 'PWR' + tech + 'CAN' + subregion + '01'
                     dataOut.append([region, techName, 'CO2', 1, year, activityRatio])
+                    if tech in modeTwoTechs:
+                        dataOut.append([region, techName, 'CO2', 2, year, activityRatio])
     
     #write to a csv
     dfOut = pd.DataFrame(dataOut,columns=['REGION','TECHNOLOGY','EMISSION','MODE_OF_OPERATION','YEAR','VALUE'])

@@ -39,6 +39,15 @@ def main():
     #read in raw operational life values
     dfOperationalLife = pd.read_csv('../dataSources/OperationalLifeTechnology.csv')
 
+    #remove P2G and FCL columns 
+    rowsToDrop = []
+    for i in range(len(dfOperationalLife)):
+      tech = dfOperationalLife['TECHNOLOGY'].iloc[i]
+      if (tech == 'P2G') or (tech == 'FCL'):
+        rowsToDrop.append(i)
+    dfOperationalLife = dfOperationalLife.drop(rowsToDrop)
+    dfOperationalLife.reset_index()
+
     #Create a dictionary from the tech, year values for use with residual capacity 
     techs = dfOperationalLife['TECHNOLOGY'].tolist()
     opLifeYears = dfOperationalLife['YEARS'].tolist()

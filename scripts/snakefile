@@ -69,7 +69,7 @@ osemosysFiles = [
 ]
 
 usaFiles = [
-#	'AvailabilityFactor.csv',
+	'AvailabilityFactor.csv',
 	'CapacityFactor.csv',
 	'CapacityToActivityUnit.csv',
 	'CapitalCost.csv',
@@ -96,7 +96,7 @@ provinces = ['BC','AB','SAS','MAN','ONT','QC','NB','NL','NS','PEI']
 ## TARGETS
 #####################################
 
-fileName = 'Canada'
+fileName = 'CanadaUSA'
 inputDir = '../dataSources/'
 outputDir = '../src/'
 
@@ -312,7 +312,8 @@ rule TechToFromStorage:
 rule UsaData:
 	input:
 		inputDir + 'Regionalization.xlsx',
-		inputDir + 'USA_Data.xlsx'
+		inputDir + 'USA_Data.xlsx',
+		inputDir + 'USA_Trade.csv'
 	output:
 		expand(outputDir + 'data/USA/{usaFile}', usaFile = usaFiles)
 	shell:

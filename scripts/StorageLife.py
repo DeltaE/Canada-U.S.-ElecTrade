@@ -23,6 +23,11 @@ def main():
     dfGeneration = dfGeneration_raw.loc[dfGeneration_raw['GENERATION'] == 'STO']
     storages = dfGeneration['VALUE'].tolist()
 
+    if not storages:
+        df = pd.DataFrame(columns=['REGION','STORAGE','VALUE'])
+        df.to_csv('../src/data/Canada/OperationalLifeStorage.csv', index=False)
+        return
+
     #Dictory to hold storage ype and op life in years
     storageLife = {'TNK':30}
 

@@ -22,6 +22,11 @@ def main():
     dfGeneration_raw = pd.read_csv('../dataSources/techList_AUTO_GENERATED.csv')
     dfGeneration = dfGeneration_raw.loc[dfGeneration_raw['GENERATION'] == 'STO']
     storages = dfGeneration['VALUE'].tolist()
+    if not storages:
+        dfOut = pd.DataFrame(columns=['REGION','TECHNOLOGY','STORAGE', 'MODE_OF_OPERATION','VALUE'])
+        dfOut.to_csv('../src/data/Canada/TechnologyToStorage.csv', index=False)
+        dfOut.to_csv('../src/data/Canada/TechnologyFromStorage.csv', index=False)
+        return
 
     #TechnologyToStorage (Technology, Storage)
     techToStorage = {

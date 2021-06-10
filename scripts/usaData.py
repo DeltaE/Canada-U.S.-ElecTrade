@@ -115,11 +115,10 @@ def main():
     rnwList = getRNWtechs(countries, rnwTechs)
 
     # get trade technology list 
-    #trnList = getTRNtechs()
+    trnList = getTRNtechs()
 
     #Append lists together and write to a csv
-    #outputTechs = pwrList + pwrTrnList + minList + rnwList + trnList
-    outputTechs = pwrList + pwrTrnList + minList + rnwList
+    outputTechs = pwrList + pwrTrnList + minList + rnwList + trnList
     dfOut = pd.DataFrame(outputTechs, columns=['VALUE'])
     dfOut.to_csv('../src/data/USA/TECHNOLOGY.csv', index=False)
 
@@ -219,7 +218,10 @@ def main():
         elif param == 'FixedCost':
             dfOut = getFixedCost(techMap, df)
         elif param == 'TotalAnnualMaxCapacity':
-            dfOut = getTotalAnnualMaxCapacity(techMap, df)
+            # Something is wrong with these values...
+            # SE Residual Capacity is greater then SE Total Annual Max Capacity 
+            #dfOut = getTotalAnnualMaxCapacity(techMap, df)
+            dfOut = pd.DataFrame(columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
         elif param == 'ReserveMarginTagTechnology':
             dfOut = getReserveMarginTagTechnology(techMap, df)
         elif param == 'ReserveMarginTagFuel':
@@ -317,7 +319,7 @@ def getRNWtechs(regions, techs):
     # Return list of rnw Technologes
     return outList
 
-def getTRNtechs(outputTechs):
+def getTRNtechs():
     # PURPOSE: Creates all the TRN naming technologies
     # INPUT:   None
     # OUTPUT:  outList =  List of all the TRN technologies
@@ -326,7 +328,7 @@ def getTRNtechs(outputTechs):
     outList = []
 
     #Read in the trade csv datafile 
-    df = pd.read_csv('../dataSources/Trade.csv')
+    df = pd.read_csv('../dataSources/USA_Trade.csv')
     outList = df['TECHNOLOGY'].tolist()
     outList = list(set(outList)) # remove duplicates
     
@@ -479,9 +481,8 @@ def getCapacityFactor(techMap, df):
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
     #capacity factor only specified for 2015 and 2016
-
-    df = df.loc[df['YEAR'] == 2016]
-    df.reset_index()
+    #df = df.loc[df['YEAR'] == 2016]
+    #df.reset_index()
 
     #Initialize filtered dataframe 
     columns = list(df)
@@ -491,7 +492,6 @@ def getCapacityFactor(techMap, df):
     for tech in techMap:
         dfTemp = df.loc[df['TECHNOLOGY'] == tech]
         dfFiltered = dfFiltered.append(dfTemp)
-
     df = dfFiltered
     df.reset_index()
 
@@ -499,7 +499,8 @@ def getCapacityFactor(techMap, df):
     years = range(2019,2051)
 
     #holds output data
-    outData = []
+    outDataCF = [] # Capacity Factor
+    outDataAF = [] # Availability Factor
 
     #map data
     for year in years:
@@ -509,11 +510,32 @@ def getCapacityFactor(techMap, df):
             tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
             ts = df['TIMESLICE'].iloc[i]
             value = df['CAPACITYFACTOR'].iloc[i]
-            outData.append([region,tech,ts,year,value])
+            if techMapped == 'HYD':
+                outDataAF.append([region,tech,ts,year,value])
+            else:
+                outDataCF.append([region,tech,ts,year,value])
 
-    #create and return datafram
-    dfOut = pd.DataFrame(outData, columns = ['REGION','TECHNOLOGY','TIMESLICE','YEAR','VALUE'])
-    return dfOut
+    #create and return dataframe for CAPACITY FACTOR
+    dfOutCF = pd.DataFrame(outDataCF, columns = ['REGION','TECHNOLOGY','TIMESLICE','YEAR','VALUE'])
+
+    #Create and write Availability Factor data to a dataframe 
+    dfAf = pd.DataFrame(outDataAF, columns = ['REGION','TECHNOLOGY','TIMESLICE','YEAR','VALUE'])
+    afTechs = dfAf['TECHNOLOGY'].to_list()
+    afTechs = list(set(afTechs))
+
+    outDataAF = [] 
+    for tech in afTechs:
+        dfTemp = dfAf.loc[dfAf['TECHNOLOGY'] == tech]
+        for year in years:
+            dfYear = dfTemp.loc[dfTemp['YEAR'] == year]
+            af = dfYear['VALUE'].mean()
+            outDataAF.append(['NAmerica',tech,year,af])
+    
+    #create and return dataframe for CAPACITY FACTOR
+    dfOutAF = pd.DataFrame(outDataAF, columns = ['REGION','TECHNOLOGY','YEAR','VALUE'])
+    dfOutAF.to_csv('../src/data/USA/AvailabilityFactor.csv', index=False)
+        
+    return dfOutCF
 
 def getOperationalLife(techMap, df):
     # PURPOSE: Creates opertionalLife file from USA data
@@ -543,6 +565,13 @@ def getOperationalLife(techMap, df):
         tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
         value = df['OPERATIONALLIFE'].iloc[i]
         outData.append([region,tech,value])
+
+    #Transmission operational life 
+    dfTrade = pd.read_csv('../dataSources/USA_Trade.csv')
+    techListTrade = dfTrade['TECHNOLOGY'].tolist()
+    techListTrade = list(set(techListTrade)) #remove duplicates
+    for tech in techListTrade:
+        outData.append(['NAmerica',tech,100])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','VALUE'])
@@ -581,6 +610,20 @@ def getResidualCapacity(techMap, df):
         year = df['YEAR'].iloc[i]
         value = df['RESIDUALCAPACITY'].iloc[i]
         outData.append([region,tech,year,value])
+
+    #Transmission Residual Capacity
+    dfTrade = pd.read_csv('../dataSources/USA_Trade.csv')
+    techListTrade = dfTrade['TECHNOLOGY'].tolist()
+    techListTrade = list(set(techListTrade)) #remove duplicates
+
+    for region in ['NAmerica']:
+      for tech in techListTrade:
+        dfResCapTrd = dfTrade.loc[(dfTrade['TECHNOLOGY'] == tech) & 
+                                  (dfTrade['MODE'] == 1)]
+        dfResCapTrd.reset_index()
+        resCapTrd = dfResCapTrd['CAPACITY (GW)'].iloc[0]
+        for year in range(2019,2051):
+          outData.append([region, tech, year, resCapTrd])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
@@ -652,6 +695,17 @@ def getInputActivityRatio(techMap, inputFuelMap, subregions, df):
             techName = 'PWR' + 'TRN' + 'USA' + subregion
             fuelIn = 'ELC' + 'USA' + subregion + '01'
             outData.append([region, techName, fuelIn, 1, year, 1])
+    
+    #IAR for transmission
+    dfTrn = pd.read_csv('../dataSources/USA_Trade.csv')
+    for region in ['NAmerica']:
+        for year in range(2019,2051):
+            for i in range(len(dfTrn)):
+                techName = dfTrn.iloc[i]['TECHNOLOGY']
+                inFuel = dfTrn.iloc[i]['INFUEL']
+                iar = dfTrn.iloc[i]['IAR']
+                mode = dfTrn.iloc[i]['MODE']
+                outData.append([region, techName, inFuel, mode, year, iar])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','FUEL','MODE_OF_OPERATION','YEAR','VALUE'])
@@ -719,6 +773,17 @@ def getOutputActivityRatio(techMap, subregions):
                 if techMap[tech] in intFuel:
                     outData.append([region, techName, fuel, 2, year, 1])
 
+    #OAR for transmission
+    dfTrn = pd.read_csv('../dataSources/USA_Trade.csv')
+    for region in ['NAmerica']:
+        for year in range(2019,2051):
+            for i in range(len(dfTrn)):
+                techName = dfTrn.iloc[i]['TECHNOLOGY']
+                outFuel = dfTrn.iloc[i]['OUTFUEL']
+                oar = dfTrn.iloc[i]['OAR']
+                mode = dfTrn.iloc[i]['MODE']
+                outData.append([region, techName, outFuel, mode, year, oar])
+
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','FUEL','MODE_OF_OPERATION','YEAR','VALUE'])
     return dfOut
@@ -757,7 +822,43 @@ def getCapitalCost(techMap, df):
         tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
         year = df['YEAR'].iloc[i]
         value = df['CAPITALCOST'].iloc[i]
+        #Convert from $/kW to M$/GW
+
         outData.append([region,tech,year,value])
+
+    #Get trade costs
+    dfCosts = pd.read_csv('../dataSources/USA_Trade.csv')
+
+    #Cost data only populated on mode 1 data rows
+    dfCosts = dfCosts.loc[dfCosts['MODE'] == 1]
+
+    # get list of all the technologies
+    techList = dfCosts['TECHNOLOGY'].tolist()
+
+    #Regions to print over
+    regions = ['NAmerica']
+
+    #cost types to get data for
+    costType = ['CAPEX']
+
+    #populate data
+    for region in regions:
+        for tech in techList:
+
+            #remove all rows except for our technology
+            dfCostsFiltered = dfCosts.loc[dfCosts['TECHNOLOGY']==tech]
+            dfCostsFiltered.reset_index()
+
+            #reset costs
+            trnCost = 0
+
+            #get costs
+            for cost in costType:
+                trnCost = trnCost + float(dfCostsFiltered[cost].iloc[0])
+
+            #save same value for all years 
+            for year in range(2019,2051):
+                outData.append([region,tech,year,trnCost])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
@@ -806,6 +907,40 @@ def getVariableCost(techMap, inputFuelMap, df):
             mode = 2
             outData.append([region,tech,mode,year,value])
 
+    #Get trade costs
+    dfCosts = pd.read_csv('../dataSources/USA_Trade.csv')
+
+    #Cost data only populated on mode 1 data rows
+    dfCosts = dfCosts.loc[dfCosts['MODE'] == 1]
+
+    # get list of all the technologies
+    techList = dfCosts['TECHNOLOGY'].tolist()
+
+    #Regions to print over
+    regions = ['NAmerica']
+
+    #cost types to get data for
+    costType = ['Variable O&M', 'Fuel']
+
+    #populate data
+    for region in regions:
+        for tech in techList:
+
+            #remove all rows except for our technology
+            dfCostsFiltered = dfCosts.loc[dfCosts['TECHNOLOGY']==tech]
+            dfCostsFiltered.reset_index()
+
+            #reset costs
+            trnCost = 0
+
+            #get costs
+            for cost in costType:
+                trnCost = trnCost + float(dfCostsFiltered[cost].iloc[0])
+
+            #save same value for all years 
+            for year in range(2019,2051):
+                outData.append([region,tech,year,trnCost])
+
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','MODE_OF_OPERATION','YEAR','VALUE'])
     return dfOut
@@ -843,6 +978,41 @@ def getFixedCost(techMap, df):
         year = df['YEAR'].iloc[i]
         value = df['FIXEDCOST'].iloc[i]
         outData.append([region,tech,year,value])
+
+    #Get trade costs
+    dfCosts = pd.read_csv('../dataSources/USA_Trade.csv')
+
+    #Cost data only populated on mode 1 data rows
+    dfCosts = dfCosts.loc[dfCosts['MODE'] == 1]
+
+    # get list of all the technologies
+    techList = dfCosts['TECHNOLOGY'].tolist()
+
+    #Regions to print over
+    regions = ['NAmerica']
+
+    #cost types to get data for
+    costType = ['Fixed O&M']
+
+    #populate data
+    for region in regions:
+        for tech in techList:
+
+            #remove all rows except for our technology
+            dfCostsFiltered = dfCosts.loc[dfCosts['TECHNOLOGY']==tech]
+            dfCostsFiltered.reset_index()
+
+            #reset costs
+            trnCost = 0
+
+            #get costs
+            for cost in costType:
+                trnCost = trnCost + float(dfCostsFiltered[cost].iloc[0])
+
+            #save same value for all years 
+            for year in range(2019,2051):
+                outData.append([region,tech,year,trnCost])
+
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])

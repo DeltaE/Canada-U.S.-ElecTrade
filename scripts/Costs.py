@@ -51,7 +51,7 @@ def main():
         dfNREL = read_NREL(costType, regions, subregions, years)
 
         #Populate P2G and FC costs
-        dfP2gSystem = p2gSystem(costType, regions, subregions, years)
+        #dfP2gSystem = p2gSystem(costType, regions, subregions, years)
 
         #Populate Trade costs
         trade = tradeCosts(costType, regions, years)
@@ -63,15 +63,17 @@ def main():
         #append all csvs together
         df = pd.DataFrame(columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
         df = df.append(dfNREL)
-        df = df.append(dfP2gSystem)
+        #df = df.append(dfP2gSystem)
         df = df.append(trade)
 
+        '''
         #add a mode of operation column for variable cost
         if outFile == 'VariableCost.csv':
             modeOperation = []
             for i in range(len(df)):
                 modeOperation.append(1)
             df.insert(2,'MODE_OF_OPERATION',modeOperation,True)
+        '''
 
         #Print capactiyFactor dataframe to a csv 
         outLocation = '../src/data/Canada/' + outFile
@@ -147,6 +149,9 @@ def read_NREL(costType, regions, subregions, years):
     #used for numerical indexing over columns shown in cost type for loop
     colNames = list(dfCost) 
 
+    #Technologies that operate on two modes of operation 
+    modeTwoTechs = ['CCG','CTG','COA','COC','URN']
+
     #Loop over regions and years 
     for region in regions:
         for subregion in subregions:
@@ -189,10 +194,23 @@ def read_NREL(costType, regions, subregions, years):
                     #construct technology name
                     techName = 'PWR' + tech + 'CAN' + subregion + '01'
 
-                    #write data to output list
-                    data.append([region, techName, year, totalCost])
+                    # write data to output list
+                    # need to include a mode column for variable cost
+                    if costType[0] == 'Variable O&M':
+                        if tech in modeTwoTechs:
+                            modes = [1,2]
+                        else:
+                            modes = [1]
+                        for mode in modes:
+                            data.append([region,techName,mode,year,totalCost])
+                    else:
+                        data.append([region, techName, year, totalCost])
                 
-    df = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
+    if costType[0] == 'Variable O&M':
+        df = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','MODE_OF_OPERATION','YEAR','VALUE'])
+    else:
+        df = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
+
     return df
 
 def p2gSystem(costType, regions, subregions, years):
@@ -231,15 +249,22 @@ def p2gSystem(costType, regions, subregions, years):
                 fcName = 'PWR' + 'FCL' + 'CAN' + subregion + '01'
 
                 # save data
-                dataP2g.append([region, p2gName, year, p2gCost])
-                dataFc.append([region, fcName, year, fcCost])
+                if costType[0] == 'Variable O&M': #add in mode 1 
+                    dataP2g.append([region, p2gName, 1, year, p2gCost])
+                    dataFc.append([region, fcName, 1, year, fcCost])
+                else:
+                    dataP2g.append([region, p2gName, year, p2gCost])
+                    dataFc.append([region, fcName, year, fcCost])
     
-    #create a dataframe to hold all data 
+    #create a master list to hold all data 
     data = dataP2g
     data.extend(dataFc)
 
     #return completed dataframe
-    df = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
+    if costType[0] == 'Variable O&M':
+        df = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','MODE_OF_OPERATION','YEAR','VALUE'])
+    else:
+        df = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
     return df
 
 def tradeCosts(costType, regions, years):
@@ -280,10 +305,17 @@ def tradeCosts(costType, regions, years):
                 trnCost = trnCost + float(costdf[cost].iloc[0])
 
             #save same value for all years 
-            for year in years:
-                data.append([region,tech,year,trnCost])
+            if costType[0] == 'Variable O&M':
+                for year in years:
+                    data.append([region,tech,1,year,trnCost])
+            else:
+                for year in years:
+                    data.append([region,tech,year,trnCost])
 
-    dfOut = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
+    if costType[0] == 'Variable O&M':
+        dfOut = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','MODE_OF_OPERATION','YEAR','VALUE'])
+    else:
+        dfOut = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
     return dfOut
 
 if __name__ == "__main__":
