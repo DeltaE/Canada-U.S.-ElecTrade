@@ -15,11 +15,11 @@ def main():
     ### EVERYTHING IS CO2 EMISSIONS
 
     # Regions to print over
-    df = pd.read_csv('../src/data/REGION.csv')
+    df = pd.read_csv('../src/data/Canada/REGION.csv')
     regions = df['VALUE'].tolist()
 
     #Years to Print over
-    dfYears = pd.read_csv('../src/data/YEAR.csv')
+    dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
     years = dfYears['VALUE'].tolist()
 
     ###########################################
@@ -41,7 +41,7 @@ def main():
     
     #write to a csv
     dfOut = pd.DataFrame(dataOut,columns=['REGION','EMISSION','YEAR','VALUE'])
-    dfOut.to_csv('../src/data/EmissionsPenalty.csv', index=False)
+    dfOut.to_csv('../src/data/Canada/EmissionsPenalty.csv', index=False)
 
 if __name__ == "__main__":
     main()

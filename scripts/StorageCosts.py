@@ -12,7 +12,7 @@ def main():
     # OUTPUT: none
 
     # Regions to print over
-    df = pd.read_csv('../src/data/REGION.csv')
+    df = pd.read_csv('../src/data/Canada/REGION.csv')
     regions = df['VALUE'].tolist()
 
     # Subregions to print over
@@ -21,13 +21,17 @@ def main():
     subregions = list(set(subregions)) # removes duplicates
 
     #Years to Print over
-    dfYears = pd.read_csv('../src/data/YEAR.csv')
+    dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
     years = dfYears['VALUE'].tolist()
 
     #Read in master list of technologies and get storage names
     dfGeneration_raw = pd.read_csv('../dataSources/techList_AUTO_GENERATED.csv')
     dfGeneration = dfGeneration_raw.loc[dfGeneration_raw['GENERATION'] == 'STO']
     storages = dfGeneration['VALUE'].tolist()
+    if not storages:
+        df = pd.DataFrame(columns=['REGION','STORAGE','YEAR','VALUE'])
+        df.to_csv('../src/data/Canada/CapitalCostStorage.csv', index=False)
+        return
 
     #Dictory to hold storage ype and cost in M$/GW
     storageCosts = {'TNK':11.673152}
@@ -48,7 +52,7 @@ def main():
                     data.append([region,stoName,year,cost])
 
     df = pd.DataFrame(data, columns=['REGION','STORAGE','YEAR','VALUE'])
-    df.to_csv('../src/data/CapitalCostStorage.csv', index=False)
+    df.to_csv('../src/data/Canada/CapitalCostStorage.csv', index=False)
     
 
 

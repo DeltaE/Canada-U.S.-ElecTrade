@@ -68,13 +68,35 @@ osemosysFiles = [
 	'YearSplit.csv'
 ]
 
+usaFiles = [
+	'AvailabilityFactor.csv',
+	'CapacityFactor.csv',
+	'CapacityToActivityUnit.csv',
+	'CapitalCost.csv',
+	'EmissionActivityRatio.csv',
+	'FixedCost.csv',
+	'FUEL.csv',
+	'InputActivityRatio.csv',
+	'OutputActivityRatio.csv',
+	'OperationalLife.csv',
+	'ReserveMargin.csv',
+	'ReserveMarginTagFuel.csv',
+	'ReserveMarginTagTechnology.csv',
+	'ResidualCapacity.csv',
+	'SpecifiedAnnualDemand.csv',
+	'SpecifiedDemandProfile.csv',
+	'TECHNOLOGY.csv',
+	'TotalAnnualMaxCapacity.csv',
+	'VariableCost.csv',
+]
+
 provinces = ['BC','AB','SAS','MAN','ONT','QC','NB','NL','NS','PEI']
 
 #####################################
 ## TARGETS
 #####################################
 
-fileName = 'Canada'
+fileName = 'CanadaUSA'
 inputDir = '../dataSources/'
 outputDir = '../src/'
 
@@ -100,59 +122,59 @@ rule ConfigFile:
 		inputDir + 'Trade.csv'
 	output:
 		inputDir + 'techList_AUTO_GENERATED.csv',
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
-		outputDir + 'data/EMISSION.csv',
-		outputDir + 'data/STORAGE.csv',
-		outputDir + 'data/TECHNOLOGY.csv',
-		outputDir + 'data/FUEL.csv'
+		outputDir + 'data/Canada/YEAR.csv',
+		outputDir + 'data/Canada/REGION.csv',
+		outputDir + 'data/Canada/EMISSION.csv',
+		outputDir + 'data/Canada/STORAGE.csv',
+		outputDir + 'data/Canada/TECHNOLOGY.csv',
+		outputDir + 'data/Canada/FUEL.csv'
 	shell:
 		'python config.py'
 
 rule AvailabilityFactor:
 	input:
 		inputDir + 'Regionalization.xlsx',
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv'
+		outputDir + 'data/Canada/YEAR.csv',
+		outputDir + 'data/Canada/REGION.csv'
 	output:
-		outputDir + 'data/AvailabilityFactor.csv'
+		outputDir + 'data/Canada/AvailabilityFactor.csv'
 	shell:
 		'python AvailabilityFactor.py'
 
 rule CapacityFactor:
 	input:
 		inputDir + 'Regionalization.xlsx',
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
+		outputDir + 'data/Canada/YEAR.csv',
+		outputDir + 'data/Canada/REGION.csv',
 		inputDir + 'NREL_Costs.csv',
 		expand(inputDir + 'CapacityFactor/SPV_{province}.csv', province = provinces),
 		expand(inputDir + 'CapacityFactor/WND_{province}.csv', province = provinces)
 	output:
-		outputDir + 'data/CapacityFactor.csv'
+		outputDir + 'data/Canada/CapacityFactor.csv'
 	shell:
 		'python CapacityFactor.py'
 
 rule CapacityToActivity:
 	input:
-		outputDir + 'data/REGION.csv',
-		outputDir + 'data/TECHNOLOGY.csv'
+		outputDir + 'data/Canada/REGION.csv',
+		outputDir + 'data/Canada/TECHNOLOGY.csv'
 	output:
-		outputDir + 'data/CapacityToActivityUnit.csv'
+		outputDir + 'data/Canada/CapacityToActivityUnit.csv'
 	shell:
 		'python CapacityToActivity.py'
 
 rule Costs:
 	input:
 		inputDir + 'Regionalization.xlsx',
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
+		outputDir + 'data/Canada/YEAR.csv',
+		outputDir + 'data/Canada/REGION.csv',
 		inputDir + 'NREL_Costs.csv',
 		inputDir + 'P2G_FC_Costs.xlsx',
 		inputDir + 'Trade.csv'
 	output:
-		outputDir + 'data/CapitalCost.csv',
-		outputDir + 'data/FixedCost.csv',
-		outputDir + 'data/VariableCost.csv'
+		outputDir + 'data/Canada/CapitalCost.csv',
+		outputDir + 'data/Canada/FixedCost.csv',
+		outputDir + 'data/Canada/VariableCost.csv'
 	shell:
 		'python Costs.py'
 
@@ -160,10 +182,10 @@ rule EmissionActivityRatio:
 	input:
 		inputDir + 'EmissionActivityRatioByTechnology.csv',
 		inputDir + 'Regionalization.xlsx',
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv'
+		outputDir + 'data/Canada/YEAR.csv',
+		outputDir + 'data/Canada/REGION.csv'
 	output:
-		outputDir + 'data/EmissionActivityRatio.csv'
+		outputDir + 'data/Canada/EmissionActivityRatio.csv'
 	shell:
 		'python EmissionActivityRatio.py'
 
@@ -172,64 +194,63 @@ rule ActivityRatio:
 		inputDir + 'InputActivityRatioByTechnology.csv', 
 		inputDir + 'OutputActivityRatioByTechnology.csv',
 		inputDir + 'Regionalization.xlsx',
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
+		outputDir + 'data/Canada/YEAR.csv',
+		outputDir + 'data/Canada/REGION.csv',
 		inputDir + 'techList_AUTO_GENERATED.csv',
 		inputDir + 'Trade.csv'
 	output:
-		outputDir + 'data/InputActivityRatio.csv',
-		outputDir + 'data/OutputActivityRatio.csv'
+		outputDir + 'data/Canada/InputActivityRatio.csv',
+		outputDir + 'data/Canada/OutputActivityRatio.csv'
 	shell:
 		'python InOutActivityRatio.py'
-
 
 rule ReserveMargin:
 	input:
 		inputDir + 'Regionalization.xlsx',
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
+		outputDir + 'data/Canada/YEAR.csv',
+		outputDir + 'data/Canada/REGION.csv',
 		inputDir + 'ProvincialAnnualDemand.csv',
 		inputDir + 'ProvincialHourlyLoads_TimeAdjusted_AUTO_GENERATED.csv'
 	output:
-		outputDir + 'data/ReserveMargin.csv',
-		outputDir + 'data/ReserveMarginTagTechnology.csv',
-		outputDir + 'data/ReserveMarginTagFuel.csv'
+		outputDir + 'data/Canada/ReserveMargin.csv',
+		outputDir + 'data/Canada/ReserveMarginTagTechnology.csv',
+		outputDir + 'data/Canada/ReserveMarginTagFuel.csv'
 	shell:
 		'python ReserveMargin.py'
 
 rule ResidualCapacity:
 	input:
 		inputDir + 'Regionalization.xlsx',
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
+		outputDir + 'data/Canada/YEAR.csv',
+		outputDir + 'data/Canada/REGION.csv',
 		inputDir + 'OperationalLifeTechnology.csv',
 		inputDir + 'ResidualCapacitiesByProvince.csv',
 		inputDir + 'Trade.csv'
 	output:
-		outputDir + 'data/ResidualCapacity.csv',
-		outputDir + 'data/OperationalLife.csv'
+		outputDir + 'data/Canada/ResidualCapacity.csv',
+		outputDir + 'data/Canada/OperationalLife.csv'
 	shell:
 		'python ResidualCapacity.py'
 
 rule AnnualDemand:
 	input:
 		inputDir + 'Regionalization.xlsx',
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
+		outputDir + 'data/Canada/YEAR.csv',
+		outputDir + 'data/Canada/REGION.csv',
 		inputDir + 'ProvincialAnnualDemand.csv'
 	output:
-		outputDir + 'data/SpecifiedAnnualDemand.csv'
+		outputDir + 'data/Canada/SpecifiedAnnualDemand.csv'
 	shell:
 		'python SpecifiedAnnualDemand.py'
 
 rule DemandProfile:
 	input:
 		inputDir + 'Regionalization.xlsx',
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
+		outputDir + 'data/Canada/YEAR.csv',
+		outputDir + 'data/Canada/REGION.csv',
 		inputDir + 'ProvincialHourlyLoads.xlsx'
 	output:
-		outputDir + 'data/SpecifiedDemandProfile.csv',
+		outputDir + 'data/Canada/SpecifiedDemandProfile.csv',
 		inputDir + 'ProvincialHourlyLoads_TimeAdjusted_AUTO_GENERATED.csv'
 	shell:
 		'python SpecifiedDemandProfile.py'
@@ -237,56 +258,75 @@ rule DemandProfile:
 rule StorageCost:
 	input:
 		inputDir + 'Regionalization.xlsx',
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
+		outputDir + 'data/Canada/YEAR.csv',
+		outputDir + 'data/Canada/REGION.csv',
 		inputDir + 'techList_AUTO_GENERATED.csv'
 	output:
-		outputDir + 'data/CapitalCostStorage.csv'
+		outputDir + 'data/Canada/CapitalCostStorage.csv'
 	shell:
 		'python StorageCosts.py'
 
 rule StorageLife:
 	input:
 		inputDir + 'Regionalization.xlsx',
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
+		outputDir + 'data/Canada/YEAR.csv',
+		outputDir + 'data/Canada/REGION.csv',
 		inputDir + 'techList_AUTO_GENERATED.csv'
 	output:
-		outputDir + 'data/OperationalLifeStorage.csv'
+		outputDir + 'data/Canada/OperationalLifeStorage.csv'
 	shell:
 		'python StorageLife.py'
 
 rule EmissionPenalty:
 	input:
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
+		outputDir + 'data/Canada/YEAR.csv',
+		outputDir + 'data/Canada/REGION.csv',
 		inputDir + 'EmissionPenaltyByYear.csv'
 	output:
-		outputDir + 'data/EmissionsPenalty.csv'
+		outputDir + 'data/Canada/EmissionsPenalty.csv'
 	shell:
 		'python EmissionPenalty.py'
 
 rule RETags:
 	input:
 		inputDir + 'Regionalization.xlsx',
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
+		outputDir + 'data/Canada/YEAR.csv',
+		outputDir + 'data/Canada/REGION.csv',
 	output:
-		outputDir + 'data/RETagTechnology.csv'
+		outputDir + 'data/Canada/RETagTechnology.csv'
 	shell:
 		'python RETags.py'
 
 rule TechToFromStorage:
 	input:
 		inputDir + 'Regionalization.xlsx',
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
+		outputDir + 'data/Canada/YEAR.csv',
+		outputDir + 'data/Canada/REGION.csv',
 		inputDir + 'techList_AUTO_GENERATED.csv'
 	output:
-		outputDir + 'data/TechnologyToStorage.csv',
-		outputDir + 'data/TechnologyFromStorage.csv'
+		outputDir + 'data/Canada/TechnologyToStorage.csv',
+		outputDir + 'data/Canada/TechnologyFromStorage.csv'
 	shell:
 		'python TechToFromStorage.py'
+
+rule UsaData:
+	input:
+		inputDir + 'Regionalization.xlsx',
+		inputDir + 'USA_Data.xlsx',
+		inputDir + 'USA_Trade.csv'
+	output:
+		expand(outputDir + 'data/USA/{usaFile}', usaFile = usaFiles)
+	shell:
+		'python usaData.py'
+
+rule mergeData:
+	input:
+		expand(outputDir + 'data/Canada/{osemosysFile}', osemosysFile = osemosysFiles),
+		expand(outputDir + 'data/USA/{usaFile}', usaFile = usaFiles)
+	output:
+		expand(outputDir + 'data/{osemosysFile}', osemosysFile = osemosysFiles)
+	shell:
+		'python MergeCanUsaData.py'
 
 rule otooleConvert:
 	input:

@@ -1,7 +1,4 @@
 import pandas as pd
-import numpy as np
-from pandas._libs import indexing
-from pandas.core.indexes.base import Index
 
 def main():
     # PURPOSE: Creates TEch and Fuel sets. Writes our files that are referenced by other scripts
@@ -24,9 +21,6 @@ def main():
     # Emission Types
     emissions = ['CO2']
 
-    # Storages
-    storages = ['TNK'] #Tank
-
     # PWR Technologies
     techsMaster = [
         'BIO', # Biomass
@@ -38,8 +32,8 @@ def main():
         'SPV', # Solar
         'URN', # Nuclear
         'WND', # Wind
-        'P2G', # Power to Gas
-        'FCL'  # Fuel Cell
+        #'P2G', # Power to Gas
+        #'FCL'  # Fuel Cell
     ]
 
     #RWN Technologies
@@ -59,7 +53,7 @@ def main():
 
     #STO Technologies
     stoTechs = [
-        'TNK' #Tank
+        #'TNK' #Tank
     ]
 
     #Countries and subregions in the model
@@ -103,25 +97,25 @@ def main():
 
     # Years set
     dfOut = pd.DataFrame(years,columns=['VALUE'])
-    dfOut.to_csv('../src/data/YEAR.csv', index=False)
+    dfOut.to_csv('../src/data/Canada/YEAR.csv', index=False)
 
     #Regions set
     dfOut = pd.DataFrame(regions, columns=['VALUE'])
-    dfOut.to_csv('../src/data/REGION.csv', index=False)
+    dfOut.to_csv('../src/data/Canada/REGION.csv', index=False)
 
     # Emissions set
     dfOut = pd.DataFrame(emissions, columns=['VALUE'])
-    dfOut.to_csv('../src/data/EMISSION.csv', index=False)
+    dfOut.to_csv('../src/data/Canada/EMISSION.csv', index=False)
 
     ####################################
     ## CREATE STORAGE SET
     ####################################
 
     #get storages for each region 
-    stoList = getSTO(countries, storages)
+    stoList = getSTO(countries, stoTechs)
 
     dfOut = pd.DataFrame(stoList, columns=['VALUE'])
-    dfOut.to_csv('../src/data/STORAGE.csv', index=False)
+    dfOut.to_csv('../src/data/Canada/STORAGE.csv', index=False)
 
     ####################################
     ## CREATE TECHNOLOGY SET
@@ -145,7 +139,7 @@ def main():
     #Append lists together and write to a csv
     outputTechs = pwrList + pwrTrnList + minList + rnwList + trnList
     dfOut = pd.DataFrame(outputTechs, columns=['VALUE'])
-    dfOut.to_csv('../src/data/TECHNOLOGY.csv', index=False)
+    dfOut.to_csv('../src/data/Canada/TECHNOLOGY.csv', index=False)
 
     ####################################
     ## CREATE FUEL SET
@@ -166,10 +160,10 @@ def main():
     #Append lists together and write to a csv
     outputFuels = rnwFuelList + minFuelList + elcFuelList + hy2FuelList
     dfOut = pd.DataFrame(outputFuels, columns=['VALUE'])
-    dfOut.to_csv('../src/data/FUEL.csv', index=False)
+    dfOut.to_csv('../src/data/Canada/FUEL.csv', index=False)
 
     ####################################
-    ## WRITE PROVINCE TO REGION MAPPING
+    ## Extra Functions
     ####################################
 
 def getPWRtechs(regions, techs):
@@ -353,6 +347,9 @@ def getSTO(regions, storages):
     # list to hold technologies
     outList = []
 
+    if not storages:
+        return storages
+
     # Loop to create all technology names
     for region, subregions in regions.items():
         for subregion in subregions:
@@ -362,230 +359,6 @@ def getSTO(regions, storages):
     
     # Return list of hydrogen fuels
     return outList
-
-'''
-
-    LandRegions = ['JWA' , 'KAN', 'MLU', 'NUA', 'SLI', 'SMA', 'PPA']
-    # LandRegions = ['IND']
-
-    LandToGridMap = {
-        'JWA': 'J',  # Java
-        'KAN': 'K',  # Kalimantan
-        'MLU': 'M',  # Maluku Islands
-        'NUA': 'N',  # Lesser Sunda Islands
-        'PPA': 'P',  # Western New Guinea
-        'SLI': 'L',  # Sulawesi
-        'SMA': 'S',   # Sumatra
-    }
-
-
-    # Energy Structure
-
-    EndUseFuels = {
-       'IND': ['COA', 'LPG', 'KER', 'DSL', 'HFO', 'OHC', 'BIO', 'NGS', 'ELCJ02', 'ELCK02', 'ELCM02', 'ELCN02', 'ELCP02', 'ELCL02', 'ELCS02'],
-       'RES': ['LPG', 'KER', 'BIO', 'NGS', 'ELCJ02', 'ELCK02', 'ELCM02', 'ELCN02', 'ELCP02', 'ELCL02', 'ELCS02'],
-       'COM': ['KER', 'DSL', 'LPG', 'BIO', 'NGS', 'ELCJ02', 'ELCK02', 'ELCM02', 'ELCN02', 'ELCP02', 'ELCL02', 'ELCS02'],
-       'AGR': ['DSL', 'ELCJ02', 'ELCK02', 'ELCM02', 'ELCN02', 'ELCP02', 'ELCL02', 'ELCS02'],
-       'TRA': ['GSL', 'KER', 'DSL', 'HFO', 'NGS', 'ELCJ02', 'ELCK02', 'ELCM02', 'ELCN02', 'ELCP02', 'ELCL02', 'ELCS02'],
-       'OTH': ['CRU', 'KER', 'HFO', 'OHC', 'NGS', 'ELCJ02', 'ELCK02', 'ELCM02', 'ELCN02', 'ELCP02', 'ELCL02', 'ELCS02']
-    }
-
-    ImportFuels = ['COA', 'CRU', 'LPG', 'GSL', 'KER', 'DSL', 'HFO']
-
-    ExportFuels = ['COA', 'NGS', 'CRU', 'GSL', 'KER', 'HFO', 'BIO']
-
-    DomesticMining = ['COA', 'NGS', 'CRU']
-
-    DomesticRenewables = ['WND', 'HYD', 'BIO', 'SOL', 'GEO']
-
-    # Note:  Transformation technologies assume that their fuels are created elsewhere (either in the DomesticMining, DomesticRenewables or ImportFuels.
-    TransformationTechnologies = [
-        ['PWRTRNJ01', 'ELCJ01', '1.11', 'ELCJ02', '1', 'Power transmission Java', '1'],  # 90% efficient transmission system (losses)
-    	['PWRTRNK01', 'ELCK01', '1.11', 'ELCK02', '1', 'Power transmission Kalimantan', '1'],
-    	['PWRTRNM01', 'ELCM01', '1.11', 'ELCM02', '1', 'Power transmission Maluku Islands', '1'],
-    	['PWRTRNN01', 'ELCN01', '1.11', 'ELCN02', '1', 'Power transmission Lesser Sunda Islands', '1'],
-    	['PWRTRNP01', 'ELCP01', '1.11', 'ELCP02', '1', 'Power transmission Western New Guinea', '1'],
-    	['PWRTRNL01', 'ELCL01', '1.11', 'ELCL02', '1', 'Power transmission Sulawesi', '1'],
-    	['PWRTRNS01', 'ELCS01', '1.11', 'ELCS02', '1', 'Power transmission Sumatra', '1'],
-
-        ['PWRTRNSJ1', 'ELCS02', '1.05', 'ELCJ01', '1', 'Power Transmission between Sumatra and Java.', '1'],
-        ['PWRTRNSJ1', 'ELCJ02', '1.05', 'ELCS01', '1', '', '2'],
-        ['PWRTRNJN1', 'ELCJ02', '1.05', 'ELCN01', '1', 'Power Transmission betweeen Java and Bali.', '1'],
-        ['PWRTRNJN1', 'ELCN02', '1.05', 'ELCJ01', '1', '', '2'],
-
-    	['UPSCRU001', 'CRU', '1.0', 'LPG', '0.0081', 'Crude oil refinery', '1'],
-        ['UPSCRU001', '', '', 'GSL', '0.1694', 'Crude oil refinery', '1'],
-    	['UPSCRU001', '', '', 'KER', '0.0694', '', '1'],
-    	['UPSCRU001', '', '', 'DSL', '0.3221', '', '1'],
-    	['UPSCRU001', '', '', 'HFO', '0.1429', '', '1'],
-    	['UPSCRU001', '', '', 'OHC', '0.0816', '', '1'],
-
-        # Structure of data is:  [Tech, InFuel, IAR, OutFuel, OAR, Name, Mode]
-        # If the FUEL is '' that piece will not be created.
-
-        # Name is used only the first time this technology shows up.  Fuels are created only if needed.
-
-        # If multiple lines for the same technology, this technology will have multiple input and output activity ratios.
-
-        # Note:  This section can also be used to add input or output fuels to various technologies (cooling water, for example)
-    ]
-
-    # Power Plants:
-    PowerPlants = {
-        'PWRCOAJ01':['Cilacap Adipala coal-fired 660 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAS01':['Bangka Belitung 3 coal-fired 60 MW, Sumatra power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ02':['Tanjung Jati-B II coal-fired 1320 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ03':['Tanjung Jati-B I coal-fired 1320 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ04':['Cirebon coal-fired 660 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ05':['Cilacap 600 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ06':['Labuan coal-fired 600 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAS02':['Labuhan Angin coal-fired 230 MW, Sumatra power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ07':['Lontar coal-fired 945 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAS03':['Ombilin coal-fired 200 MW, Sumatra power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ08':['Paiton (PLN) coal-fired 800 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ09':['Paiton 2300 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ10':['Pelabuhan Ratu coal-fired 1050 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ11':['Rembang coal-fired 630 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ12':['Pacitan coal-fired 630 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ13':['Indramayu coal-fired 990 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ14':['Suralaya coal-fired 3400 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ15':['Suralaya Baru coal-fired 625 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAS04':['Bukit Asam coal-fired 260 MW, Sumatra power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAS05':['Tarahan coal-fired 200 MW, Sumatra power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ16':['Java 4 coal-fired 2000 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ17':['Java 7 coal-fired 2000 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ18':['Central Java coal-fired (by the end of 2016) 2000 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ19':['Tanjung Awar-Awar coal-fired 700 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ20':['Madura coal-fired 200 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ21':['Bojonegara coal-fired 2220 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ22':['Tanjung Jati-A coal-fired 1320 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ23':['Nusa Penida coal-fired 200 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAJ24':['Anyer coal-fired 330 MW, Java-Bali power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAS06':['Kuala Tanjung coal-fired 224 MW, Sumatra power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAS07':['Banjarsari coal-fired 200 MW, Sumatra power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAS08':['Banyuasin coal-fired 200 MW, Sumatra power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAS09':['Baturaja coal-fired 200 MW, Sumatra power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAS10':['Simpang Belimbing coal-fired 300 MW, Sumatra power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAS11':['Arahan coal-fired 2400 MW, Sumatra power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAS12':['Central Bangko coal-fired 2480 MW, Sumatra power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAK01':['West Kalimantan 1 coal-fired 200 MW, Kalimantan power system.', 2.7, 0.0147, 0.014],
-        'PWRCOAK02':['Tanjung coal-fired 110 MW, Kalimantan power system.', 2.7, 0.0147, 0.014],
-        'PWRNGSJ01':['Bekasi 130 MW, West Java power system.', 1.76, 0.0124, 0.012],
-        'PWRNGSS01':['Betara 70 MW, Sumatra power system.', 1.76, 0.0124, 0.012],
-        'PWRNGSJ02':['Grati CCGT 764 MW, Java-Bali power system.', 1.76, 0.0124, 0.012],
-        'PWRNGSJ03':['Gresik CCGT 2255 MW, Java-Bali power system.', 1.76, 0.0124, 0.012],
-        'PWRNGSJ04':['Muara Tawar CCGT 920 MW, Java-Bali power system.', 1.76, 0.0124, 0.012],
-        'PWRNGSJ05':['Muara Karang CCGT 1208 MW, Java-Bali power system.', 1.76, 0.0124, 0.012],
-        'PWRNGSS02':['Palembang Timur 150 MW, Sumatra power system.', 1.76, 0.0124, 0.012],
-        'PWRNGSK01':['PLTG Senipah 92 MW, Kalimantan power system.', 1.76, 0.0124, 0.012],
-        'PWRNGSK02':['PLTG/MG Kalbar Peaker 100 MW, Kalimantan power system.', 1.76, 0.0124, 0.012],
-        'PWRNGSS03':['Sengkang 150 MW, Sumatra power system.', 1.76, 0.0124, 0.012],
-        'PWRNGSJ06':['Tambak Lorok CCGT 1334 MW, Java-Bali power system.', 1.76, 0.0124, 0.012],
-        'PWRNGSJ07':['Tanjung Priok CCGT 1430 MW, Java-Bali power system.', 1.76, 0.0124, 0.012],
-        'PWRDSLJ01':['Senayan Diesel 15 MW, Java-Bali power system.', 2.667, 0, 0],
-        'PWRNGSJ08':['PLTU 400 MW 400 MW, Java-Bali power system.', 1.76, 0.0124, 0.012],
-        'PWRNGSJ09':['PLTGU 120 MW 120 MW, Java-Bali power system.', 1.76, 0.0124, 0.012],
-        'PWRGEOJ01':['Kamojang geothermal 200 MW, Java-Bali power system.', 1, 0.002, 0.0006],
-        'PWRGEOJ02':['Darajat geothermal 55 MW, Java-Bali power system.', 1, 0.002, 0.0006],
-        'PWRGEOJ03':['Darajat geothermal 200 MW, Java-Bali power system.', 1, 0.002, 0.0006],
-        'PWRGEOJ04':['Gunung Salak geothermal 180 MW, Java-Bali power system.', 1, 0.002, 0.0006],
-        'PWRGEOJ05':['Gunung Salak geothermal 165 MW, Java-Bali power system.', 1, 0.002, 0.0006],
-        'PWRGEOS01':['Ulubelu Geothermal Power Station 110 MW, Sumatra power system.', 1, 0.002, 0.0006],
-        'PWRGEOJ06':['Wayang Windu geothermal 227 MW, Java-Bali power system.', 1, 0.002, 0.0006],
-        'PWRGEOJ07':['Dieng geothermal 60 MW, Java-Bali power system.', 1, 0.002, 0.0006],
-        'PWRGEOL01':['Lahendong geothermal 80 MW, Sulawesi power system.', 1, 0.002, 0.0006],
-        'PWRGEOS02':['Sibayak geothermal 11.3 MW, Sumatra power system.', 1, 0.002, 0.0006],
-        'PWRGEOJ08':['Patuha geothermal 55 MW, Java-Bali power system.', 1, 0.002, 0.0006],
-        'PWRHYDS01':['Agam hydro 10 MW, Sumatra power system.', 1, 0, 0],
-        'PWRHYDS02':['Maninjau hydro 68 MW, Sumatra power system.', 1, 0, 0],
-        'PWRHYDS03':['Singkarak hydro 175 MW, Sumatra power system.', 1, 0, 0],
-        'PWRHYDS04':['Koto Panjang hydro 114 MW, Sumatra power system.', 1, 0, 0],
-        'PWRHYDS05':['Test I hydro 16 MW, Sumatra power system.', 1, 0, 0],
-        'PWRHYDS06':['Musi hydro 210 MW, Sumatra power system.', 1, 0, 0],
-        'PWRHYDS07':['Besai hydro 90 MW, Sumatra power system.', 1, 0, 0],
-        'PWRHYDS08':['Batutegi hydro 28 MW, Sumatra power system.', 1, 0, 0],
-        'PWRHYDS09':['Lau Renun hydro 82 MW, Sumatra power system.', 1, 0, 0],
-        'PWRHYDS10':['Sipansihaporas hydro 50 MW, Sumatra power system.', 1, 0, 0],
-        'PWRHYDS11':['Asahan I hydro 180 MW, Sumatra power system.', 1, 0, 0],
-        'PWRHYDS12':['Asahan III hydro 174 MW, Sumatra power system.', 1, 0, 0],
-        'PWRHYDS13':['Sigura-gura hydro 286 MW, Sumatra power system.', 1, 0, 0],
-        'PWRHYDS14':['Tangga hydro 317 MW, Sumatra power system.', 1, 0, 0],
-        'PWRHYDS15':['Wampu hydro 45 MW, Sumatra power system.', 1, 0, 0],
-        'PWRHYDS16':['Kerinci hydro 180 MW, Sumatra power system.', 1, 0, 0],
-        'PWRHYDJ01':['Saguling hydro 701 MW, Java-Bali power system.', 1, 0, 0],
-        'PWRHYDJ02':['Cirata hydro 1008 MW, Java-Bali power system.', 1, 0, 0],
-        'PWRHYDJ03':['Jatiluhur hydro 186 MW, Java-Bali power system.', 1, 0, 0],
-        'PWRHYDJ04':['PB. Sudirman hydro 181 MW, Java-Bali power system.', 1, 0, 0],
-        'PWRHYDJ05':['Sutami hydro 105 MW, Java-Bali power system.', 1, 0, 0],
-        'PWRHYDJ06':['Wlingi hydro 54 MW, Java-Bali power system.', 1, 0, 0],
-        'PWRHYDL01':['Tonsea Lama hydro 14 MW, Sulawesi power system.', 1, 0, 0],
-        'PWRHYDL02':['Tanggari I & II hydro 36 MW, Sulawesi power system.', 1, 0, 0],
-        'PWRHYDL03':['Bakaru I & II hydro 191 MW, Sulawesi power system.', 1, 0, 0],
-        'PWRHYDL04':['Larona hydro 195 MW, Sulawesi power system.', 1, 0, 0],
-        'PWRHYDL05':['Balambano hydro 140 MW, Sulawesi power system.', 1, 0, 0],
-        'PWRHYDL06':['Karebbe hydro 132 MW, Sulawesi power system.', 1, 0, 0],
-        'PWRHYDL07':['Pamona 2 hydro 260 MW, Sulawesi power system.', 1, 0, 0],
-        'PWRHYDK01':['Riam Kanan hydro 30 MW, Kalimantan power system.', 1, 0, 0],
-        'PWRWNDJ01':['Possible wind power plant(s) in Java. Unlimited MW, Java-Bali power system.', 1, 0, 0],
-        'PWRSOLJ01':['Possible solar power plant(s) in Java. Unlimited MW, Java-Bali power system.', 1, 0, 0],
-        'PWRWNDL01':['Sidrap Wind Farm 75 MW, Sulawesi power system.', 1, 0, 0],
-        'PWRDSLM01':['Diesal Power Plant Unlimited MW, Maluku Islands power system.', 2.667, 0, 0],
-        'PWRDSLN01':['Diesal Power Plant Unlimited MW, Lesser Sunda Islands power system.', 2.667, 0, 0],
-        'PWRDSLP01':['Diesal Power Plant Unlimited MW, Western New Guinea power system.', 2.667, 0, 0],
-        'PWRDSLL01':['Diesal Power Plant Unlimited MW, Sulawesi power system.', 2.667, 0, 0],
-        'PWRHYDJ07':['Hydro Expansion Potential MAX 5000 MW, Java-Bali power system.', 1, 0, 0],
-        'PWRHYDS17':['Hydro Expansion Potential MAX 3000 MW, Sumatra power system.', 1, 0, 0],
-
-    }
-
-    Emissions = {
-        'CO2NGS':	['Carbon dioxide emissions from natural gas.', '#000000'],
-        'CO2PET':	['Carbon dioxide emissions from petroleum fuels.', '#cc9900'],
-        'CO2COA':	['Carbon dioxide emissions from coal fuels.', '#00cc66']
-    }
-
-    Regions = {'REGION1': ['Region 1', '#000000']}
-
-
-    NamingConvention = {
-        'TRA': 'Transport',
-        'OTH': 'Other',
-        'BIO': 'Biomass',
-        'COA': 'Coal',
-        'CRU': 'Crude oil',
-        'DSL': 'Diesel', 
-        'ELC001': 'Electricity from power plants',
-        'ELC002': 'Electricity from transmission',
-        'ELCJ01': 'Electricity from power plants in Java region',
-        'ELCJ02': 'Electricity from transmission in Java region',
-        'ELCK01': 'Electricity from power plants in Kalimantan region',
-        'ELCK02': 'Electricity from transmission in Kalimantan region',
-        'ELCL01': 'Electricity from power plants in Sulawesi region',
-        'ELCL02': 'Electricity from transmission in Sulawesi region',
-        'ELCM01': 'Electricity from power plants in Maluku Islands region',
-        'ELCM02': 'Electricity from transmission in Maluku Islands region',
-        'ELCP01': 'Electricity from power plants in Western New Guinea region',
-        'ELCP02': 'Electricity from transmission in Western New Guinea region',
-        'ELCN01': 'Electricity from power plants in Lesser Sunda Islands region',
-        'ELCN02': 'Electricity from transmission in Lesser Sunda Islands region',
-        'ELCS01': 'Electricity from power plants in Sumatra region',
-        'ELCS02': 'Electricity from transmission in Sumatra region',
-        'GSL': 'Gasoline', 
-        'HFO': 'Heavy fuel oil',
-        'NGS': 'Natural gas',
-        'KER': 'Kerosene',  
-        'LPG': 'LPG', 
-        'OHC': 'Other hydrocarbons',
-        'GEO': 'Geothermal', 
-        'HYD': 'Hydropower', 
-        'SOL': 'Solar', 
-        'WND': 'Wind',
-        'CHC': 'Charcoal',
-        'PCK': 'Petroleum coke',
-        'JFL': 'Jet fuel',
-    }
-
-'''
 
 if __name__ == "__main__":
     main()  

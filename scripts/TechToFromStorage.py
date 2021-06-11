@@ -10,7 +10,7 @@ def main():
     ###########################################
 
     # Regions to print over
-    df = pd.read_csv('../src/data/REGION.csv')
+    df = pd.read_csv('../src/data/Canada/REGION.csv')
     regions = df['VALUE'].tolist()
 
     # Subregions to print over
@@ -22,6 +22,11 @@ def main():
     dfGeneration_raw = pd.read_csv('../dataSources/techList_AUTO_GENERATED.csv')
     dfGeneration = dfGeneration_raw.loc[dfGeneration_raw['GENERATION'] == 'STO']
     storages = dfGeneration['VALUE'].tolist()
+    if not storages:
+        dfOut = pd.DataFrame(columns=['REGION','TECHNOLOGY','STORAGE', 'MODE_OF_OPERATION','VALUE'])
+        dfOut.to_csv('../src/data/Canada/TechnologyToStorage.csv', index=False)
+        dfOut.to_csv('../src/data/Canada/TechnologyFromStorage.csv', index=False)
+        return
 
     #TechnologyToStorage (Technology, Storage)
     techToStorage = {
@@ -57,11 +62,11 @@ def main():
     
     #write tech to storage
     dfOut = pd.DataFrame(toStorageData,columns=['REGION','TECHNOLOGY','STORAGE', 'MODE_OF_OPERATION','VALUE'])
-    dfOut.to_csv('../src/data/TechnologyToStorage.csv', index=False)
+    dfOut.to_csv('../src/data/Canada/TechnologyToStorage.csv', index=False)
 
     #write tech from storage
     dfOut = pd.DataFrame(fromStorageData,columns=['REGION','TECHNOLOGY','STORAGE', 'MODE_OF_OPERATION','VALUE'])
-    dfOut.to_csv('../src/data/TechnologyFromStorage.csv', index=False)
+    dfOut.to_csv('../src/data/Canada/TechnologyFromStorage.csv', index=False)
 
 if __name__ == "__main__":
     main()

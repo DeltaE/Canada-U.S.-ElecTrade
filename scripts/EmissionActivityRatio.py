@@ -15,7 +15,7 @@ def main():
     ### EVERYTHING IS CO2 EMISSIONS
 
     # Regions to print over
-    df = pd.read_csv('../src/data/REGION.csv')
+    df = pd.read_csv('../src/data/Canada/REGION.csv')
     regions = df['VALUE'].tolist()
 
     # Subregions to print over
@@ -24,7 +24,7 @@ def main():
     subregions = list(set(subregions)) # removes duplicates
 
     #Years to Print over
-    dfYears = pd.read_csv('../src/data/YEAR.csv')
+    dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
     years = dfYears['VALUE'].tolist()
 
     ###########################################
@@ -40,6 +40,9 @@ def main():
     #get list of technologies to print over
     techList = list(dfRaw)
 
+    #Techs that operate on two modes of operation 
+    modeTwoTechs = ['CCG','CCG','COA','COC','URN']
+
     #print all values 
     for region in regions:
         for year in years:
@@ -48,10 +51,12 @@ def main():
                     activityRatio = dfRaw.loc[year,tech]
                     techName = 'PWR' + tech + 'CAN' + subregion + '01'
                     dataOut.append([region, techName, 'CO2', 1, year, activityRatio])
+                    if tech in modeTwoTechs:
+                        dataOut.append([region, techName, 'CO2', 2, year, activityRatio])
     
     #write to a csv
     dfOut = pd.DataFrame(dataOut,columns=['REGION','TECHNOLOGY','EMISSION','MODE_OF_OPERATION','YEAR','VALUE'])
-    dfOut.to_csv('../src/data/EmissionActivityRatio.csv', index=False)
+    dfOut.to_csv('../src/data/Canada/EmissionActivityRatio.csv', index=False)
 
 if __name__ == "__main__":
     main()

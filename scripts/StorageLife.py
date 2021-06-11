@@ -10,7 +10,7 @@ def main():
     # OUTPUT: none
 
     # Regions to print over
-    df = pd.read_csv('../src/data/REGION.csv')
+    df = pd.read_csv('../src/data/Canada/REGION.csv')
     regions = df['VALUE'].tolist()
 
     # Subregions to print over
@@ -22,6 +22,11 @@ def main():
     dfGeneration_raw = pd.read_csv('../dataSources/techList_AUTO_GENERATED.csv')
     dfGeneration = dfGeneration_raw.loc[dfGeneration_raw['GENERATION'] == 'STO']
     storages = dfGeneration['VALUE'].tolist()
+
+    if not storages:
+        df = pd.DataFrame(columns=['REGION','STORAGE','VALUE'])
+        df.to_csv('../src/data/Canada/OperationalLifeStorage.csv', index=False)
+        return
 
     #Dictory to hold storage ype and op life in years
     storageLife = {'TNK':30}
@@ -38,7 +43,7 @@ def main():
                 data.append([region,stoName,life])
 
     df = pd.DataFrame(data, columns=['REGION','STORAGE','VALUE'])
-    df.to_csv('../src/data/OperationalLifeStorage.csv', index=False)
+    df.to_csv('../src/data/Canada/OperationalLifeStorage.csv', index=False)
     
 if __name__ == "__main__":
     main()
