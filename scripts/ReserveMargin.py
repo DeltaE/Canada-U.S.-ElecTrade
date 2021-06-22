@@ -166,6 +166,7 @@ def main():
             fuelName = 'ELC' + 'CAN' + reserveMarginRaw[i][0] + '01'
             year = reserveMarginRaw[i][1]
             rm = reserveMarginRaw[i][2]
+            rm = round(rm,3)
             reserveMarginTagFuel.append([region, fuelName, year, rm])
     
     #reserve margin Tag Technology = Region, Technology, Year, Value

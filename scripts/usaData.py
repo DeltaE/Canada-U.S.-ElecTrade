@@ -417,6 +417,7 @@ def getSpecifiedAnnualDemand(techMap, df):
         fuel = 'ELC' + 'USA' + df['REGION'].iloc[i] + '02'
         year = df['YEAR'].iloc[i]
         value = df['DEMAND'].iloc[i]
+        value = round(value,3)
         outData.append([region,fuel,year,value])
 
     #create and return datafram
@@ -443,6 +444,7 @@ def getSpecifiedDemandProfile(techMap, df):
         ts = df['TIMESLICE'].iloc[i]
         year = df['YEAR'].iloc[i]
         value = df['DEMAND'].iloc[i]
+        value = round(value,3)
         outData.append([region,fuel,ts,year,value])
 
     #create and return datafram
@@ -510,6 +512,7 @@ def getCapacityFactor(techMap, df):
             tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
             ts = df['TIMESLICE'].iloc[i]
             value = df['CAPACITYFACTOR'].iloc[i]
+            value = round(value, 3)
             if techMapped == 'HYD':
                 outDataAF.append([region,tech,ts,year,value])
             else:
@@ -529,6 +532,7 @@ def getCapacityFactor(techMap, df):
         for year in years:
             dfYear = dfTemp.loc[dfTemp['YEAR'] == year]
             af = dfYear['VALUE'].mean()
+            af = round(af, 3)
             outDataAF.append(['NAmerica',tech,year,af])
     
     #create and return dataframe for CAPACITY FACTOR
@@ -609,6 +613,7 @@ def getResidualCapacity(techMap, df):
         tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
         year = df['YEAR'].iloc[i]
         value = df['RESIDUALCAPACITY'].iloc[i]
+        value = round(value,3)
         outData.append([region,tech,year,value])
 
     #Transmission Residual Capacity
@@ -622,6 +627,7 @@ def getResidualCapacity(techMap, df):
                                   (dfTrade['MODE'] == 1)]
         dfResCapTrd.reset_index()
         resCapTrd = dfResCapTrd['CAPACITY (GW)'].iloc[0]
+        resCapTrd = round(float(resCapTrd),3)
         for year in range(2019,2051):
           outData.append([region, tech, year, resCapTrd])
 
@@ -666,6 +672,7 @@ def getInputActivityRatio(techMap, inputFuelMap, subregions, df):
         tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
         year = df['YEAR'].iloc[i]
         value = df['INPUTACTIVITYRATIO'].iloc[i]
+        value = round(value, 3)
         fuelMapped = inputFuelMap[techMapped]
 
         #check if tech will operate on two modes of operation
@@ -822,6 +829,7 @@ def getCapitalCost(techMap, df):
         tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
         year = df['YEAR'].iloc[i]
         value = df['CAPITALCOST'].iloc[i]
+        value = round(value, 3)
         #Convert from $/kW to M$/GW
 
         outData.append([region,tech,year,value])
@@ -855,6 +863,8 @@ def getCapitalCost(techMap, df):
             #get costs
             for cost in costType:
                 trnCost = trnCost + float(dfCostsFiltered[cost].iloc[0])
+
+            trnCost = round(trnCost,3)
 
             #save same value for all years 
             for year in range(2019,2051):
@@ -901,6 +911,7 @@ def getVariableCost(techMap, inputFuelMap, df):
         year = df['YEAR'].iloc[i]
         mode = 1
         value = df['VARIABLECOST'].iloc[i]
+        value = round(value, 3)
         outData.append([region,tech,mode,year,value])
         #checks if need to write value for mode 2
         if inputFuelMap[techMapped] in intFuel:
@@ -936,6 +947,7 @@ def getVariableCost(techMap, inputFuelMap, df):
             #get costs
             for cost in costType:
                 trnCost = trnCost + float(dfCostsFiltered[cost].iloc[0])
+            trnCost = round(trnCost, 3)
 
             #save same value for all years 
             for year in range(2019,2051):
@@ -977,6 +989,7 @@ def getFixedCost(techMap, df):
         tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
         year = df['YEAR'].iloc[i]
         value = df['FIXEDCOST'].iloc[i]
+        value = round(value, 3)
         outData.append([region,tech,year,value])
 
     #Get trade costs
@@ -1009,6 +1022,7 @@ def getFixedCost(techMap, df):
             for cost in costType:
                 trnCost = trnCost + float(dfCostsFiltered[cost].iloc[0])
 
+            trnCost = round(trnCost, 3)
             #save same value for all years 
             for year in range(2019,2051):
                 outData.append([region,tech,year,trnCost])
@@ -1064,7 +1078,7 @@ def getReserveMarginTagTechnology(techMap, df):
 
     # Due to our naming convention, we actually want to assign reserve margin value
     # to reservemargintagtechnology
-    df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'ReserveMargin(r,y)')
+    #df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'ReserveMargin(r,y)')
 
     #remove anything from years 2015 - 2018
     df = df.loc[df['YEAR'] > 2018]
@@ -1073,15 +1087,21 @@ def getReserveMarginTagTechnology(techMap, df):
     #list to hold output data
     outData=[]
 
+    #get list of regions
+    subregions = df['REGION']
+    subregions = list(set(subregions))
+
     #populate data 
     for techOld in techMap:
-        for i in range(len(df)):
-            region = 'NAmerica'
-            techMapped = techMap[techOld]
-            tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
-            year = df['YEAR'].iloc[i]
-            value = df['RESERVEMARGIN'].iloc[i]
-            outData.append([region,tech,year,value])
+        for year in range(2019,2051):
+            for subregion in subregions:
+                region = 'NAmerica'
+                techMapped = techMap[techOld]
+                tech = 'PWR' + techMapped + 'USA' + subregion + '01'
+                #year = df['YEAR'].iloc[i]
+                #value = df['RESERVEMARGIN'].iloc[i]
+                value = 1
+                outData.append([region,tech,year,value])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
@@ -1105,7 +1125,8 @@ def getReserveMarginTagFuel(techMap, df):
         region = 'NAmerica'
         fuel = 'ELC' + 'USA' + df['REGION'].iloc[i] + '01'
         year = df['YEAR'].iloc[i]
-        value = df['RESERVEMARGINTAGFUEL'].iloc[i]
+        #value = df['RESERVEMARGINTAGFUEL'].iloc[i]
+        value = 1.15 #will need to come back and have this read from the file
         outData.append([region,fuel,year,value])
 
     #create and return datafram
@@ -1185,6 +1206,7 @@ def getEmisionActivityRatio(techMap, inputFuelMap, df):
             emission = df['EMISSION'].iloc[i]
             mode = 1
             value = df['EMISSIONACTIVITYRATIO'].iloc[i]
+            value = round(value, 3)
             outData.append([region,tech,emission,mode,year,value])
             #checks if need to write value for mode 2
             if inputFuelMap[techMapped] in intFuel:

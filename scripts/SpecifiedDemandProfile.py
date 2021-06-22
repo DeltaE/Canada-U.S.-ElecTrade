@@ -77,6 +77,7 @@ def main():
                         ts = season + str(hour)
                         dfFilter = dfSeason.loc[dfSeason['HOUR'] == hour]
                         profileValue = dfFilter['VALUE'].sum() / totalLoad
+                        profileValue = round(profileValue, 3)
                         #pd.set_option('display.max_rows', dfFilter.shape[0]+1)
                         #print(dfFilter)
 

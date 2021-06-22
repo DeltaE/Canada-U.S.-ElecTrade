@@ -155,10 +155,11 @@ def main():
     elcFuelList = getELCfuels(countries)
 
     #Hydrogen Fuels
-    hy2FuelList = getHY2fuels(countries)
+    #hy2FuelList = getHY2fuels(countries)
 
     #Append lists together and write to a csv
-    outputFuels = rnwFuelList + minFuelList + elcFuelList + hy2FuelList
+    #outputFuels = rnwFuelList + minFuelList + elcFuelList + hy2FuelList
+    outputFuels = rnwFuelList + minFuelList  + elcFuelList
     dfOut = pd.DataFrame(outputFuels, columns=['VALUE'])
     dfOut.to_csv('../src/data/Canada/FUEL.csv', index=False)
 

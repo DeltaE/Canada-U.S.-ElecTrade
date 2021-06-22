@@ -77,7 +77,8 @@ def main():
         for region in regions:
             for subregion in subregions:
                 techName = 'PWR' + 'HYD' + 'CAN' + subregion + '01'
-                outData.append([region, techName, year, af[subregion]])
+                value = round(af[subregion],3)
+                outData.append([region, techName, year, value])
 
     ###########################################
     # Writing Availability Factor to File 

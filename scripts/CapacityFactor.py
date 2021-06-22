@@ -121,6 +121,9 @@ def renewableNinjaData(tech, regions, subregions, seasons, years):
                         for i in range(len(provinces)):
                             weightingFactor = landArea[provinces[i]]/regionLandArea
                             cf = cf + cfList[i]*weightingFactor
+                        
+                        #round cf
+                        cf = round(cf,3)
 
                         #create timeslice value 
                         ts = season + str(hour)
@@ -386,6 +389,7 @@ def read_NREL(regions, subregions, seasons, years):
                     else:
                         #extract capaity factor
                         cf = dfTech.iloc[0]['value']
+                        cf = round(cf,3)
 
                     #write data for all timeslices in the year
                     for season in seasons:

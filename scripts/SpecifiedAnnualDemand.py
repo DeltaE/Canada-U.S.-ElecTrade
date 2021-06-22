@@ -46,7 +46,9 @@ def main():
             sumDemand = dfRegion.loc[:,:].sum(axis=1)
             for year in years:
                 fuelName = 'ELC' + 'CAN' + subregion + '02'
-                demand.append([region, fuelName, year, sumDemand[year]])
+                value = sumDemand[year]
+                value = round(value,3)
+                demand.append([region, fuelName, year, value])
 
     ###########################################
     # Writing Demand Files 
