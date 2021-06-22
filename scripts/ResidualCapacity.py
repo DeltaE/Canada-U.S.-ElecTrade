@@ -123,6 +123,7 @@ def main():
                                           (dfProvince['COMISSION'] <= year) ]
               resCap = dfFiltered['CAPACITY (MW)'].sum()
               resCap = resCap / 1000 #MW -> GW
+              resCap = round(resCap,3)
 
               #create correct name
               techName = 'PWR' + tech + 'CAN' + subregion + '01'
@@ -135,6 +136,7 @@ def main():
                                   (dfTrade['MODE'] == 1)]
         dfResCapTrd.reset_index()
         resCapTrd = dfResCapTrd['CAPACITY (GW)'].iloc[0]
+        resCapTrd = round(float(resCapTrd),3)
         for year in years:
           resCapData.append([region, tech, year, resCapTrd])
 

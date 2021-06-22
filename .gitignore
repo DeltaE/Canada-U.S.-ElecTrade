@@ -4,4 +4,6 @@ dataSources/*_RAW.xlsx
 scripts/.vscode/
 scripts/.snakemake/
 scripts/dag*
+results/
+scripts/.ipynb_checkpoints/
 dataSources/UpdateDemand/

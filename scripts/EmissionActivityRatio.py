@@ -1,6 +1,4 @@
 import pandas as pd
-import os
-import numpy as np
 
 def main():
     # PURPOSE: Creates otoole formatted emission activity ratio csv
@@ -49,6 +47,7 @@ def main():
             for subregion in subregions:
                 for tech in techList:
                     activityRatio = dfRaw.loc[year,tech]
+                    activityRatio = round(activityRatio, 3)
                     techName = 'PWR' + tech + 'CAN' + subregion + '01'
                     dataOut.append([region, techName, 'CO2', 1, year, activityRatio])
                     if tech in modeTwoTechs:

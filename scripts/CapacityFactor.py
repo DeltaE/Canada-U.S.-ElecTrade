@@ -13,10 +13,10 @@ def main():
 
     #Dictionary holds month to season Mapping 
     seasons = {
-        'W':[1, 2, 3],
-        'SP':[4, 5, 6],
-        'S':[7, 8, 9],
-        'F':[10, 11, 12]}
+        'W':[1, 2, 12],
+        'SP':[3, 4, 5],
+        'S':[6, 7, 8],
+        'F':[9, 10, 11]}
 
     #Years to Print over
     dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
@@ -121,6 +121,9 @@ def renewableNinjaData(tech, regions, subregions, seasons, years):
                         for i in range(len(provinces)):
                             weightingFactor = landArea[provinces[i]]/regionLandArea
                             cf = cf + cfList[i]*weightingFactor
+                        
+                        #round cf
+                        cf = round(cf,3)
 
                         #create timeslice value 
                         ts = season + str(hour)
@@ -386,6 +389,7 @@ def read_NREL(regions, subregions, seasons, years):
                     else:
                         #extract capaity factor
                         cf = dfTech.iloc[0]['value']
+                        cf = round(cf,3)
 
                     #write data for all timeslices in the year
                     for season in seasons:

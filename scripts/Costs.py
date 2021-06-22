@@ -190,6 +190,8 @@ def read_NREL(costType, regions, subregions, years):
                                 totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion['Variable O&M']
                             else:
                                 totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion[cost]
+                        
+                        totalCost = round(totalCost,3)
 
                     #construct technology name
                     techName = 'PWR' + tech + 'CAN' + subregion + '01'

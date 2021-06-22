@@ -1,0 +1,52 @@
+code,name_english,name_spanish,colour
+BIO,Biomass,Biomasa,forestgreen
+COA,Coal,Carbón,black
+COC,Coal CCS,Petróleo crudo,brown
+SPV,Solar,Solar,gold
+URN,Nuclear,Nuclear,grey
+HYD,Hydro,Hidro,blue
+WND,Wind,Eólica,violet
+CCG,Gas CC,Combind Cycle,orange
+CTG,Gas CT,Combustion Turbine,red
+DSL,Diesel,Diésel,orange
+ELC,Electricity,Electricidad,grey
+GEO,Geothermal,Geotérmica,purple
+GSL,Gasoline,Gasolina,orange
+HFO,HFO,HFO,brown
+JFL,Jet fuel,Jet fuel,firebrick
+LNG,LNG,LNG,purple
+LPG,LPG,GLP,gold
+PCK,Petroleum coke,Coque de petróleo,red
+NGS,Natural gas,Gas natural,purple
+OHC,Oil products,Otros hidrocarburos,grey
+PET,Petroleum products,Petroleum products,red
+WAS,MSW,Residuos,green
+WAT,Water,Agua,blue
+LND,Land,Suelo,green
+PWR,Power sector,Centrales eléctricas,red
+PUB,Public supply,Abastecimiento público,grey
+EVT,Evapotranspiration,Evapotranspiración,green
+PRC,Precipitation,Precipitación,blue
+GRC,Groundwater recharge,Recarga de agua subterránea,orange
+SUR,Surface water run-off,Agua superficial,red
+IRR,Irrigation,Irrigación,brown
+REN,Other renewables,Otras fuentes renovables,green
+OIL,Oil,Petróleo,firebrick
+GAS,Gas,Gas,purple
+MAZ,Maize,Maíz,gold
+SOR,Sorghum,Sorgo,purple
+SOY,Soybean,Soya,firebrick
+CDA,Sugarcane,Caña de azúcar,green
+PAP,Potatoes,Papa,orange
+TLD,Other crops,Otros cultivos,grey
+LPG,LPG,LPG,pink
+KER,Kerosene,Kerosene,violet
+RES,Residential,Residential,blue
+TRA,Transport,Transport,black
+IND,Industry,Industry,grey
+COM,Commercial & services,Commercial & services,green
+ELC_IMP,Electricity imports,,pink
+PWR_WAT,Power sector (consumptive use),,lightblue
+PWR_WITH,Power sector (withdrawal),,darkblue
+ELC_EXP,Electricity exports,,pink
+ELC_NET,Net electricity imports,,pink
