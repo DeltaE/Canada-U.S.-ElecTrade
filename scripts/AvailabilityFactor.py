@@ -12,10 +12,10 @@ def main():
 
     #Dictionary holds month to season Mapping 
     seasons = {
-        'W':[1, 2, 3],
-        'SP':[4, 5, 6],
-        'S':[7, 8, 9],
-        'F':[10, 11, 12]}
+        'W':[1, 2, 12],
+        'SP':[3, 4, 5],
+        'S':[6, 7, 8],
+        'F':[9, 10, 11]}
 
     #Years to Print over
     dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
