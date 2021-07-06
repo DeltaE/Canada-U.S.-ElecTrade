@@ -1098,9 +1098,12 @@ def getReserveMarginTagTechnology(techMap, df):
                 region = 'NAmerica'
                 techMapped = techMap[techOld]
                 tech = 'PWR' + techMapped + 'USA' + subregion + '01'
+                if (techMapped == 'WND') or (techMapped == 'SPV'):
+                    value = 0
+                else:
                 #year = df['YEAR'].iloc[i]
                 #value = df['RESERVEMARGIN'].iloc[i]
-                value = 1
+                    value = 1
                 outData.append([region,tech,year,value])
 
     #create and return datafram

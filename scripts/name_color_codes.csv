@@ -50,3 +50,10 @@ PWR_WAT,Power sector (consumptive use),,lightblue
 PWR_WITH,Power sector (withdrawal),,darkblue
 ELC_EXP,Electricity exports,,pink
 ELC_NET,Net electricity imports,,pink
+USA,United States,United States,blue
+CAN,Canada,Canada,red
+OTH,Other,Other,mediumaquamarine
+INT,International ,International ,orange
+IMP,Imports,Imports,red
+EXP,Exports,Exports,blue
+NET,Net Imports,Net Imports,orange
