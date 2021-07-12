@@ -54,7 +54,8 @@ def main():
     fuelTag = ['ELC']
 
     # List of technologies to tag
-    techTags = ['HYD','BIO','CCG','CTG','URN','COA','COC','WND', 'SPV']
+    #techTags = ['HYD','BIO','CCG','CTG','URN','COA','COC','WND', 'SPV']
+    techTags = ['HYD','BIO','CCG','CTG','URN','COA','COC']
 
     #Dictionary holds month to season Mapping 
     seasons = {
@@ -169,10 +170,6 @@ def main():
             rm = round(rm,3)
             reserveMarginTagFuel.append([region, fuelName, year, rm])
     
-    # List of technologies to tag
-    #techTags = ['HYD','BIO','CCG','CTG','URN','COA','COC','WND', 'SPV']
-    techTags = ['HYD','BIO','CCG','CTG','URN','COA','COC']
-
     #reserve margin Tag Technology = Region, Technology, Year, Value
     reserveMarginTagTech = []
     for region in regions:

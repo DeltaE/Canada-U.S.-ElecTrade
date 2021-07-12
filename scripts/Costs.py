@@ -117,7 +117,7 @@ def read_NREL(costType, regions, subregions, years):
         'CAPEX': 1,
         'Fixed O&M': 1,
         'Variable O&M': 0.277778,
-        'Fuel': 0.7066878
+        'Fuel': 0.94782058
     }
 
     #read in file 
@@ -186,7 +186,19 @@ def read_NREL(costType, regions, subregions, years):
                         else:
                             #calculate total cost
                             #handels edge case of nuclear fuel cost given in $/MWh
+                            #####################################################
+                            ###### HARD CODED IN ALL FULE UNITS TO BE MWh #######
+                            ###### UNIT CONSISTENCY ISSUE ON ATB          #######
+                            #####################################################
                             if tech == 'URN' and cost == 'Fuel':
+                                totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion['Variable O&M']
+                            elif tech == 'COA' and cost == 'Fuel':
+                                totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion['Variable O&M']
+                            elif tech == 'COC' and cost == 'Fuel':
+                                totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion['Variable O&M']
+                            elif tech == 'CCG' and cost == 'Fuel':
+                                totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion['Variable O&M']
+                            elif tech == 'CTG' and cost == 'Fuel':
                                 totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion['Variable O&M']
                             else:
                                 totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion[cost]
