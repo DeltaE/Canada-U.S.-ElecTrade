@@ -951,7 +951,8 @@ def getVariableCost(techMap, inputFuelMap, df):
 
             #save same value for all years 
             for year in range(2019,2051):
-                outData.append([region,tech,year,trnCost])
+                outData.append([region,tech,1,year,trnCost])
+                outData.append([region,tech,2,year,trnCost])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','MODE_OF_OPERATION','YEAR','VALUE'])

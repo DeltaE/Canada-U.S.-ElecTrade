@@ -61,7 +61,10 @@ def main():
         ###########################################
 
         #append all csvs together
-        df = pd.DataFrame(columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
+        if trigger == 3:
+            df = pd.DataFrame(columns=['REGION','TECHNOLOGY','MODE_OF_OPERATION','YEAR','VALUE'])
+        else:
+            df = pd.DataFrame(columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
         df = df.append(dfNREL)
         #df = df.append(dfP2gSystem)
         df = df.append(trade)
