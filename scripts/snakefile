@@ -25,6 +25,7 @@ osemosysFiles = [
 	'DiscountRateStorage.csv',
 	'EMISSION.csv',
 	'EmissionActivityRatio.csv',
+	'EmissionsPenalty.csv',
 	'FixedCost.csv',
 	'FUEL.csv',
 	'InputActivityRatio.csv',

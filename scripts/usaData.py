@@ -172,23 +172,23 @@ def main():
 
     #dictionary holding excel sheet name to parameter names
     excelToParameter = {
-    'SpecifiedAnnualDemand(r,f,y)':'SpecifiedAnnualDemand',
-    'SpecifiedDemandProfile(r,f,l,y)':'SpecifiedDemandProfile',
-    'CapacityToActivityUnit(r,t)':'CapacityToActivityUnit',
-    'CapacityFactor(r,t,l,y)':'CapacityFactor',
-    'OperationalLife(r,t)':'OperationalLife',
-    'ResidualCapacity(r,t,y)':'ResidualCapacity',
-    'InputActivityRatio(r,t,f,m,y)':'InputActivityRatio',
-    'OutputActivityRatio(r,t,f,m,y)':'OutputActivityRatio',
-    'CapitalCost(r,t,y)':'CapitalCost',
-    'VariableCost(r,t,m,y)':'VariableCost',
-    'FixedCost(r,t,y)':'FixedCost',
-    'TotalAnnualMaxCapacity(r,t,y)':'TotalAnnualMaxCapacity',
-    'ReserveMarginInTagTech(r,t,y)':'ReserveMarginTagTechnology',
-    'ReserveMarginInTagFuel(r,f,y)':'ReserveMarginTagFuel',
-    'ReserveMargin(r,y)':'ReserveMargin',
-    'RETagTechnology(r,t,y)':'RETagTechnology',
-    'EmisionActivityRatio(r,t,e,m,y)':'EmissionActivityRatio',
+        'SpecifiedAnnualDemand(r,f,y)':'SpecifiedAnnualDemand',
+        'SpecifiedDemandProfile(r,f,l,y)':'SpecifiedDemandProfile',
+        'CapacityToActivityUnit(r,t)':'CapacityToActivityUnit',
+        'CapacityFactor(r,t,l,y)':'CapacityFactor',
+        'OperationalLife(r,t)':'OperationalLife',
+        'ResidualCapacity(r,t,y)':'ResidualCapacity',
+        'InputActivityRatio(r,t,f,m,y)':'InputActivityRatio',
+        'OutputActivityRatio(r,t,f,m,y)':'OutputActivityRatio',
+        'CapitalCost(r,t,y)':'CapitalCost',
+        'VariableCost(r,t,m,y)':'VariableCost',
+        'FixedCost(r,t,y)':'FixedCost',
+        'TotalAnnualMaxCapacity(r,t,y)':'TotalAnnualMaxCapacity',
+        'ReserveMarginInTagTech(r,t,y)':'ReserveMarginTagTechnology',
+        'ReserveMarginInTagFuel(r,f,y)':'ReserveMarginTagFuel',
+        'ReserveMargin(r,y)':'ReserveMargin',
+        'RETagTechnology(r,t,y)':'RETagTechnology',
+        'EmisionActivityRatio(r,t,e,m,y)':'EmissionActivityRatio',
     }
 
     # Read in each sheet and save it as a dataframe
@@ -220,12 +220,12 @@ def main():
         elif param == 'TotalAnnualMaxCapacity':
             # Something is wrong with these values...
             # SE Residual Capacity is greater then SE Total Annual Max Capacity 
-            #dfOut = getTotalAnnualMaxCapacity(techMap, df)
+            # dfOut = getTotalAnnualMaxCapacity(techMap, df)
             dfOut = pd.DataFrame(columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
         elif param == 'ReserveMarginTagTechnology':
             dfOut = getReserveMarginTagTechnology(techMap, df)
         elif param == 'ReserveMarginTagFuel':
-            dfOut = getReserveMarginTagFuel(techMap, df)
+            dfOut = getReserveMarginTagFuel()
         elif param == 'ReserveMargin':
             dfOut = getReserveMargin()
         elif param == 'RETagTechnology':
@@ -951,7 +951,8 @@ def getVariableCost(techMap, inputFuelMap, df):
 
             #save same value for all years 
             for year in range(2019,2051):
-                outData.append([region,tech,year,trnCost])
+                outData.append([region,tech,1,year,trnCost])
+                outData.append([region,tech,2,year,trnCost])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','MODE_OF_OPERATION','YEAR','VALUE'])
@@ -1076,10 +1077,6 @@ def getReserveMarginTagTechnology(techMap, df):
     #          df = raw data
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
-    # Due to our naming convention, we actually want to assign reserve margin value
-    # to reservemargintagtechnology
-    #df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'ReserveMargin(r,y)')
-
     #remove anything from years 2015 - 2018
     df = df.loc[df['YEAR'] > 2018]
     df.reset_index()
@@ -1101,8 +1098,6 @@ def getReserveMarginTagTechnology(techMap, df):
                 if (techMapped == 'WND') or (techMapped == 'SPV'):
                     value = 0
                 else:
-                #year = df['YEAR'].iloc[i]
-                #value = df['RESERVEMARGIN'].iloc[i]
                     value = 1
                 outData.append([region,tech,year,value])
 
@@ -1110,27 +1105,130 @@ def getReserveMarginTagTechnology(techMap, df):
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
     return dfOut
 
-def getReserveMarginTagFuel(techMap, df):
+def getReserveMarginTagFuel():
     # PURPOSE: Creates ReserveMarginTagFuel file from USA data
     # INPUT:   techMap =  dictionary mapping USA naming to our naming for technologies
     #          df = raw data
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
-    #remove anything from years 2015 - 2018
-    df = df.loc[df['YEAR'] > 2018]
-    df.reset_index()
+    # Due to our naming convention, we actually want to assign reserve margin value
+    # to reservemargintagfuel
+
+    # List of technologies to tag
+    techTags = ['HYD','BIO','CCG','CTG','URN','COA','COC']
+
+    ##################################################
+    # Account for peak squishing 
+    ##################################################
+    # Region Dictionary
+    regions = {
+        'NW':['WA','OR'],
+        'CA':['CA'],
+        'MN':['MT','ID','WY','NV','UT','CO'],
+        'SW':['AZ','NM'],
+        'CE':['ND','SD','NE','KS','OK'],
+        'TX':['TX'],
+        'MW':['MN','WI','IA','IL','IN','MI','MO'],
+        'AL':['AR','LA'],
+        'MA':['OH','PA','WV','KY','VA','NJ','DE','MD'],
+        'SE':['TN','NC','SC','MS','AL','GA'],
+        'FL':['FL'],
+        'NY':['NY'],
+        'NE':['VT','NH','ME','MA','CT','RI'],
+        }
+
+    # Should update this for individual states
+    # should be 10 percent for hydro dominated provinces or 
+    # 15 percent for thermal dominated regions 
+    baseRM = {
+        'NW':1.15,
+        'CA':1.15,
+        'MN':1.15,
+        'SW':1.15,
+        'CE':1.15,
+        'TX':1.15,
+        'MW':1.15,
+        'AL':1.15,
+        'MA':1.15,
+        'SE':1.15,
+        'FL':1.15,
+        'NY':1.15,
+        'NE':1.15
+    }
+
+    sourceFile = '../dataSources/USA_Demand.xlsx'
+    dfDemand = pd.read_excel(sourceFile, sheet_name='AnnualDemand')
+    dfProfile = pd.read_excel(sourceFile, sheet_name='HourlyDemand')
+
+    #rename profile dataframe columns
+    dfProfile = dfProfile.rename(columns={'CAL Demand (MWh)':'CA',
+                                        #'CAR Demand (MWh)':'',
+                                        'CENT Demand (MWh)':'CE',
+                                        'FLA Demand (MWh)':'FL',
+                                        'MIDA Demand (MWh)':'MA',
+                                        'MIDW Demand (MWh)':'MW',
+                                        'NE Demand (MWh)':'NE',
+                                        'NW Demand (MWh)':'NW',
+                                        'NY Demand (MWh)':'NY',
+                                        'SE Demand (MWh)':'AL',
+                                        'SW Demand (MWh)':'SW',
+                                        'TEN Demand (MWh)':'SE',
+                                        'TEX Demand (MWh)':'TX'})
+
+    #Fill in ovelap;ping regons (these will have the same reserve margin)
+    dfProfile = dfProfile.drop(columns=['CAR Demand (MWh)'])
+    dfProfile['MN'] = dfProfile['NW']
+
+    #Get total annual demand 
+    annualDemand = dict()
+    for region, states in regions.items():
+        regionalDemand = 0
+        for state in states:
+            regionalDemand = regionalDemand + dfDemand.loc[dfDemand['Abr.']==state]['PJ'].sum()
+        if state == 'NY': #DC not by default included in demand 
+            regionalDemand = regionalDemand + dfDemand.loc[dfDemand['Abr.']=='DC']['PJ'].sum()
+        annualDemand[region] = regionalDemand
+
+    #Normalize the load profiles 
+    maxDemandDict = dict()
+    for region in regions:
+        maxDemand = dfProfile[region].max()
+        totalDemand = dfProfile[region].sum()
+        maxDemandDict[region] = maxDemand / totalDemand
+
+    # Actual Peak Demand
+    actualPeak = dict()
+    for region in regions:
+        actualPeak[region] = maxDemandDict[region] * annualDemand[region]
+
+    #Modeled peak Demand
+    dfModeledProfile = pd.read_excel('../dataSources/USA_Data.xlsx','SpecifiedDemandProfile(r,f,l,y)')
+
+    #remove everything except 2019
+    dfModeledProfile = dfModeledProfile.loc[(dfModeledProfile['YEAR'] > 2018) &
+                                            (dfModeledProfile['YEAR']< 2020)]
+    dfModeledProfile.reset_index()
+
+    #get max modelled peak 
+    modelledPeak = dict()
+    for region in regions:
+        maxProfile = dfModeledProfile.loc[(dfModeledProfile['REGION'] == region)]['DEMAND'].max()
+        modelledPeak[region]=maxProfile * annualDemand[region] * (96/8960)
+
+    #calculate adjusted reserve margin 
+    reserveMargin = dict()
+    for region in regions:
+        reserveMargin[region] = baseRM[region] + (actualPeak[region] - modelledPeak[region]) / actualPeak[region]
 
     #list to hold output data
     outData=[]
 
     #populate data 
-    for i in range(len(df)):
-        region = 'NAmerica'
-        fuel = 'ELC' + 'USA' + df['REGION'].iloc[i] + '01'
-        year = df['YEAR'].iloc[i]
-        #value = df['RESERVEMARGINTAGFUEL'].iloc[i]
-        value = 1.15 #will need to come back and have this read from the file
-        outData.append([region,fuel,year,value])
+    for year in range(2019,2051):
+        for region in regions:
+            fuel = 'ELC' + 'USA' + region + '01'
+            value = reserveMargin[region]
+            outData.append(['NAmerica',fuel,year,value])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','FUEL','YEAR','VALUE'])
