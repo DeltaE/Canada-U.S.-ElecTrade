@@ -1,40 +1,39 @@
-# Canada-U.S.Model Source Folder
+# Folder Contents
 
-## Contents
-Inlcuded in this folder are the four items listed below. For more information on OSeMOSYS, see their [GitHub page](https://github.com/OSeMOSYS)
+## 1. OSeMOSYS Model file 
+The OSeMOSYS model, `osemosys_fast.txt`, is a modified version of the original [OSeMOSYS_fast](https://github.com/OSeMOSYS/OSeMOSYS_GNU_MathProg/tree/master/src#installation) code. Specific modifications are outlined in the [wiki](https://github.com/DeltaE/Canada-U.S.-ElecTrade/wiki). 
 
-### 1. OSeMOSYS Model file 
-The OSeMOSYS model used is the [Alternative Storage Code](https://github.com/OSeMOSYS/OSeMOSYS_GNU_MathProg/releases/tag/AlternateStorageCode_v0.1) version created by T. Niet. 
+## 2. Data File 
+The data file, `CanadaUSA.txt` holds all data read in during the solving process. 
 
-### 2. Data File 
-The data file is generated thorugh [otoole](https://github.com/OSeMOSYS/otoole) using the CSVs in the data folder 
+## 3. data folder 
+Contains CSV files that hold all parameter data in seperate files 
 
-### 3. datapackage.json file 
-Used by otoole to create the datafile from the CSVs
+## 4. datapackage.json file 
+Used by [otoole](https://github.com/OSeMOSYS/otoole) to create the datafile from the folder of CSVs
 
-### 4. data folder 
-Contains all data in CSV fomat to be written to a datafile using [otoole](https://github.com/OSeMOSYS/otoole)
+# Running the Model
+To run the model, you will first need to install the [GUN Linear Programming Kit](https://www.gnu.org/software/glpk/). Installation instructions can be found on the [OSeMOSYS repository](https://github.com/OSeMOSYS/OSeMOSYS_GNU_MathProg/tree/master/src#installation). Ensure you follow the optional steps to install [otoole]()https://github.com/OSeMOSYS/otoole and the CBC open-source solver. 
+
+## Dependencies 
+### Python Packages 
+
+
+### Computer Requirements
+The base model requires extensive computer resources. 
+- 64GB RAM 
+- 9hr Run Time using CPLEX 
 
 ## How to Run 
-1. Update data in the `/dataSources` folder
-2. Navigate to the `/scripts` folder in the command line 
-3. Run the command `snakemake dataFile` from the command line to generate an OSeMOSYS compatiable datafile
-3. In the dataFile, remove the parameter `StorageLevelStart`
-4. In the dataFile, add the parameter `param default 999999999 : StorageMaxCapacity := ;`
+1. Navigate to the `/src` folder in the command line 
+2. Run the command `snakemake <input_argument>` from the command line, replacing `<input_argument>` with  
+a.  `dataFile` to generate the file holding all data in .txt format  
+b.  `lpFile` to generate the file to input into the solver  
+c.  `solveCBC` to generate the input datafiles and solve the model using CPLEX  
+d. `solveCPLEX` to generate the input datafiles and solve the model using CPLEX
 
-### Using GLPK
-5. Run the model using the command `glpsol -m <modelFile.txt> -d <dataFile.txt>`
-
-### Using CPLEX
-5. Create a .lp file using GLPK using the command `glpsol --wlp <outputFile.lp> --check -m <modelFile.txt> -d <dataFile.txt>`
-6. Open CPLEX thorugh the command `CPLEX`
-7. Read in the .lp file using `read <outputFile.lp>`
-8. Solve the model using `optimize`
-
-NOTE: Steps 3 and 4 are required because the modified model file intoduces the StorageMaxCapacity parameter and removes the default StorageLevelStart parameter. Since otoole does not currently support user added parameters, manually addings/removing the parameters is required. 
-
-## Solution Quality 
-To check the solution quality, the model is first solved using CPLEX following "How to Run" steps 5 thru 8. Once the model has been optimized, the command `check solution quality` is run. CPLEX will return the following list of numbers: 
+### Solution Quality 
+If using CPLEX to solve the model, the following table will print out at the end of the solve. This table presents the quality and stability of the solution. We consider acceptable condition numbers to be on the order of 1e+9 or less, as described on page 151 of the [CPLEX User’s Manual](https://perso.ensta-paris.fr/~diam/ro/online/cplex/cplex1271_pdfs/usrcplex.pdf). We also consider acceptable Ax-b residual numbers to be no larder then the [feasability tolerance](http://www-eio.upc.edu/lceio/manuals/cplex-11/html/refparameterscplex/refparameterscplex47.html) used to solve the model. By default the feasibility tolerance is set to 1e-06 as described on page 272 of the [CPLEX User’s Manual](https://perso.ensta-paris.fr/~diam/ro/online/cplex/cplex1271_pdfs/usrcplex.pdf). 
 
 Max. unscaled (scaled) bound infeas.        =  
 Max. unscaled (scaled) reduced-cost infeas. =  
@@ -46,8 +45,11 @@ Max. unscaled (scaled) |pi|                 =
 Max. unscaled (scaled) |red-cost|           =  
 Condition number of scaled basis            =  
 
-### Condition Number  
-We consider acceptable condition numbers on the order of 1e+9 or less. See page 151 of the [CPLEX User’s Manual](https://perso.ensta-paris.fr/~diam/ro/online/cplex/cplex1271_pdfs/usrcplex.pdf)
+## Viewing Results 
+The results will be saved to a `.sol` in a `results/` folder under the root directory. If running through CBC, a folder of CSVs will also be created.
 
-### Ax-b Residual
-We consider acceptable Ax-b residual numbers to be no larder then the feasibility tolerance used to solve the model. See page 272 of the [CPLEX User’s Manual]. By default the [feasability tolerance](http://www-eio.upc.edu/lceio/manuals/cplex-11/html/refparameterscplex/refparameterscplex47.html) is set to 1e-06. 
+### CPLEX Results
+Working with the native solution file from CPLEX is difficult. We opt to use a OSeMOSYS Community user created script to convert the CPLEX result file into one that is the same format as CBC. 
+
+### Jupyter Notebooks 
+Visualization scripts can be found in `scripts/postPocessing/`. Scripts will read in the `.sol` file 
