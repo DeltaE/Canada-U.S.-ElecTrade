@@ -1,13 +1,29 @@
 # Canada-U.S.Model Scripts Folder
 
 ## Contents
-Inlcuded in this folder are the scripts used to pre-process and post-process data 
+Included in this folder are the scripts used to pre-process, and a folder for post-processing scripts
 
 ## Snakemake 
-A [snakemake](https://snakemake.readthedocs.io/en/stable/) workflow has been implemented to eaisly create new datafiles when itterating through scenarios. To generate the datafile, run the command:
+A [snakemake](https://snakemake.readthedocs.io/en/stable/) workflow has been implemented to eaisly create new datafiles when iterating through scenarios. To generate the datafile, run the command:
 1. Navigate to the `scripts/` directory in the command line  
 2. Execute the command `snakemake dataFile`  
 3. Manually replace the datafile parameter StorageLevelStart as described [here](https://github.com/DeltaE/Canada-U.S.-ElecTrade/tree/main/src)  
+The snakemake file also lists the relationships between raw data files in the dataSources folder, the scripts, and the processed files in the src/data folder.
+
+## Config
+[config.py] Creates Tech and Fuel sets. Writes our files that are referenced by other scripts  // Find more description
+
+## Merging Canada and USA Data
+[MergeCanUsaData.py] appends the USA data onto the bottom of Canada data  // Find more description
+
+## Mode List
+[mode_list.csv] // Find more description
+
+## Storage Life
+[StorageLife.py] // Find more description
+
+## USA Data
+[usaData.py] appends the USA data onto the bottom of Canada data // Find more description
 
 ## Pre-Processing Scripts
 Below are the pre-processing scripts that are run through the snakemake workflow. Each heading lists the parameter that is generated through the script. 
@@ -116,7 +132,3 @@ Below are the pre-processing scripts that are run through the snakemake workflow
 - Script: `Costs.py` 
 - Purpose: Creates an otool formatted CSV holding variable costs. Capital, fixed, and variable costs are all updated with this script
 - DataFiles: `dataSources/NREL_Costs.csv`, `dataSources/P2G_FC_Costs.xlsx` 
-
-## Post-Processing Scripts
-
-`W_ProductionAndDemandNOTrade_24_extended.py`
