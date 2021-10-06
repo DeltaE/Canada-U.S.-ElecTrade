@@ -1,7 +1,7 @@
 import pandas as pd
 
 def main():
-    # PURPOSE: Creates otoole formatted TechnologyTo/FromStorage CSVs
+    # PURPOSE: Creates otoole formatted CSVs holding TechnologyToStorage and TechnologyFromStorage  
     # INPUT: none
     # OUTPUT: none
 

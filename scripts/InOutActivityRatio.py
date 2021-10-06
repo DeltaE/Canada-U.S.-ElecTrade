@@ -3,7 +3,7 @@ import os
 import numpy as np
 
 def main():
-    # PURPOSE: Creates otoole formatted input and output acitivy ratios
+    # PURPOSE: Creates otoole formatted InputActivityRatio AND OutputActivityRatio CSVs  
     # INPUT: none
     # OUTPUT: none
 

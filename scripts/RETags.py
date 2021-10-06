@@ -1,7 +1,7 @@
 import pandas as pd
 
 def main():
-    # PURPOSE: Creates otoole formatted RETagTechnology
+    # PURPOSE: Creates otoole formatted RETagTechnology CSVs 
     # INPUT: none
     # OUTPUT: none
 

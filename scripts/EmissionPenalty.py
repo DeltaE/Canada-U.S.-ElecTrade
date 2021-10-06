@@ -3,7 +3,7 @@ import os
 import numpy as np
 
 def main():
-    # PURPOSE: Creates otoole formatted emission activity ratio csv
+    # PURPOSE: Creates otoole formatted EmissionsPenalty CSV  
     # INPUT: none
     # OUTPUT: none
 

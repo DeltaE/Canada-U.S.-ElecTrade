@@ -1,7 +1,7 @@
 import pandas as pd
 
 def main():
-    # PURPOSE: Creates otoole formatted emission activity ratio csv
+    # PURPOSE: Creates otoole formatted Emission Activity Ratio CSV 
     # INPUT: none
     # OUTPUT: none
 

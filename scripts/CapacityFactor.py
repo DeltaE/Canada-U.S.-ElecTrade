@@ -3,7 +3,7 @@ import datetime
 from collections import defaultdict
 
 def main():
-    # PURPOSE: Creates otoole formatted CapacityFactor.csv datafile 
+    # PURPOSE: Creates an otoole formatted CSV holding capacity for all technologies. If Hydro Capacity Factors are used, be sure to remove hydro availabilty factor  
     # INPUT: none
     # OUTPUT: none
 
