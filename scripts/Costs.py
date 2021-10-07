@@ -5,7 +5,7 @@ import pandas as pd
 ####################################################
 
 def main():
-    # PURPOSE: Creates an otoole formatted CSV holding capital costs. Capital, fixed, and variable costs are all updated with this script
+    # PURPOSE: Creates otoole formatted Capital Costs AND Variable Costs AND Fixed Costs CSV
     # INPUT: none
     # OUTPUT: none
 

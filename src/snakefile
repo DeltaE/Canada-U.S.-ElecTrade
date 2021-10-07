@@ -99,6 +99,7 @@ provinces = ['BC','AB','SAS','MAN','ONT','QC','NB','NL','NS','PEI']
 
 fileName = 'CanadaUSA'
 inputDir = '../dataSources/'
+scriptsDir = '../scripts/'
 outputDir = '../src/'
 
 rule all:
@@ -130,7 +131,7 @@ rule ConfigFile:
 		outputDir + 'data/Canada/TECHNOLOGY.csv',
 		outputDir + 'data/Canada/FUEL.csv'
 	shell:
-		'python config.py'
+		'python ' + scriptsDir + 'config.py'
 
 rule AvailabilityFactor:
 	input:
@@ -140,7 +141,7 @@ rule AvailabilityFactor:
 	output:
 		outputDir + 'data/Canada/AvailabilityFactor.csv'
 	shell:
-		'python AvailabilityFactor.py'
+		'python ' + scriptsDir + 'AvailabilityFactor.py'
 
 rule CapacityFactor:
 	input:
@@ -153,7 +154,7 @@ rule CapacityFactor:
 	output:
 		outputDir + 'data/Canada/CapacityFactor.csv'
 	shell:
-		'python CapacityFactor.py'
+		'python ' + scriptsDir + 'CapacityFactor.py'
 
 rule CapacityToActivity:
 	input:
@@ -162,7 +163,7 @@ rule CapacityToActivity:
 	output:
 		outputDir + 'data/Canada/CapacityToActivityUnit.csv'
 	shell:
-		'python CapacityToActivity.py'
+		'python ' + scriptsDir + 'CapacityToActivity.py'
 
 rule Costs:
 	input:
@@ -177,7 +178,7 @@ rule Costs:
 		outputDir + 'data/Canada/FixedCost.csv',
 		outputDir + 'data/Canada/VariableCost.csv'
 	shell:
-		'python Costs.py'
+		'python ' + scriptsDir + 'Costs.py'
 
 rule EmissionActivityRatio:
 	input:
@@ -188,7 +189,7 @@ rule EmissionActivityRatio:
 	output:
 		outputDir + 'data/Canada/EmissionActivityRatio.csv'
 	shell:
-		'python EmissionActivityRatio.py'
+		'python ' + scriptsDir + 'EmissionActivityRatio.py'
 
 rule ActivityRatio:
 	input:
@@ -203,7 +204,7 @@ rule ActivityRatio:
 		outputDir + 'data/Canada/InputActivityRatio.csv',
 		outputDir + 'data/Canada/OutputActivityRatio.csv'
 	shell:
-		'python InOutActivityRatio.py'
+		'python ' + scriptsDir + 'InOutActivityRatio.py'
 
 rule ReserveMargin:
 	input:
@@ -217,7 +218,7 @@ rule ReserveMargin:
 		outputDir + 'data/Canada/ReserveMarginTagTechnology.csv',
 		outputDir + 'data/Canada/ReserveMarginTagFuel.csv'
 	shell:
-		'python ReserveMargin.py'
+		'python ' + scriptsDir + 'ReserveMargin.py'
 
 rule ResidualCapacity:
 	input:
@@ -231,7 +232,7 @@ rule ResidualCapacity:
 		outputDir + 'data/Canada/ResidualCapacity.csv',
 		outputDir + 'data/Canada/OperationalLife.csv'
 	shell:
-		'python ResidualCapacity.py'
+		'python ' + scriptsDir + 'ResidualCapacity.py'
 
 rule AnnualDemand:
 	input:
@@ -242,7 +243,7 @@ rule AnnualDemand:
 	output:
 		outputDir + 'data/Canada/SpecifiedAnnualDemand.csv'
 	shell:
-		'python SpecifiedAnnualDemand.py'
+		'python ' + scriptsDir + 'SpecifiedAnnualDemand.py'
 
 rule DemandProfile:
 	input:
@@ -254,7 +255,7 @@ rule DemandProfile:
 		outputDir + 'data/Canada/SpecifiedDemandProfile.csv',
 		inputDir + 'ProvincialHourlyLoads_TimeAdjusted_AUTO_GENERATED.csv'
 	shell:
-		'python SpecifiedDemandProfile.py'
+		'python ' + scriptsDir + 'SpecifiedDemandProfile.py'
 
 rule StorageCost:
 	input:
@@ -265,7 +266,7 @@ rule StorageCost:
 	output:
 		outputDir + 'data/Canada/CapitalCostStorage.csv'
 	shell:
-		'python StorageCosts.py'
+		'python ' + scriptsDir + 'StorageCosts.py'
 
 rule StorageLife:
 	input:
@@ -276,7 +277,7 @@ rule StorageLife:
 	output:
 		outputDir + 'data/Canada/OperationalLifeStorage.csv'
 	shell:
-		'python StorageLife.py'
+		'python ' + scriptsDir + 'StorageLife.py'
 
 rule EmissionPenalty:
 	input:
@@ -286,7 +287,7 @@ rule EmissionPenalty:
 	output:
 		outputDir + 'data/Canada/EmissionsPenalty.csv'
 	shell:
-		'python EmissionPenalty.py'
+		'python ' + scriptsDir + 'EmissionPenalty.py'
 
 rule RETags:
 	input:
@@ -296,7 +297,7 @@ rule RETags:
 	output:
 		outputDir + 'data/Canada/RETagTechnology.csv'
 	shell:
-		'python RETags.py'
+		'python ' + scriptsDir + 'RETags.py'
 
 rule TechToFromStorage:
 	input:
@@ -308,7 +309,7 @@ rule TechToFromStorage:
 		outputDir + 'data/Canada/TechnologyToStorage.csv',
 		outputDir + 'data/Canada/TechnologyFromStorage.csv'
 	shell:
-		'python TechToFromStorage.py'
+		'python ' + scriptsDir + 'TechToFromStorage.py'
 
 rule UsaData:
 	input:
@@ -318,7 +319,7 @@ rule UsaData:
 	output:
 		expand(outputDir + 'data/USA/{usaFile}', usaFile = usaFiles)
 	shell:
-		'python usaData.py'
+		'python ' + scriptsDir + 'usaData.py'
 
 rule mergeData:
 	input:
@@ -327,7 +328,7 @@ rule mergeData:
 	output:
 		expand(outputDir + 'data/{osemosysFile}', osemosysFile = osemosysFiles)
 	shell:
-		'python MergeCanUsaData.py'
+		'python ' + scriptsDir + 'MergeCanUsaData.py'
 
 rule otooleConvert:
 	input:
