@@ -6,6 +6,11 @@ The OSeMOSYS model, `osemosys_fast.txt`, is a modified version of the original [
 ## 2. Data File 
 The data file, `CanadaUSA.txt` holds all data read in during the solving process. 
 
+## Snakefile
+A [snakemake](https://snakemake.readthedocs.io/en/stable/) workflow has been implemented to eaisly create new datafiles when iterating through scenarios.
+
+The snakemake file, the 'snakefile' also lists the relationships between raw data files in the dataSources folder, the scripts, and the processed files in the src/data folder.
+
 ## 3. data folder 
 Contains CSV files that hold all parameter data in seperate files 
 
