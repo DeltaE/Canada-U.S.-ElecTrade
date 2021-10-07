@@ -25,8 +25,8 @@ The base model requires extensive computer resources.
 - 9hr Run Time using CPLEX 
 
 ## How to Run 
-1. Navigate to the `/scripts` folder in the command line 
-2. Run the command `snakemake <input_argument>` from the command line, replacing `<input_argument>` with  
+1. Navigate to the `/src` folder in the command line 
+2. Run the command `snakemake <input_argument> -c1` from the command line, replacing `<input_argument>` with  
 a.  `dataFile` to generate the file holding all data in .txt format  
 b.  `lpFile` to generate the file to input into the solver  
 c.  `solveCBC` to generate the input datafiles and solve the model using CPLEX  
