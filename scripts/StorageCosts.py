@@ -7,7 +7,7 @@ import numpy as np
 ####################################################
 
 def main():
-    # PURPOSE: Creates otoole formatted Storage Capital Costs csv file 
+    # PURPOSE: Creates an otoole formatted CapitalCostStorage CSV AND OperationalLifeStorage CSV
     # INPUT: none
     # OUTPUT: none
 

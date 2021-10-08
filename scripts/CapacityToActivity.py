@@ -3,7 +3,7 @@ import os
 import numpy as np
 
 def main():
-    # PURPOSE: Creates otoole formatted CapacityToActivityUnit.csv
+    # PURPOSE: Creates otoole formatted CapacityToActivityUnit CSV. Assumes all usints are in GW and PJ  
     # INPUT: none
     # OUTPUT: none
 

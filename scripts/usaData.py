@@ -6,7 +6,6 @@ def main():
     # INPUT: none
     # OUTPUT: none
 
-
     ####################################
     ## MODEL PARAMETERS
     ####################################

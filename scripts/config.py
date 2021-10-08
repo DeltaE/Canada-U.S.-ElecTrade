@@ -1,7 +1,7 @@
 import pandas as pd
 
 def main():
-    # PURPOSE: Creates TEch and Fuel sets. Writes our files that are referenced by other scripts
+    # PURPOSE: Creates Tech and Fuel sets. Writes our files that are referenced by other scripts
     # INPUT: none
     # OUTPUT: none
 

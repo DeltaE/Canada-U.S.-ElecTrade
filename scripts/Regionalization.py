@@ -4,7 +4,7 @@ import numpy as np
 from collections import defaultdict
 
 def main():
-    # PURPOSE: Creates otoole formatted REGION set
+    # PURPOSE: Creates otoole formatted REGION set file
     # INPUT: none
     # OUTPUT: none
 

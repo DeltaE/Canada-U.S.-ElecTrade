@@ -3,7 +3,7 @@ import datetime
 from collections import defaultdict
 
 def main():
-    # PURPOSE: Creates otoole formatted SpecifiedDemandProfile csv file 
+    # PURPOSE: Creates an otoole formatted CSV holding the specified demand profile for the model. Accounts for time zones and daylight saving time   
     # INPUT: none
     # OUTPUT: none
 

@@ -6,10 +6,15 @@ The OSeMOSYS model, `osemosys_fast.txt`, is a modified version of the original [
 ## 2. Data File 
 The data file, `CanadaUSA.txt` holds all data read in during the solving process. 
 
-## 3. data folder 
+## 3. Snakefile
+A [snakemake](https://snakemake.readthedocs.io/en/stable/) workflow has been implemented to eaisly create new datafiles when iterating through scenarios.
+
+The snakemake file, the 'snakefile' also lists the relationships between raw data files in the dataSources folder, the scripts, and the processed files in the src/data folder.
+
+## 4. data folder 
 Contains CSV files that hold all parameter data in seperate files 
 
-## 4. datapackage.json file 
+## 5. datapackage.json file 
 Used by [otoole](https://github.com/OSeMOSYS/otoole) to create the datafile from the folder of CSVs
 
 # Running the Model
@@ -26,7 +31,7 @@ The base model requires extensive computer resources.
 
 ## How to Run 
 1. Navigate to the `/src` folder in the command line 
-2. Run the command `snakemake <input_argument>` from the command line, replacing `<input_argument>` with  
+2. Run the command `snakemake <input_argument> -c1` from the command line, replacing `<input_argument>` with  
 a.  `dataFile` to generate the file holding all data in .txt format  
 b.  `lpFile` to generate the file to input into the solver  
 c.  `solveCBC` to generate the input datafiles and solve the model using CPLEX  

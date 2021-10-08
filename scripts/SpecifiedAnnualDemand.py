@@ -2,7 +2,7 @@ import pandas as pd
 from collections import defaultdict
 
 def main():
-    # PURPOSE: Creates otoole formatted SpecifiedAnnualDemand csv file 
+    # PURPOSE: Creates an otoole formatted CSV holding the specified annual demand for the model
     # INPUT: none
     # OUTPUT: none
 

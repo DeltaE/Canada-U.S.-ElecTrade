@@ -2,7 +2,7 @@ import pandas as pd
 from collections import defaultdict
 
 def main():
-    # PURPOSE: Creates otoole formatted AvailabilityFactor.csv datafile for Hydro
+    # PURPOSE: Creates an otoole formatted CSV holding availability factors for Hydro. If Hydro Availability Factors are used, be sure to remove hydro capacity factor  
     # INPUT: none
     # OUTPUT: none
 

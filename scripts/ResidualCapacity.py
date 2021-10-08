@@ -4,7 +4,7 @@ import numpy as np
 from collections import defaultdict
 
 def main():
-    # PURPOSE: Creates otoole formatted operational life and residual capacity data CSVs. 
+    # PURPOSE: Creates otoole formatted operational life and residual capacity data CSVs.  
     #          The reason for creating both files is that Residual Capacity relies on operational life. 
     #          So if operational life is updates, residual capacity will also be updated. 
     # INPUT: none
