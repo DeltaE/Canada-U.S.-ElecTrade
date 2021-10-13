@@ -3,7 +3,7 @@ dataSources/*_RAW.csv
 dataSources/*_RAW.xlsx
 scripts/.vscode/
 src/.snakemake/
-scripts/dag*
+src/dag*
 results/
 scripts/.ipynb_checkpoints/
 dataSources/UpdateDemand/
