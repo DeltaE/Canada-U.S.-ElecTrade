@@ -214,7 +214,6 @@ rule ReserveMargin:
 		outputDir + 'data/Canada/YEAR.csv',
 		outputDir + 'data/Canada/REGION.csv',
 		inputDir + 'ProvincialAnnualDemand.csv',
-		inputDir + 'ProvincialHourlyLoads_TimeAdjusted_AUTO_GENERATED.csv'
 	output:
 		outputDir + 'data/Canada/ReserveMargin.csv',
 		outputDir + 'data/Canada/ReserveMarginTagTechnology.csv',
@@ -255,7 +254,6 @@ rule SpecifiedDemandProfile:
 		inputDir + 'ProvincialHourlyLoads.xlsx'
 	output:
 		outputDir + 'data/Canada/SpecifiedDemandProfile.csv',
-		inputDir + 'ProvincialHourlyLoads_TimeAdjusted_AUTO_GENERATED.csv'
 	shell:
 		'python ' + scriptsDir + 'SpecifiedDemandProfile.py'
 
