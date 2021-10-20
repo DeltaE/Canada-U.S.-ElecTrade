@@ -120,7 +120,7 @@ rule lpFile:
 ## INTERMEDIATE RULES
 #####################################
 
-rule ConfigFile:
+rule config:
 	input:
 		inputDir + 'Regionalization.xlsx',
 		inputDir + 'Trade.csv'
@@ -193,7 +193,7 @@ rule EmissionActivityRatio:
 	shell:
 		'python ' + scriptsDir + 'EmissionActivityRatio.py'
 
-rule ActivityRatio:
+rule InOutActivityRatio:
 	input:
 		inputDir + 'InputActivityRatioByTechnology.csv', 
 		inputDir + 'OutputActivityRatioByTechnology.csv',
@@ -236,7 +236,7 @@ rule ResidualCapacity:
 	shell:
 		'python ' + scriptsDir + 'ResidualCapacity.py'
 
-rule AnnualDemand:
+rule SpecifiedAnnualDemand:
 	input:
 		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/Canada/YEAR.csv',
@@ -247,7 +247,7 @@ rule AnnualDemand:
 	shell:
 		'python ' + scriptsDir + 'SpecifiedAnnualDemand.py'
 
-rule DemandProfile:
+rule SpecifiedDemandProfile:
 	input:
 		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/Canada/YEAR.csv',
@@ -259,7 +259,7 @@ rule DemandProfile:
 	shell:
 		'python ' + scriptsDir + 'SpecifiedDemandProfile.py'
 
-rule StorageCost:
+rule StorageCosts:
 	input:
 		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/Canada/YEAR.csv',
@@ -322,9 +322,9 @@ rule UsaData:
 	output:
 		expand(outputDir + 'data/USA/{usaFile}', usaFile = usaFiles)
 	shell:
-		'python ' + scriptsDir + 'usaData.py'
+		'python ' + scriptsDir + 'UsaData.py'
 
-rule mergeData:
+rule MergeCanUsaData:
 	input:
 		expand(outputDir + 'data/Canada/{osemosysFile}', osemosysFile = osemosysFiles),
 		expand(outputDir + 'data/USA/{usaFile}', usaFile = usaFiles)
