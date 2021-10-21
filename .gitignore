@@ -10,3 +10,4 @@ dataSources/UpdateDemand/
 scripts/developer_tools/CanadaUsaTxtDiffCheck/New Copy/*.txt
 scripts/developer_tools/CanadaUsaTxtDiffCheck/Old Copy/*.txt
 scripts/developer_tools/CanadaUsaTxtDiffCheck/Results.txt
+scripts/__pycache__/
