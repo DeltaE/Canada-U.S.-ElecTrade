@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import numpy as np
 import datetime
+import functions
 from collections import defaultdict
 
 def main():
@@ -72,7 +73,7 @@ def main():
     ###########################################
 
     #Read in complited actual loads that have been cleaned for DST
-    dfDemandRaw = pd.read_csv('../dataSources/ProvincialHourlyLoads_TimeAdjusted_AUTO_GENERATED.csv')
+    dfDemandRaw = functions.getLoadValues()
 
     #Dictionary to hold regions additional reserve margin needed. 
     peakSquishFactor = {} 

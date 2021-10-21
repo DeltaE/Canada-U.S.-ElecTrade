@@ -35,6 +35,7 @@ osemosysFiles = [
 	'ModelPeriodExogenousEmission.csv',
 	'OutputActivityRatio.csv',
 	'OperationalLife.csv',
+	'OperationalLifeStorage.csv',
 	'REMinProductionTarget.csv',
 	'REGION.csv',
 	'ReserveMargin.csv',
@@ -84,6 +85,7 @@ usaFiles = [
 	'ReserveMarginTagFuel.csv',
 	'ReserveMarginTagTechnology.csv',
 	'ResidualCapacity.csv',
+	'RETagTechnology.csv',
 	'SpecifiedAnnualDemand.csv',
 	'SpecifiedDemandProfile.csv',
 	'TECHNOLOGY.csv',
@@ -118,7 +120,7 @@ rule lpFile:
 ## INTERMEDIATE RULES
 #####################################
 
-rule ConfigFile:
+rule ConfigRule:
 	input:
 		inputDir + 'Regionalization.xlsx',
 		inputDir + 'Trade.csv'
@@ -191,7 +193,7 @@ rule EmissionActivityRatio:
 	shell:
 		'python ' + scriptsDir + 'EmissionActivityRatio.py'
 
-rule ActivityRatio:
+rule InOutActivityRatio:
 	input:
 		inputDir + 'InputActivityRatioByTechnology.csv', 
 		inputDir + 'OutputActivityRatioByTechnology.csv',
@@ -212,7 +214,6 @@ rule ReserveMargin:
 		outputDir + 'data/Canada/YEAR.csv',
 		outputDir + 'data/Canada/REGION.csv',
 		inputDir + 'ProvincialAnnualDemand.csv',
-		inputDir + 'ProvincialHourlyLoads_TimeAdjusted_AUTO_GENERATED.csv'
 	output:
 		outputDir + 'data/Canada/ReserveMargin.csv',
 		outputDir + 'data/Canada/ReserveMarginTagTechnology.csv',
@@ -234,7 +235,7 @@ rule ResidualCapacity:
 	shell:
 		'python ' + scriptsDir + 'ResidualCapacity.py'
 
-rule AnnualDemand:
+rule SpecifiedAnnualDemand:
 	input:
 		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/Canada/YEAR.csv',
@@ -245,7 +246,7 @@ rule AnnualDemand:
 	shell:
 		'python ' + scriptsDir + 'SpecifiedAnnualDemand.py'
 
-rule DemandProfile:
+rule SpecifiedDemandProfile:
 	input:
 		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/Canada/YEAR.csv',
@@ -253,11 +254,10 @@ rule DemandProfile:
 		inputDir + 'ProvincialHourlyLoads.xlsx'
 	output:
 		outputDir + 'data/Canada/SpecifiedDemandProfile.csv',
-		inputDir + 'ProvincialHourlyLoads_TimeAdjusted_AUTO_GENERATED.csv'
 	shell:
 		'python ' + scriptsDir + 'SpecifiedDemandProfile.py'
 
-rule StorageCost:
+rule StorageCosts:
 	input:
 		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/Canada/YEAR.csv',
@@ -315,13 +315,14 @@ rule UsaData:
 	input:
 		inputDir + 'Regionalization.xlsx',
 		inputDir + 'USA_Data.xlsx',
+		inputDir + 'USA_Demand.xlsx',
 		inputDir + 'USA_Trade.csv'
 	output:
 		expand(outputDir + 'data/USA/{usaFile}', usaFile = usaFiles)
 	shell:
-		'python ' + scriptsDir + 'usaData.py'
+		'python ' + scriptsDir + 'UsaData.py'
 
-rule mergeData:
+rule MergeCanUsaData:
 	input:
 		expand(outputDir + 'data/Canada/{osemosysFile}', osemosysFile = osemosysFiles),
 		expand(outputDir + 'data/USA/{usaFile}', usaFile = usaFiles)
@@ -341,7 +342,7 @@ rule otooleConvert:
 
 rule createLP:
 	input:
-		modelFile = outputDir + 'Osemosys_TacoMod.txt',
+		modelFile = outputDir + 'osemosys_fast_TB.txt',
 		dataFile = outputDir + fileName + '.txt'
 	output:
 		outputDir + fileName + '.lp'
