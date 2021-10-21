@@ -120,7 +120,7 @@ rule lpFile:
 ## INTERMEDIATE RULES
 #####################################
 
-rule config:
+rule ConfigRule:
 	input:
 		inputDir + 'Regionalization.xlsx',
 		inputDir + 'Trade.csv'

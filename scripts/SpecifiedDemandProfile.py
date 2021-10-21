@@ -44,12 +44,6 @@ def main():
     #generate master load dataframe
     dfLoad = functions.getLoadValues()
 
-    ###########################################
-    # DEPRECATED
-    # #save load dataframe for use in other scripts
-    # dfLoad.to_csv('../dataSources/ProvincialHourlyLoads_TimeAdjusted_AUTO_GENERATED.csv', index=False)
-    ###########################################
-
     #Master list to output
     #Region, fuel, timeslice, year, value
     load = []
