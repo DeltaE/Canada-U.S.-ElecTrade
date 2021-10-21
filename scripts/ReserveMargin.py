@@ -2,7 +2,7 @@ import pandas as pd
 import os
 import numpy as np
 import datetime
-from functions import getLoadValues
+import functions
 from collections import defaultdict
 
 def main():
