@@ -1,5 +1,5 @@
 import pandas as pd
-from collections import defaultdict
+import functions
 
 def main():
     # PURPOSE: Creates an otoole formatted CSV holding availability factors for Hydro. If Hydro Availability Factors are used, be sure to remove hydro capacity factor  
@@ -9,31 +9,7 @@ def main():
     ###########################################
     # Model Parameters
     ###########################################
-
-    #Dictionary holds month to season Mapping 
-    seasons = {
-        'W':[1, 2, 12],
-        'SP':[3, 4, 5],
-        'S':[6, 7, 8],
-        'F':[9, 10, 11]}
-
-    #Years to Print over
-    dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
-    years = dfYears['VALUE'].tolist()
-
-    # Regions to print over
-    dfRegions = pd.read_csv('../src/data/Canada/REGION.csv')
-    regions = dfRegions['VALUE'].tolist()
-
-    #Dictionary for subregion to province mappings
-    subregions = defaultdict(list)
-
-    # Read in regionalization file to get provincial seperation
-    df = pd.read_excel('../dataSources/Regionalization.xlsx', sheet_name='CAN')
-    for i in range(len(df)):    
-        subregion = df['REGION'].iloc[i]
-        province = df['PROVINCE'].iloc[i]
-        subregions[subregion].append(province)
+    seasons, years, regions, subregions, df = functions.factorParametersSetup()
 
     ###########################################
     # Availability Factor Calculations
