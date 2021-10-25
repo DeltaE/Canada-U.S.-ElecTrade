@@ -112,7 +112,7 @@ def daylightSavings(inData):
 # PURPOSE: Setting up seasons, years, regions, subregions, and new dataframe for AvailabilityFactor and CapacityFactor
 # INPUT: None
 # OUTPUT: seasons, years, regions, subregions, dataframe for forming the new csv file
-def factorParametersSetup():
+def initializeFactorParameters():
     #Dictionary holds month to season Mapping 
     seasons = {
         'W':[1, 2, 12],

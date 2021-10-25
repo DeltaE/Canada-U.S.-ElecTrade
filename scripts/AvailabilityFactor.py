@@ -9,7 +9,7 @@ def main():
     ###########################################
     # Model Parameters
     ###########################################
-    seasons, years, regions, subregions, df = functions.factorParametersSetup()
+    seasons, years, regions, subregions, df = functions.initializeFactorParameters()
 
     ###########################################
     # Availability Factor Calculations
