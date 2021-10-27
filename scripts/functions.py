@@ -109,10 +109,10 @@ def daylightSavings(inData):
 
     return inData
 
-# PURPOSE: Setting up seasons, years, regions, subregions, and new dataframe for AvailabilityFactor and CapacityFactor
-# INPUT: None
-# OUTPUT: seasons, years, regions, subregions, dataframe for forming the new csv file
 def initializeFactorParameters():
+    # PURPOSE: Setting up seasons, years, regions, subregions, and new dataframe for AvailabilityFactor and CapacityFactor
+    # INPUT: None
+    # OUTPUT: seasons, years, regions, subregions, dataframe for forming the new csv file
     #Dictionary holds month to season Mapping 
     seasons = {
         'W':[1, 2, 12],
@@ -139,3 +139,289 @@ def initializeFactorParameters():
         subregions[subregion].append(province)
 
     return seasons, years, regions, subregions, df
+
+def getPWRtechs(regions, techs):
+    # PURPOSE: Creates all the PWR naming technologies
+    # INPUT:   regions =  Dictionary holding region as the key and subregion as the values in a list
+    #          techs =    List of the technologies to print over 
+    # OUTPUT:  outList =  List of all the PWR technologies
+
+    # list to hold technologies
+    outList = []
+
+    # Loop to create all technology names
+    for region, subregions in regions.items():
+        for subregion in subregions:
+            for tech in techs:
+                techName = 'PWR' + tech + region + subregion + '01'
+                outList.append(techName)
+    
+    # Return list of pwr Technologes
+    return outList
+
+def getPWRTRNtechs(regions):
+    # PURPOSE: Creates all the PWRTRN naming technologies
+    # INPUT:   regions =  Dictionary holding region as the key and subregion as the values in a list
+    # OUTPUT:  outList =  List of all the PWR technologies
+
+    # list to hold technologies
+    outList = []
+
+    # Loop to create all technology names
+    for region, subregions in regions.items():
+        for subregion in subregions:
+                techName = 'PWR' + 'TRN' + region + subregion
+                outList.append(techName)
+    
+    # Return list of pwr Technologes
+    return outList
+
+def getMINtechs(regions, techs, isCanada):
+    # PURPOSE: Creates all the MIN naming technologies
+    # INPUT:   regions =  Dictionary holding region as the key and subregion as the values in a list
+    #          techs =    List of the technologies to print over 
+    # OUTPUT:  outList =  List of all the MIN technologies
+
+    # list to hold technologies
+    outList = []
+
+    # Loop to create all regionalized technology names
+    for region in regions:
+        for tech in techs:
+            techName = 'MIN' + tech + region
+            outList.append(techName)
+    
+    # DONE ONLY IN THE CANADA SCRIPTS
+    # Loop to create all international mining techs
+    if isCanada:
+        for tech in techs:
+            techName = 'MIN' + tech + 'INT'
+            outList.append(techName)
+
+    # Return list of min Technologes
+    return outList
+
+def getRNWtechs(regions, techs):
+    # PURPOSE: Creates all the RNW naming technologies
+    # INPUT:   regions =  Dictionary holding region as the key and subregion as the values in a list
+    #          techs =    List of the technologies to print over 
+    # OUTPUT:  outList =  List of all the RNW technologies
+
+    # list to hold technologies
+    outList = []
+
+    # Loop to create all technology names
+    for region, subregions in regions.items():
+        for subregion in subregions:
+            for tech in techs:
+                techName = 'RNW' + tech + region + subregion
+                outList.append(techName)
+    
+    # Return list of rnw Technologes
+    return outList
+
+def getTRNtechs(csvPath):
+    # PURPOSE: Creates all the TRN naming technologies
+    # INPUT:   None
+    # OUTPUT:  outList =  List of all the TRN technologies
+
+    # list to hold technologies
+    outList = []
+
+    #Read in the trade csv datafile 
+    df = pd.read_csv(csvPath)
+    outList = df['TECHNOLOGY'].tolist()
+    outList = list(set(outList)) # remove duplicates
+    
+    # Return list of rnw Technologes
+    return outList
+
+def getRNWfuels(regions, techs):
+    # PURPOSE: Creates fuels names for Renewable technologies
+    # INPUT:   regions =  Dictionary holding region as the key and subregion as the values in a list
+    #          techs =    List of the technologies to print over 
+    # OUTPUT:  outList =  List of all the RNW technologies
+
+    # list to hold technologies
+    outList = []
+
+    # Loop to create all technology names
+    for region, subregions in regions.items():
+        for subregion in subregions:
+            for tech in techs:
+                fuelName = tech + region + subregion
+                outList.append(fuelName)
+    
+    # Return list of rnw fuels
+    return outList
+
+def getMINfuels(regions, techs, isCanada):
+    # PURPOSE: Creates Fuel names for Min technologies
+    # INPUT:   regions =  Dictionary holding region as the key and subregion as the values in a list
+    #          techs =    List of the technologies to print over 
+    # OUTPUT:  outList =  List of all the MIN Fuels 
+
+    # list to hold technologies
+    outList = []
+
+    # Loop to create all technology names based on region
+    for region in regions:
+        for tech in techs:
+            fuelName = tech + region
+            outList.append(fuelName)
+    
+    # Created once in Canada scripts
+    # Loop to create all technology names for international import/export
+    if isCanada:
+        for tech in techs:
+            fuelName = tech + 'INT'
+            outList.append(fuelName)
+        for tech in techs:
+            outList.append(tech)
+
+    # Return list of min TFuels
+    return outList
+
+def getELCfuels(regions):
+    # PURPOSE: Creates Fuel electricity use fuel names
+    # INPUT:   regions =  Dictionary holding region as the key and subregion as the values in a list
+    # OUTPUT:  outList =  List of all the ELC Fuels 
+
+    # list to hold technologies
+    outList = []
+
+    # Loop to create all technology names
+    for region, subregions in regions.items():
+        for subregion in subregions:
+            elcOne = 'ELC' + region + subregion + '01'
+            elcTwo = 'ELC' + region + subregion + '02'
+            outList.extend([elcOne, elcTwo])
+    
+    # Return list of electricty fuels
+    return outList
+
+def createFuelSet(countries, rnwTechs, mineTechs, csvPath):
+    # Renewable fuels
+    rnwFuelList = getRNWfuels(countries, rnwTechs)
+
+    # Mining fuels
+    minFuelList = getMINfuels(countries, mineTechs, 1)
+
+    #ELC fuels
+    elcFuelList = getELCfuels(countries)
+
+    #Hydrogen Fuels
+    #hy2FuelList = getHY2fuels(countries)
+
+    #Append lists together and write to a csv
+    #outputFuels = rnwFuelList + minFuelList + elcFuelList + hy2FuelList
+    outputFuels = rnwFuelList + minFuelList + elcFuelList
+    dfOut = pd.DataFrame(outputFuels, columns=['VALUE'])
+    dfOut.to_csv(csvPath, index=False)
+
+def createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, csvPath):
+    # get power generator technology list 
+    pwrList = getPWRtechs(countries, techsMaster)
+
+    # get grid distribution technology list (PWRTRN<Reg><SubReg>)
+    pwrTrnList = getPWRTRNtechs(countries)
+
+    # get Mining technology list
+    minList = getMINtechs(countries, mineTechs, 1)
+
+    # get Renewables technology list 
+    rnwList = getRNWtechs(countries, rnwTechs)
+
+    # get trade technology list 
+    trnList = getTRNtechs('../dataSources/Trade.csv')
+
+    #Append lists together and write to a csv
+    outputTechs = pwrList + pwrTrnList + minList + rnwList + trnList
+    dfOut = pd.DataFrame(outputTechs, columns=['VALUE'])
+    dfOut.to_csv(csvPath, index=False)
+
+    return outputTechs
+
+def createTechLists(techsMaster, rnwTechs, mineTechs, stoTechs):
+    data = []
+
+    for i in range(len(techsMaster)):
+        data.append(['PWR',techsMaster[i]])
+
+    for i in range(len(rnwTechs)):
+        data.append(['RNW',rnwTechs[i]])
+
+    for i in range(len(mineTechs)):
+        data.append(['MIN',mineTechs[i]])
+
+    for i in range(len(stoTechs)):
+        data.append(['STO',stoTechs[i]])
+    
+    return data
+
+def initializeCanadaUsaModelParameters(topLevelRegion):
+    # Model Name 
+    model = ['Canada_USA']
+
+    # Regions in the model
+    regions = ['NAmerica']
+
+    # Years to loop over 
+    years = list(range(2019,2051,1))
+
+    # Emission Types
+    emissions = ['CO2']
+
+    # Storages
+    # storages = [] 
+
+    # PWR Technologies
+    techsMaster = [
+        'BIO', # Biomass
+        'CCG', # Gas Combind Cycle 
+        'CTG', # Gas Combustion Turbine
+        'COA', # Coal
+        'COC', # Coal CCS
+        'HYD', # Hydro 
+        'SPV', # Solar
+        'URN', # Nuclear
+        'WND', # Wind
+        #'P2G', # Power to Gas
+        #'FCL'  # Fuel Cell
+    ]
+
+    #RWN Technologies
+    rnwTechs = [
+        'HYD', # Hydro 
+        'SPV', # Solar
+        'WND', # Wind
+        'BIO', # Biomass
+    ]
+
+    #MIN TEchnologies
+    mineTechs = [
+        'COA', # Coal
+        'GAS', # Gas
+        'URN', # Nuclear
+    ]
+
+    #STO Technologies
+    stoTechs = [
+        #'TNK' #Tank
+    ]
+
+    #Countries and subregions in the model
+    countries = {
+        topLevelRegion:[]
+        }
+
+    #Read in subregions. This step is needed cause other scripts use the 
+    #provincial breakdown by subregion in the excel file 
+    sourceFile = '../dataSources/Regionalization.xlsx'
+    for country in countries:
+        dfCountry = pd.read_excel(sourceFile, sheet_name=country)
+        regionList = dfCountry['REGION'].tolist()
+        regionList = list(set(regionList)) # remove duplicates
+        countries[country] = regionList # save to dictionary
+    
+    return years, regions, emissions, techsMaster, rnwTechs, mineTechs, stoTechs, countries
