@@ -11,7 +11,8 @@ def main():
     ###########################################
     # Model Parameters
     ###########################################
-    seasons, years, regions, subregions, df = functions.initializeFactorParameters()
+    seasons, years = functions.initializeTemporalFactorParameters()
+    regions, subregions = functions.initializeSpatialFactorParameters()
 
     ###########################################
     # Capacity Factor Calculations

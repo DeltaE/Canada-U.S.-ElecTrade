@@ -109,11 +109,11 @@ def daylightSavings(inData):
 
     return inData
 
-def initializeFactorParameters():
-    # PURPOSE: Setting up seasons, years, regions, subregions, and new dataframe for AvailabilityFactor and CapacityFactor
+def initializeTemporalFactorParameters():
+    # PURPOSE: Setting up seasons and years for AvailabilityFactor and CapacityFactor
     # INPUT: None
-    # OUTPUT: seasons, years, regions, subregions, dataframe for forming the new csv file
-    #Dictionary holds month to season Mapping 
+    # OUTPUT: seasons (dictionary) and years (list)
+    # Dictionary holds month to season Mapping
     seasons = {
         'W':[1, 2, 12],
         'SP':[3, 4, 5],
@@ -123,6 +123,13 @@ def initializeFactorParameters():
     #Years to Print over
     dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
     years = dfYears['VALUE'].tolist()
+
+    return seasons, years
+
+def initializeSpatialFactorParameters():
+    # PURPOSE: Setting up regions and subregions for AvailabilityFactor and CapacityFactor
+    # INPUT: None
+    # OUTPUT: regions (list) and subregions (dictionary)
 
     # Regions to print over
     dfRegions = pd.read_csv('../src/data/Canada/REGION.csv')
@@ -138,7 +145,7 @@ def initializeFactorParameters():
         province = df['PROVINCE'].iloc[i]
         subregions[subregion].append(province)
 
-    return seasons, years, regions, subregions, df
+    return regions, subregions
 
 def getPWRtechs(regions, techs):
     # PURPOSE: Creates all the PWR naming technologies
