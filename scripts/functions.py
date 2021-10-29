@@ -187,6 +187,7 @@ def getMINtechs(regions, techs, isCanada):
     # PURPOSE: Creates all the MIN naming technologies
     # INPUT:   regions =  Dictionary holding region as the key and subregion as the values in a list
     #          techs =    List of the technologies to print over 
+    #          isCanada = True/False for whether function is being called for Canada data or USA data
     # OUTPUT:  outList =  List of all the MIN technologies
 
     # list to hold technologies
@@ -229,7 +230,7 @@ def getRNWtechs(regions, techs):
 
 def getTRNtechs(csvPath):
     # PURPOSE: Creates all the TRN naming technologies
-    # INPUT:   None
+    # INPUT:   csvPath = The location of the datafile, as a path
     # OUTPUT:  outList =  List of all the TRN technologies
 
     # list to hold technologies
@@ -262,10 +263,12 @@ def getRNWfuels(regions, techs):
     # Return list of rnw fuels
     return outList
 
-def getMINfuels(regions, techs, isCanada):
+def getMINfuels(regions, techs, generateInternational):
     # PURPOSE: Creates Fuel names for Min technologies
     # INPUT:   regions =  Dictionary holding region as the key and subregion as the values in a list
     #          techs =    List of the technologies to print over 
+    #          generateInternational = True/False for whether function needs to create all
+    #                                  technology names for international import/export
     # OUTPUT:  outList =  List of all the MIN Fuels 
 
     # list to hold technologies
@@ -279,7 +282,7 @@ def getMINfuels(regions, techs, isCanada):
     
     # Created once in Canada scripts
     # Loop to create all technology names for international import/export
-    if isCanada:
+    if generateInternational:
         for tech in techs:
             fuelName = tech + 'INT'
             outList.append(fuelName)
@@ -307,12 +310,21 @@ def getELCfuels(regions):
     # Return list of electricty fuels
     return outList
 
-def createFuelSet(countries, rnwTechs, mineTechs, csvPath, isCanada):
+def createFuelSet(countries, rnwTechs, mineTechs, csvPath, generateInternational):
+    # PURPOSE: Appends all fuel name lists together and writes them to a CSV
+    # INPUT:   countries = Dictionary holding countries as the key and subregion as the values in a list
+    #          rnwTechs = List of the technologies to print over for getRNWfuels
+    #          mineTechs = List of the technologies to print over for getMINfuels
+    #          csvPath = Path for the output
+    #          generateInternational = True/False for whether getMINfuels function needs to create all
+    #                                  technology names for international import/export
+    # OUTPUT:  None
+
     # Renewable fuels
     rnwFuelList = getRNWfuels(countries, rnwTechs)
 
     # Mining fuels
-    minFuelList = getMINfuels(countries, mineTechs, isCanada)
+    minFuelList = getMINfuels(countries, mineTechs, generateInternational)
 
     #ELC fuels
     elcFuelList = getELCfuels(countries)
@@ -327,6 +339,15 @@ def createFuelSet(countries, rnwTechs, mineTechs, csvPath, isCanada):
     dfOut.to_csv(csvPath, index=False)
 
 def createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsvPath, outputCsvPath, isCanada):
+    # PURPOSE: Appends all technology name lists together and writes them to a CSV
+    # INPUT:   countries = Dictionary holding countries as the key and subregion as the values in a list
+    #          techsMaster = List of the technologies to print over for getPWRtechs
+    #          mineTechs = List of the technologies to print over for getMINtechs
+    #          rnwTechs = List of the technologies to print over for getRNWtechs
+    #          trnTechsCsvPath = Trade csv datafile location
+    #          outputCsvPath = Path for the output
+    #          isCanada = True/False for whether function is being called for Canada data or USA data
+    # OUTPUT:  outputTechs = All technology lists appended together
     # get power generator technology list 
     pwrList = getPWRtechs(countries, techsMaster)
 
@@ -350,6 +371,14 @@ def createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsv
     return outputTechs
 
 def createTechLists(techsMaster, rnwTechs, mineTechs, stoTechs):
+    # PURPOSE: Merges several tech lists into 'data' so that they can be printed over
+    # INPUT:   countries = Dictionary holding countries as the key and subregion as the values in a list
+    #          techsMaster = List of the technologies to print over for power techs
+    #          rnwTechs = List of the technologies to print over for renewable techs
+    #          mineTechs = List of the technologies to print over for mining techs
+    #          stoTechs = List of the technologies to print over for storage techs
+    # OUTPUT:  data = Merged tech lists
+    # get power generator technology list 
     data = []
 
     for i in range(len(techsMaster)):
@@ -367,8 +396,18 @@ def createTechLists(techsMaster, rnwTechs, mineTechs, stoTechs):
     return data
 
 def initializeCanadaUsaModelParameters(topLevelRegion):
-    # Model Name 
-    model = ['Canada_USA']
+    # PURPOSE: Initializes necessary parameters for config.py and UsaData.py, which create
+    # Tech and Fuel sets for Canada and the US, respectively
+    # INPUT:   topLevelRegion = String indicating region: 'CAN' or 'USA'
+    # OUTPUT:  years = List from 2019 to 2051
+    #          regions = List for regions
+    #          emissions = List for CO2 emissions
+    #          techsMaster = List for power technologies
+    #          rnwTechs = List for renewable technologies
+    #          mineTechs = List for mining technologies
+    #          stoTechs = List for storage technologies
+    #          countries = Dictionary for holding countries as the key and subregion as the values in a list
+    # get power generator technology list 
 
     # Regions in the model
     regions = ['NAmerica']

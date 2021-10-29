@@ -57,7 +57,7 @@ def main():
     ## CREATE FUEL SET
     ####################################
 
-    functions.createFuelSet(countries, rnwTechs, mineTechs, '../src/data/Canada/FUEL.csv', 1)
+    functions.createFuelSet(countries, rnwTechs, mineTechs, '../src/data/Canada/FUEL.csv', True)
 
     ####################################
     ## Extra Functions

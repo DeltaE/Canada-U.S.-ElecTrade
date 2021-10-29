@@ -37,7 +37,7 @@ def main():
     ## CREATE FUEL SET
     ####################################
 
-    functions.createFuelSet(countries, rnwTechs, mineTechs, '../src/data/USA/FUEL.csv', 0)
+    functions.createFuelSet(countries, rnwTechs, mineTechs, '../src/data/USA/FUEL.csv', False)
 
     ####################################
     ## READ IN MAIN EXCEL SHEET
