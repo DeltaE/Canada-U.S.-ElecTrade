@@ -15,19 +15,7 @@ def main():
     # Model Parameters
     ###########################################
 
-    # Regions to print over
-    dfRegions = pd.read_csv('../src/data/Canada/REGION.csv')
-    regions = dfRegions['VALUE'].tolist()
-
-    #Dictionary for subregion to province mappings
-    subregions = defaultdict(list)
-
-    # Read in regionalization file to get provincial seperation
-    df = pd.read_excel('../dataSources/Regionalization.xlsx', sheet_name='CAN')
-    for i in range(len(df)):    
-        subregion = df['REGION'].iloc[i]
-        province = df['PROVINCE'].iloc[i]
-        subregions[subregion].append(province)
+    regions, subregions = functions.initializeSpatialParameters()
 
     #Years to Print over
     dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')

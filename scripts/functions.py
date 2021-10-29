@@ -109,7 +109,7 @@ def daylightSavings(inData):
 
     return inData
 
-def initializeTemporalFactorParameters():
+def initializeTemporalParameters():
     # PURPOSE: Setting up seasons and years for AvailabilityFactor and CapacityFactor
     # INPUT: None
     # OUTPUT: seasons (dictionary) and years (list)
@@ -126,7 +126,7 @@ def initializeTemporalFactorParameters():
 
     return seasons, years
 
-def initializeSpatialFactorParameters():
+def initializeSpatialParameters():
     # PURPOSE: Setting up regions and subregions for AvailabilityFactor and CapacityFactor
     # INPUT: None
     # OUTPUT: regions (list) and subregions (dictionary)
