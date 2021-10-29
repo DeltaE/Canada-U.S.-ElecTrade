@@ -15,7 +15,7 @@ def main():
     #######################################
     ## CREATE TECH LISTS FOR OTHER SCRIPTS
     #######################################
-
+    
     data = functions.createTechLists(techsMaster, rnwTechs, mineTechs, stoTechs)
 
     dfGenerationType = pd.DataFrame(data, columns=['GENERATION','VALUE'])
@@ -51,13 +51,13 @@ def main():
     ## CREATE TECHNOLOGY SET
     ####################################
 
-    functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../src/data/Canada/TECHNOLOGY.csv')
+    functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', '../src/data/Canada/TECHNOLOGY.csv', 1)
 
     ####################################
     ## CREATE FUEL SET
     ####################################
 
-    functions.createFuelSet(countries, rnwTechs, mineTechs, '../src/data/Canada/FUEL.csv')
+    functions.createFuelSet(countries, rnwTechs, mineTechs, '../src/data/Canada/FUEL.csv', 1)
 
     ####################################
     ## Extra Functions

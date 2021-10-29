@@ -31,13 +31,13 @@ def main():
     ## CREATE TECHNOLOGY SET
     ####################################
 
-    outputTechs = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../src/data/USA/TECHNOLOGY.csv')
+    outputTechs = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', '../src/data/USA/TECHNOLOGY.csv', 0)
 
     ####################################
     ## CREATE FUEL SET
     ####################################
 
-    functions.createFuelSet(countries, rnwTechs, mineTechs, '../src/data/USA/FUEL.csv')
+    functions.createFuelSet(countries, rnwTechs, mineTechs, '../src/data/USA/FUEL.csv', 0)
 
     ####################################
     ## READ IN MAIN EXCEL SHEET

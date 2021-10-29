@@ -300,12 +300,12 @@ def getELCfuels(regions):
     # Return list of electricty fuels
     return outList
 
-def createFuelSet(countries, rnwTechs, mineTechs, csvPath):
+def createFuelSet(countries, rnwTechs, mineTechs, csvPath, isCanada):
     # Renewable fuels
     rnwFuelList = getRNWfuels(countries, rnwTechs)
 
     # Mining fuels
-    minFuelList = getMINfuels(countries, mineTechs, 1)
+    minFuelList = getMINfuels(countries, mineTechs, isCanada)
 
     #ELC fuels
     elcFuelList = getELCfuels(countries)
@@ -319,7 +319,7 @@ def createFuelSet(countries, rnwTechs, mineTechs, csvPath):
     dfOut = pd.DataFrame(outputFuels, columns=['VALUE'])
     dfOut.to_csv(csvPath, index=False)
 
-def createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, csvPath):
+def createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsvPath, outputCsvPath, isCanada):
     # get power generator technology list 
     pwrList = getPWRtechs(countries, techsMaster)
 
@@ -327,18 +327,18 @@ def createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, csvPath):
     pwrTrnList = getPWRTRNtechs(countries)
 
     # get Mining technology list
-    minList = getMINtechs(countries, mineTechs, 1)
+    minList = getMINtechs(countries, mineTechs, isCanada)
 
     # get Renewables technology list 
     rnwList = getRNWtechs(countries, rnwTechs)
 
     # get trade technology list 
-    trnList = getTRNtechs('../dataSources/Trade.csv')
+    trnList = getTRNtechs(trnTechsCsvPath)
 
     #Append lists together and write to a csv
     outputTechs = pwrList + pwrTrnList + minList + rnwList + trnList
     dfOut = pd.DataFrame(outputTechs, columns=['VALUE'])
-    dfOut.to_csv(csvPath, index=False)
+    dfOut.to_csv(outputCsvPath, index=False)
 
     return outputTechs
 
