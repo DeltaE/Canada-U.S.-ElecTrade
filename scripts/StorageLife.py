@@ -1,4 +1,5 @@
 import pandas as pd
+import functions
 
 ##############################################################
 ## ASSUMES ALL REGIONS USE THE SAME OPERATIONAL LIFE VALUES ##
@@ -10,8 +11,7 @@ def main():
     # OUTPUT: none
 
     # Regions to print over
-    df = pd.read_csv('../src/data/Canada/REGION.csv')
-    regions = df['VALUE'].tolist()
+    regions = functions.initializeRegions()
 
     # Subregions to print over
     df = pd.read_excel('../dataSources/Regionalization.xlsx', sheet_name='CAN')

@@ -110,7 +110,7 @@ def daylightSavings(inData):
     return inData
 
 def initializeTemporalParameters():
-    # PURPOSE: Setting up seasons and years for AvailabilityFactor and CapacityFactor
+    # PURPOSE: Setting up seasons and years as a dictionary and list
     # INPUT: None
     # OUTPUT: seasons (dictionary) and years (list)
     # Dictionary holds month to season Mapping
@@ -126,15 +126,17 @@ def initializeTemporalParameters():
 
     return seasons, years
 
-def initializeSpatialParameters():
-    # PURPOSE: Setting up regions and subregions for AvailabilityFactor and CapacityFactor
+def initializeRegions():
+    # PURPOSE: Initializes regions as a list
     # INPUT: None
-    # OUTPUT: regions (list) and subregions (dictionary)
+    # OUTPUT: regions (list)
 
     # Regions to print over
     dfRegions = pd.read_csv('../src/data/Canada/REGION.csv')
     regions = dfRegions['VALUE'].tolist()
+    return regions
 
+def initializeSubregions():
     #Dictionary for subregion to province mappings
     subregions = defaultdict(list)
 
@@ -144,6 +146,16 @@ def initializeSpatialParameters():
         subregion = df['REGION'].iloc[i]
         province = df['PROVINCE'].iloc[i]
         subregions[subregion].append(province)
+    
+    return subregions
+
+def initializeSpatialParameters():
+    # PURPOSE: Setting up regions and subregions as a list and dictionary
+    # INPUT: None
+    # OUTPUT: regions (list) and subregions (dictionary)
+
+    regions = initializeRegions()
+    subregions = initializeSubregions()
 
     return regions, subregions
 
