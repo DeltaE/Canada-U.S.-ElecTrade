@@ -109,10 +109,11 @@ def daylightSavings(inData):
 
     return inData
 
-def initializeTemporalParameters():
-    # PURPOSE: Setting up seasons and years as a dictionary and list
+def initializeSeasons():
+    # PURPOSE: Initializes seasons as a dictionary
     # INPUT: None
-    # OUTPUT: seasons (dictionary) and years (list)
+    # OUTPUT: seasons (dictionary)
+
     # Dictionary holds month to season Mapping
     seasons = {
         'W':[1, 2, 12],
@@ -120,11 +121,18 @@ def initializeTemporalParameters():
         'S':[6, 7, 8],
         'F':[9, 10, 11]}
 
+    return seasons
+
+def initializeYears():
+    # PURPOSE: Initializes years as a list
+    # INPUT: None
+    # OUTPUT: years (list)
+
     #Years to Print over
     dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
     years = dfYears['VALUE'].tolist()
 
-    return seasons, years
+    return years
 
 def initializeRegions():
     # PURPOSE: Initializes regions as a list
@@ -137,6 +145,10 @@ def initializeRegions():
     return regions
 
 def initializeSubregions():
+    # PURPOSE: Initializes subregions as a dictionary
+    # INPUT: None
+    # OUTPUT: subregions (dictionary)
+
     #Dictionary for subregion to province mappings
     subregions = defaultdict(list)
 
@@ -148,16 +160,6 @@ def initializeSubregions():
         subregions[subregion].append(province)
     
     return subregions
-
-def initializeSpatialParameters():
-    # PURPOSE: Setting up regions and subregions as a list and dictionary
-    # INPUT: None
-    # OUTPUT: regions (list) and subregions (dictionary)
-
-    regions = initializeRegions()
-    subregions = initializeSubregions()
-
-    return regions, subregions
 
 def getPWRtechs(regions, techs):
     # PURPOSE: Creates all the PWR naming technologies

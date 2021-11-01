@@ -15,13 +15,11 @@ def main():
     # Model Parameters
     ###########################################
 
-    regions, subregions = functions.initializeSpatialParameters()
-
-    #Years to Print over
-    dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
-    years = dfYears['VALUE'].tolist()
+    regions = functions.initializeRegions()
+    subregions = functions.initializeSubregions()
+    years = functions.initializeYears()
     
-    # holds baselione reserve margin for each province based on NERC
+    # holds baseline reserve margin for each province based on NERC
     # 10 percent for hydro dominated provinces
     # 15 percent for thermal dominated regions 
     provincialReserveMargin = {

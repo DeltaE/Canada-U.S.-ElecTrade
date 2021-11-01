@@ -15,11 +15,9 @@ def main():
     # Model Parameters
     ###########################################
 
-    regions, subregions = functions.initializeSpatialParameters()
-
-    #Years to Print over
-    dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
-    years = dfYears['VALUE'].tolist()
+    regions = functions.initializeRegions()
+    subregions = functions.initializeSubregions()
+    years = functions.initializeYears()
 
     ###########################################
     # Operational Life

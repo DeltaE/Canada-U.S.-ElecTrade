@@ -12,7 +12,8 @@ def main():
     # Model Parameters
     ###########################################
 
-    seasons, years = functions.initializeTemporalParameters()
+    seasons = functions.initializeSeasons()
+    years = functions.initializeYears()
     regions = functions.initializeRegions()
     subregions = functions.initializeSubregions()
 
