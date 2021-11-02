@@ -161,6 +161,29 @@ def initializeSubregions():
     
     return subregions
 
+def initializeSubregionsWithNoDuplicates():
+    # PURPOSE: Initializes subregions as a list without duplicates
+    # INPUT: None
+    # OUTPUT: subregions (list)
+
+    df = pd.read_excel('../dataSources/Regionalization.xlsx', sheet_name='CAN')
+    subregions = df['REGION'].tolist()
+    subregions = list(set(subregions)) # removes duplicates
+
+    return subregions
+
+def initializeStorages():
+    # PURPOSE: Initializes storages as a list
+    # INPUT: None
+    # OUTPUT: storages (list)
+
+    #Read in master list of technologies and get storage names
+    dfGeneration_raw = pd.read_csv('../dataSources/techList_AUTO_GENERATED.csv')
+    dfGeneration = dfGeneration_raw.loc[dfGeneration_raw['GENERATION'] == 'STO']
+    storages = dfGeneration['VALUE'].tolist()
+
+    return storages
+
 def getPWRtechs(regions, techs):
     # PURPOSE: Creates all the PWR naming technologies
     # INPUT:   regions =  Dictionary holding region as the key and subregion as the values in a list
