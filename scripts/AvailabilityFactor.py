@@ -10,6 +10,7 @@ def main():
     # Model Parameters
     ###########################################
 
+    # Parameters to print over
     seasons = functions.initializeSeasons()
     years = functions.initializeYears()
     regions = functions.initializeRegions()

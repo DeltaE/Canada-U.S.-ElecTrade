@@ -15,6 +15,7 @@ def main():
     # Model Parameters
     ###########################################
 
+    # Parameters to print over
     regions = functions.initializeRegions()
     subregions = functions.initializeSubregions()
     years = functions.initializeYears()

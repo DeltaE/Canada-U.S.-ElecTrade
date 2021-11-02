@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import numpy as np
+import functions
 
 def main():
     # PURPOSE: Creates otoole formatted CapacityToActivityUnit CSV. Assumes all usints are in GW and PJ  
@@ -14,12 +15,11 @@ def main():
     ## ASSUMES ALL CAPACITIES IN GW AND ALL ENNERGY IN PJ
 
     # Regions to print over
-    df = pd.read_csv('../src/data/Canada/REGION.csv')
-    regions = df['VALUE'].tolist()
+    regions = functions.initializeRegions()
 
     #Technologies to print over
     df = pd.read_csv('../src/data/Canada/TECHNOLOGY.csv')
-    technologis = df['VALUE'].tolist()
+    technologies = df['VALUE'].tolist()
 
     '''
     # Subregions to print over
@@ -70,7 +70,7 @@ def main():
 
     #populate list
     for region in regions:
-        for tech in technologis:
+        for tech in technologies:
             data.append([region, tech, capToAct])
 
     #write to csv

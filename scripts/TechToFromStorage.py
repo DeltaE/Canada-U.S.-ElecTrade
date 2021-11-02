@@ -10,13 +10,9 @@ def main():
     # Model Parameters
     ###########################################
 
-    # Regions to print over
+    # Parameters to print over
     regions = functions.initializeRegions()
-
-    # Subregions to print over
     subregions = functions.initializeSubregionsWithNoDuplicates()
-
-    #Read in master list of technologies and get storage names
     storages = functions.initializeStorages()
     
     if not storages:

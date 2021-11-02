@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import numpy as np
+import functions
 
 def main():
     # PURPOSE: Creates otoole formatted InputActivityRatio AND OutputActivityRatio CSVs  
@@ -13,18 +14,10 @@ def main():
 
     ###EVERYTHING CURRENTLY MAPS TO MODE_OFOPERARION = 1
 
-    # Regions to print over
-    df = pd.read_csv('../src/data/Canada/REGION.csv')
-    regions = df['VALUE'].tolist()
-
-    # Subregions to print over
-    df = pd.read_excel('../dataSources/Regionalization.xlsx', sheet_name='CAN')
-    subregions = df['REGION'].tolist()
-    subregions = list(set(subregions)) # removes duplicates
-
-    #Years to Print over
-    dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
-    years = dfYears['VALUE'].tolist()
+    # Parameters to print over
+    regions = functions.initializeRegions()
+    subregions = functions.initializeSubregionsWithNoDuplicates()
+    years = functions.initializeYears()
 
     ###########################################
     # Get Min and Rnw techs

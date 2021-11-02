@@ -1,4 +1,5 @@
 import pandas as pd
+import functions
 
 ####################################################
 ## ASSUMES ALL PROVINCES USE THE SAME COST VALUES ##
@@ -13,18 +14,10 @@ def main():
     # Model Parameters
     ###########################################
 
-    # Regions to print over
-    df = pd.read_csv('../src/data/Canada/REGION.csv')
-    regions = df['VALUE'].tolist()
-
-    # Subregions to print over
-    df = pd.read_excel('../dataSources/Regionalization.xlsx', sheet_name='CAN')
-    subregions = df['REGION'].tolist()
-    subregions = list(set(subregions)) # removes duplicates
-
-    #Years to Print over
-    dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
-    years = dfYears['VALUE'].tolist()
+    # Parameters to print over
+    regions = functions.initializeRegions()
+    subregions = functions.initializeSubregionsWithNoDuplicates()
+    years = functions.initializeYears()
 
     #Trigger used to print capital, fixed and variable costs one at a time
     for trigger in range(1,4):

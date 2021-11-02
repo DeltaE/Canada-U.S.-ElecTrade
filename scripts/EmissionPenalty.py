@@ -1,6 +1,7 @@
 import pandas as pd
 import os
 import numpy as np
+import functions
 
 def main():
     # PURPOSE: Creates otoole formatted EmissionsPenalty CSV  
@@ -11,16 +12,9 @@ def main():
     # Model Parameters
     ###########################################
 
-    ### EVERYTHING CURRENTLY MAPS TO MODE_OFOPERARION = 1
-    ### EVERYTHING IS CO2 EMISSIONS
-
-    # Regions to print over
-    df = pd.read_csv('../src/data/Canada/REGION.csv')
-    regions = df['VALUE'].tolist()
-
-    #Years to Print over
-    dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
-    years = dfYears['VALUE'].tolist()
+    # Parameters to print over
+    regions = functions.initializeRegions()
+    years = functions.initializeYears()
 
     ###########################################
     # Compile Emission Activity Ratio
