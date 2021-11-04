@@ -15,25 +15,11 @@ def main():
     # Model Parameters
     ###########################################
 
-    # Regions to print over
-    dfRegions = pd.read_csv('../src/data/Canada/REGION.csv')
-    regions = dfRegions['VALUE'].tolist()
-
-    #Dictionary for subregion to province mappings
-    subregions = defaultdict(list)
-
-    # Read in regionalization file to get provincial seperation
-    df = pd.read_excel('../dataSources/Regionalization.xlsx', sheet_name='CAN')
-    for i in range(len(df)):    
-        subregion = df['REGION'].iloc[i]
-        province = df['PROVINCE'].iloc[i]
-        subregions[subregion].append(province)
-
-    #Years to Print over
-    dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
-    years = dfYears['VALUE'].tolist()
+    regions = functions.initializeRegions()
+    subregions = functions.initializeSubregionsAsDictionary()
+    years = functions.initializeYears()
     
-    # holds baselione reserve margin for each province based on NERC
+    # holds baseline reserve margin for each province based on NERC
     # 10 percent for hydro dominated provinces
     # 15 percent for thermal dominated regions 
     provincialReserveMargin = {

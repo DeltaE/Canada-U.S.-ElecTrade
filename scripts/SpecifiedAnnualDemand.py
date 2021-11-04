@@ -1,4 +1,5 @@
 import pandas as pd
+import functions
 from collections import defaultdict
 
 def main():
@@ -10,13 +11,9 @@ def main():
     # Model Parameters
     ###########################################
 
-    #Years to Print over
-    dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
-    years = dfYears['VALUE'].tolist()
-
-    # Regions to print over
-    dfRegions = pd.read_csv('../src/data/Canada/REGION.csv')
-    regions = dfRegions['VALUE'].tolist()
+    # Parameters to print over
+    years = functions.initializeYears()
+    regions = functions.initializeRegions()
 
     #Dictionary for subregion to province mappings
     subregions = defaultdict(list)

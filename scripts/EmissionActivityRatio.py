@@ -1,4 +1,5 @@
 import pandas as pd
+import functions
 
 def main():
     # PURPOSE: Creates otoole formatted Emission Activity Ratio CSV 
@@ -12,18 +13,10 @@ def main():
     ### EVERYTHING CURRENTLY MAPS TO MODE_OFOPERARION = 1
     ### EVERYTHING IS CO2 EMISSIONS
 
-    # Regions to print over
-    df = pd.read_csv('../src/data/Canada/REGION.csv')
-    regions = df['VALUE'].tolist()
-
-    # Subregions to print over
-    df = pd.read_excel('../dataSources/Regionalization.xlsx', sheet_name='CAN')
-    subregions = df['REGION'].tolist()
-    subregions = list(set(subregions)) # removes duplicates
-
-    #Years to Print over
-    dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
-    years = dfYears['VALUE'].tolist()
+    # Parameters to print over
+    regions = functions.initializeRegions()
+    subregions = functions.initializeSubregionsAsList()
+    years = functions.initializeYears()
 
     ###########################################
     # Compile Emission Activity Ratio
