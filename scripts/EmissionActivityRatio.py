@@ -15,7 +15,7 @@ def main():
 
     # Parameters to print over
     regions = functions.initializeRegions()
-    subregions = functions.initializeSubregionsWithNoDuplicates()
+    subregions = functions.initializeSubregionsAsList()
     years = functions.initializeYears()
 
     ###########################################

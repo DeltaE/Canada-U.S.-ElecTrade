@@ -22,7 +22,7 @@ def main():
     # Parameters to print over
     years = functions.initializeYears()
     regions = functions.initializeRegions()
-    subregions = functions.initializeSubregions()
+    subregions = functions.initializeSubregionsAsDictionary()
 
     ###########################################
     # Calculate profile  

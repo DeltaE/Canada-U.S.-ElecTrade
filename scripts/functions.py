@@ -144,8 +144,8 @@ def initializeRegions():
     regions = dfRegions['VALUE'].tolist()
     return regions
 
-def initializeSubregions():
-    # PURPOSE: Initializes subregions as a dictionary
+def initializeSubregionsAsDictionary():
+    # PURPOSE: Initializes Canadian subregions as a dictionary
     # INPUT: None
     # OUTPUT: subregions (dictionary)
 
@@ -161,7 +161,7 @@ def initializeSubregions():
     
     return subregions
 
-def initializeSubregionsWithNoDuplicates():
+def initializeSubregionsAsList():
     # PURPOSE: Initializes subregions as a list without duplicates
     # INPUT: None
     # OUTPUT: subregions (list)
@@ -220,11 +220,12 @@ def getPWRTRNtechs(regions):
     # Return list of pwr Technologes
     return outList
 
-def getMINtechs(regions, techs, isCanada):
+def getMINtechs(regions, techs, generateInternational):
     # PURPOSE: Creates all the MIN naming technologies
     # INPUT:   regions =  Dictionary holding region as the key and subregion as the values in a list
     #          techs =    List of the technologies to print over 
-    #          isCanada = True/False for whether function is being called for Canada data or USA data
+    #          generateInternational = True/False for whether function should
+    #                                  create all international mining techs
     # OUTPUT:  outList =  List of all the MIN technologies
 
     # list to hold technologies
@@ -238,7 +239,7 @@ def getMINtechs(regions, techs, isCanada):
     
     # DONE ONLY IN THE CANADA SCRIPTS
     # Loop to create all international mining techs
-    if isCanada:
+    if generateInternational:
         for tech in techs:
             techName = 'MIN' + tech + 'INT'
             outList.append(techName)
@@ -375,15 +376,17 @@ def createFuelSet(countries, rnwTechs, mineTechs, csvPath, generateInternational
     dfOut = pd.DataFrame(outputFuels, columns=['VALUE'])
     dfOut.to_csv(csvPath, index=False)
 
-def createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsvPath, outputCsvPath, isCanada):
+def createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsvPath, outputCsvPath, generateInternational):
     # PURPOSE: Appends all technology name lists together and writes them to a CSV
-    # INPUT:   countries = Dictionary holding countries as the key and subregion as the values in a list
+    # INPUT:   countries = Dictionary holding countries as the key
+    #                      and subregion as the values in a list
     #          techsMaster = List of the technologies to print over for getPWRtechs
     #          mineTechs = List of the technologies to print over for getMINtechs
     #          rnwTechs = List of the technologies to print over for getRNWtechs
     #          trnTechsCsvPath = Trade csv datafile location
     #          outputCsvPath = Path for the output
-    #          isCanada = True/False for whether function is being called for Canada data or USA data
+    #          generateInternational = True/False for whether function should
+    #                                  create all international mining techs
     # OUTPUT:  outputTechs = All technology lists appended together
     # get power generator technology list 
     pwrList = getPWRtechs(countries, techsMaster)
@@ -392,7 +395,7 @@ def createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsv
     pwrTrnList = getPWRTRNtechs(countries)
 
     # get Mining technology list
-    minList = getMINtechs(countries, mineTechs, isCanada)
+    minList = getMINtechs(countries, mineTechs, generateInternational)
 
     # get Renewables technology list 
     rnwList = getRNWtechs(countries, rnwTechs)
@@ -501,10 +504,9 @@ def initializeCanadaUsaModelParameters(topLevelRegion):
     #Read in subregions. This step is needed cause other scripts use the 
     #provincial breakdown by subregion in the excel file 
     sourceFile = '../dataSources/Regionalization.xlsx'
-    for country in countries:
-        dfCountry = pd.read_excel(sourceFile, sheet_name=country)
-        regionList = dfCountry['REGION'].tolist()
-        regionList = list(set(regionList)) # remove duplicates
-        countries[country] = regionList # save to dictionary
+    dfCountry = pd.read_excel(sourceFile, sheet_name=topLevelRegion)
+    regionList = dfCountry['REGION'].tolist()
+    regionList = list(set(regionList)) # remove duplicates
+    countries[topLevelRegion] = regionList # save to dictionary
     
     return years, regions, emissions, techsMaster, rnwTechs, mineTechs, stoTechs, countries

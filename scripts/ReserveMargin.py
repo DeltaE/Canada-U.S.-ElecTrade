@@ -16,7 +16,7 @@ def main():
     ###########################################
 
     regions = functions.initializeRegions()
-    subregions = functions.initializeSubregions()
+    subregions = functions.initializeSubregionsAsDictionary()
     years = functions.initializeYears()
     
     # holds baseline reserve margin for each province based on NERC

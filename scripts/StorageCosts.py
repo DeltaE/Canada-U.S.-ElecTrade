@@ -14,7 +14,7 @@ def main():
 
     # Parameters to print over
     regions = functions.initializeRegions()
-    subregions = functions.initializeSubregionsWithNoDuplicates()
+    subregions = functions.initializeSubregionsAsList()
     years = functions.initializeYears()
 
     #Read in master list of technologies and get storage names

@@ -14,7 +14,7 @@ def main():
     seasons = functions.initializeSeasons()
     years = functions.initializeYears()
     regions = functions.initializeRegions()
-    subregions = functions.initializeSubregions()
+    subregions = functions.initializeSubregionsAsDictionary()
 
     ###########################################
     # Availability Factor Calculations
