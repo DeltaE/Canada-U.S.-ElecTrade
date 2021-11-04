@@ -125,13 +125,7 @@ def initializeSeasons():
     # OUTPUT: seasons (dictionary)
 
     # Dictionary holds month to season Mapping
-    seasons = {
-        'W':[1, 2, 12],
-        'SP':[3, 4, 5],
-        'S':[6, 7, 8],
-        'F':[9, 10, 11]}
-
-    return seasons
+    return openYaml().get('seasons')
 
 def initializeYears():
     # PURPOSE: Initializes years as a list
