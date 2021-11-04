@@ -5,10 +5,20 @@
 import datetime
 import pandas as pd
 from collections import defaultdict
+import yaml
+
+def openYaml():
+    # PURPOSE: Returns the configured config.yaml file, which is a modifiable settings file that contains constants
+    # INPUT: None
+    # OUTPUT: parsedYaml = the ready-to-use yaml file
+
+    originalYaml = open("config.yaml")
+    parsedYaml = yaml.load(originalYaml, Loader=yaml.FullLoader)
+    return parsedYaml
 
 def getLoadValues():
     # PURPOSE: Takes hourly load value excel sheet and converts it into a master df
-    # INPUT: none
+    # INPUT: None
     # OUTPUT: Dataframe with the columns: Province, Month, Day, Hour, Load Value 
     #Dictionary to hold timezone shifting values 
     timeZone = {
