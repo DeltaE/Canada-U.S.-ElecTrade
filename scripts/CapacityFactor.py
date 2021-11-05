@@ -54,7 +54,7 @@ def renewableNinjaData(tech, regions, subregions, seasons, years):
     # OUTPUT:  otoole formatted dataframe holding capacity factor values for input tech type 
 
     #Dictionary to hold land area for averaging (thousand km2)
-    landArea = {
+    PROVINCIAL_LAND_AREAS = {
         'BC':945,
         'AB':661,
         'SAS':651,
@@ -86,7 +86,7 @@ def renewableNinjaData(tech, regions, subregions, seasons, years):
             #Find total land area of region for calcaulting weighted averages
             regionLandArea = 0
             for province in subregions[subregion]:
-                regionLandArea = regionLandArea + landArea[province]
+                regionLandArea = regionLandArea + PROVINCIAL_LAND_AREAS[province]
 
             #Filter dataframe for each season and timeslice 
             for year in years:
@@ -101,7 +101,7 @@ def renewableNinjaData(tech, regions, subregions, seasons, years):
                         #Find average weighted average capacity factor
                         cf = 0
                         for i in range(len(provinces)):
-                            weightingFactor = landArea[provinces[i]]/regionLandArea
+                            weightingFactor = PROVINCIAL_LAND_AREAS[provinces[i]]/regionLandArea
                             cf = cf + cfList[i]*weightingFactor
                         
                         #round cf
@@ -126,6 +126,19 @@ def readRenewableNinjaCSV(csvName, province):
     # INPUT: Name of csv file to read in WITH csv extension (.csv)
     # OUTPUT: Dataframe with the columns: Province, Month, Day, Hour, CF Value 
 
+    #Dictionary to hold timezone shifting values 
+    PROVINCIAL_TIME_ZONES = {
+        'BC':0,
+        'AB':1,
+        'SAS':2,
+        'MAN':2,
+        'ONT':3,
+        'QC':3,
+        'NB':4,
+        'NL':4,
+        'NS':4,
+        'PEI':4}
+
     #Path to file to read
     sourceFile = '../dataSources/CapacityFactor/' + csvName
 
@@ -141,19 +154,6 @@ def readRenewableNinjaCSV(csvName, province):
     dateList = df['date'].tolist()
     cfList = df['value'].tolist()
 
-    #Dictionary to hold timezone shifting values 
-    timeZone = {
-        'BC':0,
-        'AB':1,
-        'SAS':2,
-        'MAN':2,
-        'ONT':3,
-        'QC':3,
-        'NB':4,
-        'NL':4,
-        'NS':4,
-        'PEI':4}
-
     #List to hold all data in to be written to a dataframe
     data = []
 
@@ -166,7 +166,7 @@ def readRenewableNinjaCSV(csvName, province):
         hourAdjusted = date.hour + 1
 
         #Shift time values to match BC time (ie. Shift 3pm Alberta time back one hour, so all timeslices represent the asme time)
-        hourAdjusted = hourAdjusted - timeZone[province]
+        hourAdjusted = hourAdjusted - PROVINCIAL_TIME_ZONES[province]
         if hourAdjusted < 1:
             hourAdjusted = hourAdjusted + 24
         
