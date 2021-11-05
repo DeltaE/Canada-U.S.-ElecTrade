@@ -20,18 +20,18 @@ def main():
     # Availability Factor Calculations
     ###########################################
 
-    # Residual Hydro Capacity (GW), Total Generation (TWh), and hydro generation (TWh) per province in 2017
+    # Residual Hydro Capacity (GW) and hydro generation (TWh) per province in 2017
     inData = {
-        'BC':  [15.407,  74.483,  66.510],
-        'AB':  [1.218,   81.404,   2.050],
-        'SAS': [0.867,   24.739,   3.862],
-        'MAN': [5.461,   37.076,  35.991],
-        'ONT': [9.122,  152.745,  39.492],
-        'QC':  [40.438, 214.375, 202.001],
-        'NB':  [0.968,   13.404,   2.583],
-        'NL':  [6.762,   39.069,  36.715],
-        'NS':  [0.370,   10.034,   0.849],
-        'PEI': [0.000,    0.615,   0.000]}
+        'BC':  [15.407,  66.510],
+        'AB':  [1.218,   2.050],
+        'SAS': [0.867,   3.862],
+        'MAN': [5.461,   35.991],
+        'ONT': [9.122,   39.492],
+        'QC':  [40.438,  202.001],
+        'NB':  [0.968,   2.583],
+        'NL':  [6.762,   36.715],
+        'NS':  [0.370,   0.849],
+        'PEI': [0.000,   0.000]}
     # Residual Capacity: https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=2510002201&pickMembers%5B0%5D=1.1&pickMembers%5B1%5D=2.1&cubeTimeFrame.startYear=2017&cubeTimeFrame.endYear=2017&referencePeriods=20170101%2C20170101
     # Generation Source: https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=2510001501&pickMembers%5B0%5D=1.1&pickMembers%5B1%5D=2.1&cubeTimeFrame.startMonth=01&cubeTimeFrame.startYear=2017&cubeTimeFrame.endMonth=12&cubeTimeFrame.endYear=2017&referencePeriods=20170101%2C20171201
   
@@ -43,7 +43,7 @@ def main():
         #calcualte totals for subregion 
         for province in subregions[subregion]:
             capacity = capacity + inData[province][0]
-            generation = generation + inData[province][2]
+            generation = generation + inData[province][1]
         
         #save total capacity factor
         af[subregion] = (generation*(1000/8760))/capacity
