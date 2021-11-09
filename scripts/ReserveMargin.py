@@ -15,14 +15,15 @@ def main():
     # Model Parameters
     ###########################################
 
-    regions = functions.initializeRegions()
-    subregions = functions.initializeSubregionsAsDictionary()
-    years = functions.initializeYears()
+    regions = functions.openYaml().get('regions')
+    subregions = functions.openYaml().get('subregions_dictionary')
+    years = functions.openYaml().get('years')
+    seasons = functions.openYaml().get('seasons')
     
     # holds baseline reserve margin for each province based on NERC
     # 10 percent for hydro dominated provinces
     # 15 percent for thermal dominated regions 
-    provincialReserveMargin = {
+    PROVINCIAL_RESERVE_MARGIN = {
         'BC':1.10,
         'AB':1.15,
         'SAS':1.15,
@@ -34,22 +35,12 @@ def main():
         'NS':1.15,
         'PEI':1.15}
 
-    #Years to Print over
-    years = range(2019,2051,1)
-
     # List of fuels to tag
-    fuelTag = ['ELC']
+    # fuelTag = ['ELC']
 
     # List of technologies to tag
-    #techTags = ['HYD','BIO','CCG','CTG','URN','COA','COC','WND', 'SPV']
-    techTags = ['HYD','BIO','CCG','CTG','URN','COA','COC']
-
-    #Dictionary holds month to season Mapping 
-    seasons = {
-        'W':[1, 2, 3],
-        'SP':[4, 5, 6],
-        'S':[7, 8, 9],
-        'F':[10, 11, 12]}
+    # TECH_TAGS = ['HYD','BIO','CCG','CTG','URN','COA','COC','WND', 'SPV']
+    TECH_TAGS = ['HYD','BIO','CCG','CTG','URN','COA','COC']
 
     #For timeslicing 
     hours = range(1,25)
@@ -128,7 +119,7 @@ def main():
 
             #weighted reserve margin based on NERC numbers
             for province in provinces:
-                regionReserveMargin = regionReserveMargin + (dfDemand.loc[year, province] / totalDemand) * provincialReserveMargin[province]
+                regionReserveMargin = regionReserveMargin + (dfDemand.loc[year, province] / totalDemand) * PROVINCIAL_RESERVE_MARGIN[province]
             
             #add in squishing factor
             regionReserveMargin = regionReserveMargin + peakSquishFactor[subregion]
@@ -162,7 +153,7 @@ def main():
     for region in regions:
         for subregion in subregions:
             for year in years:
-                for tech in techTags:
+                for tech in TECH_TAGS:
                     techName = 'PWR' + tech + 'CAN' +subregion + '01'
                     reserveMarginTagTech.append([region, techName, year, 1])
 

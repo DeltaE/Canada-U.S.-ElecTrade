@@ -15,9 +15,26 @@ def main():
     ###EVERYTHING CURRENTLY MAPS TO MODE_OFOPERARION = 1
 
     # Parameters to print over
-    regions = functions.initializeRegions()
-    subregions = functions.initializeSubregionsAsList()
-    years = functions.initializeYears()
+    regions = functions.openYaml().get('regions')
+    subregions = functions.openYaml().get('subregions_list')
+    years = functions.openYaml().get('years')
+
+    ###########################################
+    # Tech to Fuel Mapping
+    ###########################################
+    TECH_TO_FUEL = {
+        'BIO':'BIO',
+        'CCG':'GAS',
+        'CTG':'GAS',
+        'COA':'COA',
+        'COC':'COA',
+        'HYD':'HYD',
+        'SPV':'SPV',
+        'URN':'URN',
+        'WND':'WND',
+        'P2G':'ELC',
+        'FCL':'HY2'
+    }
 
     ###########################################
     # Get Min and Rnw techs
@@ -33,23 +50,6 @@ def main():
     minTechs = dfGeneration['VALUE'].tolist()
     dfGeneration = dfGeneration_raw.loc[dfGeneration_raw['GENERATION'] == 'PWR']
     pwrTechs = dfGeneration['VALUE'].tolist()
-
-    ###########################################
-    # Tech to Fuel Mapping
-    ###########################################
-    techToFuel = {
-        'BIO':'BIO',
-        'CCG':'GAS',
-        'CTG':'GAS',
-        'COA':'COA',
-        'COC':'COA',
-        'HYD':'HYD',
-        'SPV':'SPV',
-        'URN':'URN',
-        'WND':'WND',
-        'P2G':'ELC',
-        'FCL':'HY2'
-    }
 
     ###########################################
     # IAR and OAR of One
@@ -120,7 +120,7 @@ def main():
                     techName = 'PWR' + tech + 'CAN' + subregion + '01'
                     iar = dfIAR.loc[year,tech]
                     oar = dfOAR.loc[year,tech]
-                    fuelName = techToFuel[tech]
+                    fuelName = TECH_TO_FUEL[tech]
                     # if has international imports
                     if fuelName in minTechs:
                         inFuelModeOne = fuelName + 'CAN'

@@ -1,5 +1,5 @@
 #####################################
-## This file is for functions common between multiple files
+## This file is for functions and constants common between multiple files
 #####################################
 
 import datetime
@@ -7,12 +7,60 @@ import pandas as pd
 from collections import defaultdict
 import yaml
 
+#####################################
+# NON-CONFIGURABLE CONSTANTS
+#####################################
+
+# Province to Time Zone Mapping
+PROVINCIAL_TIME_ZONES = {
+    'BC':0,
+    'AB':1,
+    'SAS':2,
+    'MAN':2,
+    'ONT':3,
+    'QC':3,
+    'NB':4,
+    'NL':4,
+    'NS':4,
+    'PEI':4}
+
+# Residual Hydro Capacity (GW) per province in 2017
+# Source: https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=2510002201&pickMembers%5B0%5D=1.1&pickMembers%5B1%5D=2.1&cubeTimeFrame.startYear=2017&cubeTimeFrame.endYear=2017&referencePeriods=20170101%2C20170101
+RESIDUAL_HYDRO_CAPACITY = {
+    'BC':  15.407,
+    'AB':  1.218,   
+    'SAS': 0.867,   
+    'MAN': 5.461,   
+    'ONT': 9.122,   
+    'QC':  40.438,  
+    'NB':  0.968,   
+    'NL':  6.762,   
+    'NS':  0.370,   
+    'PEI': 0.000}
+
+# Hydro generation (TWh) per province in 2017
+# Source: https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=2510001501&pickMembers%5B0%5D=1.1&pickMembers%5B1%5D=2.1&cubeTimeFrame.startMonth=01&cubeTimeFrame.startYear=2017&cubeTimeFrame.endMonth=12&cubeTimeFrame.endYear=2017&referencePeriods=20170101%2C20171201
+HYDRO_GENERATION = {
+    'BC': 66.510,
+    'AB': 2.050,
+    'SAS': 3.862,
+    'MAN': 35.991,
+    'ONT': 39.492,
+    'QC': 202.001,
+    'NB': 2.583,
+    'NL': 36.715,
+    'NS': 0.849,
+    'PEI': 0.000}
+
+#####################################
+# COMMON FUNCTIONS
+#####################################
 def openYaml():
     # PURPOSE: Returns the configured config.yaml file, which is a modifiable settings file that contains constants
     # INPUT: None
     # OUTPUT: parsedYaml = the ready-to-use yaml file
 
-    originalYaml = open("config.yaml")
+    originalYaml = open("../scripts/config.yaml")
     parsedYaml = yaml.load(originalYaml, Loader=yaml.FullLoader)
     return parsedYaml
 
@@ -21,17 +69,6 @@ def getLoadValues():
     # INPUT: None
     # OUTPUT: Dataframe with the columns: Province, Month, Day, Hour, Load Value 
     #Dictionary to hold timezone shifting values 
-    timeZone = {
-        'BC':0,
-        'AB':1,
-        'SAS':2,
-        'MAN':2,
-        'ONT':3,
-        'QC':3,
-        'NB':4,
-        'NL':4,
-        'NS':4,
-        'PEI':4}
 
     #Read in all provinces
     sourceFile = '../dataSources/ProvincialHourlyLoads.xlsx'
@@ -53,7 +90,7 @@ def getLoadValues():
             date = datetime.datetime.strptime(dateFull, '%Y-%m-%d')
 
             #Shift time values to match BC time (ie. Shift 3pm Alberta time back one hour, so all timeslices represent the asme time)
-            hourAdjusted = int(hourList[i]) - timeZone[province]
+            hourAdjusted = int(hourList[i]) - PROVINCIAL_TIME_ZONES[province]
             if hourAdjusted < 1:
                 hourAdjusted = hourAdjusted + 24
 
@@ -118,75 +155,6 @@ def daylightSavings(inData):
         inData.insert(i, newRow)
 
     return inData
-
-def initializeSeasons():
-    # PURPOSE: Initializes seasons as a dictionary
-    # INPUT: None
-    # OUTPUT: seasons (dictionary)
-
-    # Dictionary holds month to season Mapping
-    return openYaml().get('seasons')
-
-def initializeYears():
-    # PURPOSE: Initializes years as a list
-    # INPUT: None
-    # OUTPUT: years (list)
-
-    #Years to Print over
-    dfYears = pd.read_csv('../src/data/Canada/YEAR.csv')
-    years = dfYears['VALUE'].tolist()
-
-    return years
-
-def initializeRegions():
-    # PURPOSE: Initializes regions as a list
-    # INPUT: None
-    # OUTPUT: regions (list)
-
-    # Regions to print over
-    dfRegions = pd.read_csv('../src/data/Canada/REGION.csv')
-    regions = dfRegions['VALUE'].tolist()
-    return regions
-
-def initializeSubregionsAsDictionary():
-    # PURPOSE: Initializes Canadian subregions as a dictionary
-    # INPUT: None
-    # OUTPUT: subregions (dictionary)
-
-    #Dictionary for subregion to province mappings
-    subregions = defaultdict(list)
-
-    # Read in regionalization file to get provincial seperation
-    df = pd.read_excel('../dataSources/Regionalization.xlsx', sheet_name='CAN')
-    for i in range(len(df)):    
-        subregion = df['REGION'].iloc[i]
-        province = df['PROVINCE'].iloc[i]
-        subregions[subregion].append(province)
-    
-    return subregions
-
-def initializeSubregionsAsList():
-    # PURPOSE: Initializes subregions as a list without duplicates
-    # INPUT: None
-    # OUTPUT: subregions (list)
-
-    df = pd.read_excel('../dataSources/Regionalization.xlsx', sheet_name='CAN')
-    subregions = df['REGION'].tolist()
-    subregions = list(set(subregions)) # removes duplicates
-
-    return subregions
-
-def initializeStorages():
-    # PURPOSE: Initializes storages as a list
-    # INPUT: None
-    # OUTPUT: storages (list)
-
-    #Read in master list of technologies and get storage names
-    dfGeneration_raw = pd.read_csv('../dataSources/techList_AUTO_GENERATED.csv')
-    dfGeneration = dfGeneration_raw.loc[dfGeneration_raw['GENERATION'] == 'STO']
-    storages = dfGeneration['VALUE'].tolist()
-
-    return storages
 
 def getPWRtechs(regions, techs):
     # PURPOSE: Creates all the PWR naming technologies
@@ -453,52 +421,13 @@ def initializeCanadaUsaModelParameters(topLevelRegion):
     #          countries = Dictionary for holding countries as the key and subregion as the values in a list
     # get power generator technology list 
 
-    # Regions in the model
-    regions = ['NAmerica']
-
-    # Years to loop over 
-    years = list(range(2019,2051,1))
-
-    # Emission Types
-    emissions = ['CO2']
-
-    # Storages
-    # storages = [] 
-
-    # PWR Technologies
-    techsMaster = [
-        'BIO', # Biomass
-        'CCG', # Gas Combind Cycle 
-        'CTG', # Gas Combustion Turbine
-        'COA', # Coal
-        'COC', # Coal CCS
-        'HYD', # Hydro 
-        'SPV', # Solar
-        'URN', # Nuclear
-        'WND', # Wind
-        #'P2G', # Power to Gas
-        #'FCL'  # Fuel Cell
-    ]
-
-    #RWN Technologies
-    rnwTechs = [
-        'HYD', # Hydro 
-        'SPV', # Solar
-        'WND', # Wind
-        'BIO', # Biomass
-    ]
-
-    #MIN TEchnologies
-    mineTechs = [
-        'COA', # Coal
-        'GAS', # Gas
-        'URN', # Nuclear
-    ]
-
-    #STO Technologies
-    stoTechs = [
-        #'TNK' #Tank
-    ]
+    regions = openYaml().get('regions')
+    years = openYaml().get('years')
+    emissions = openYaml().get('emissions')
+    techsMaster = openYaml().get('techs_master')
+    rnwTechs = openYaml().get('rnw_techs')
+    mineTechs = openYaml().get('mine_techs')
+    stoTechs = openYaml().get('sto_techs')
 
     #Countries and subregions in the model
     countries = {

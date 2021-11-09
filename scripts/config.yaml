@@ -1,5 +1,97 @@
+# month to season mapping
 seasons:
   'W': [ 1, 2, 12 ]
   'SP': [ 3, 4, 5 ]
   'S': [ 6, 7, 8 ]
   'F': [ 9, 10, 11 ]
+
+# only one region in this model
+regions: 
+  - 'NAmerica'
+
+# list of subregions without mapping
+subregions_list:
+  - 'WS'
+  - 'MW'
+  - 'OT'
+  - 'QC'
+  - 'AT'
+
+# province to subregions mapping
+subregions_dictionary:
+  'WS': [ 'BC', 'AB' ]
+  'MW': [ 'SAS', 'MAN' ]
+  'OT': [ 'ONT' ]
+  'QC': [ 'QC' ]
+  'AT': [ 'NB', 'NS', 'PEI', 'NL' ]
+
+# 2019 to 2050
+years:
+ - 2019
+ - 2020
+ - 2021
+ - 2022
+ - 2023
+ - 2024
+ - 2025
+ - 2026
+ - 2027
+ - 2028
+ - 2029
+ - 2030
+ - 2031
+ - 2032
+ - 2033
+ - 2034
+ - 2035
+ - 2036
+ - 2037
+ - 2038
+ - 2039
+ - 2040
+ - 2041
+ - 2042
+ - 2043
+ - 2044
+ - 2045
+ - 2046
+ - 2047
+ - 2048
+ - 2049
+ - 2050
+
+storages: []
+
+# types of emissions
+emissions:
+  - 'CO2'
+
+# master list of techs
+techs_master:
+  - 'BIO' # Biomass
+  - 'CCG' # Gas Combined Cycle 
+  - 'CTG' # Gas Combustion Turbine
+  - 'COA' # Coal
+  - 'COC' # Coal CCS
+  - 'HYD' # Hydro 
+  - 'SPV' # Solar
+  - 'URN' # Nuclear
+  - 'WND' # Wind
+    #'P2G', # Power to Gas
+    #'FCL'  # Fuel Cell
+
+# list of renewable technologies
+rnw_techs:
+  - 'HYD' # Hydro 
+  - 'SPV' # Solar
+  - 'WND' # Wind
+  - 'BIO' # Biomass
+
+# list of mining technologies
+mine_techs:
+  - 'COA' # Coal
+  - 'GAS' # Gas
+  - 'URN' # Nuclear
+
+  # list of storage technologies (In the future may have 'TNK' # Tank)
+sto_techs: []

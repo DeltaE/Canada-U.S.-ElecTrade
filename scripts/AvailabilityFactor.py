@@ -11,30 +11,15 @@ def main():
     ###########################################
 
     # Parameters to print over
-    seasons = functions.initializeSeasons()
-    years = functions.initializeYears()
-    regions = functions.initializeRegions()
-    subregions = functions.initializeSubregionsAsDictionary()
+    seasons = functions.openYaml().get('seasons')
+    years = functions.openYaml().get('years')
+    regions = functions.openYaml().get('regions')
+    subregions = functions.openYaml().get('subregions_dictionary')
 
     ###########################################
     # Availability Factor Calculations
     ###########################################
 
-    # Residual Hydro Capacity (GW) and hydro generation (TWh) per province in 2017
-    inData = {
-        'BC':  [15.407,  66.510],
-        'AB':  [1.218,   2.050],
-        'SAS': [0.867,   3.862],
-        'MAN': [5.461,   35.991],
-        'ONT': [9.122,   39.492],
-        'QC':  [40.438,  202.001],
-        'NB':  [0.968,   2.583],
-        'NL':  [6.762,   36.715],
-        'NS':  [0.370,   0.849],
-        'PEI': [0.000,   0.000]}
-    # Residual Capacity: https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=2510002201&pickMembers%5B0%5D=1.1&pickMembers%5B1%5D=2.1&cubeTimeFrame.startYear=2017&cubeTimeFrame.endYear=2017&referencePeriods=20170101%2C20170101
-    # Generation Source: https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=2510001501&pickMembers%5B0%5D=1.1&pickMembers%5B1%5D=2.1&cubeTimeFrame.startMonth=01&cubeTimeFrame.startYear=2017&cubeTimeFrame.endMonth=12&cubeTimeFrame.endYear=2017&referencePeriods=20170101%2C20171201
-  
     #calculate capacity factor for each province 
     af = {}
     for subregion in subregions:
@@ -42,8 +27,8 @@ def main():
         capacity = 0 #TW
         #calcualte totals for subregion 
         for province in subregions[subregion]:
-            capacity = capacity + inData[province][0]
-            generation = generation + inData[province][1]
+            capacity = capacity + functions.RESIDUAL_HYDRO_CAPACITY[province]
+            generation = generation + functions.HYDRO_GENERATION[province]
         
         #save total capacity factor
         af[subregion] = (generation*(1000/8760))/capacity

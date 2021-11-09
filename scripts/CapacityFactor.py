@@ -13,10 +13,10 @@ def main():
     ###########################################
 
     # Parameters to print over
-    seasons = functions.initializeSeasons()
-    years = functions.initializeYears()
-    regions = functions.initializeRegions()
-    subregions = functions.initializeSubregionsAsDictionary()
+    seasons = functions.openYaml().get('seasons')
+    years = functions.openYaml().get('years')
+    regions = functions.openYaml().get('regions')
+    subregions = functions.openYaml().get('subregions_dictionary')
 
     ###########################################
     # Capacity Factor Calculations
@@ -126,19 +126,6 @@ def readRenewableNinjaCSV(csvName, province):
     # INPUT: Name of csv file to read in WITH csv extension (.csv)
     # OUTPUT: Dataframe with the columns: Province, Month, Day, Hour, CF Value 
 
-    #Dictionary to hold timezone shifting values 
-    PROVINCIAL_TIME_ZONES = {
-        'BC':0,
-        'AB':1,
-        'SAS':2,
-        'MAN':2,
-        'ONT':3,
-        'QC':3,
-        'NB':4,
-        'NL':4,
-        'NS':4,
-        'PEI':4}
-
     #Path to file to read
     sourceFile = '../dataSources/CapacityFactor/' + csvName
 
@@ -166,7 +153,7 @@ def readRenewableNinjaCSV(csvName, province):
         hourAdjusted = date.hour + 1
 
         #Shift time values to match BC time (ie. Shift 3pm Alberta time back one hour, so all timeslices represent the asme time)
-        hourAdjusted = hourAdjusted - PROVINCIAL_TIME_ZONES[province]
+        hourAdjusted = hourAdjusted - functions.PROVINCIAL_TIME_ZONES[province]
         if hourAdjusted < 1:
             hourAdjusted = hourAdjusted + 24
         
@@ -234,26 +221,6 @@ def capFactorHydro(regions, seasons, years):
     #          Years: List of years to populate values for 
     # OUTPUT:  otoole formatted dataframe holding hydro capacity factor values 
     
-    #####################################################
-    ## CAPACITIES AND GENERATION FOR 2017 HARDCODED IN ##
-    ##              WILL NEED TO UPDATE                ##
-    #####################################################
-
-    # Residual Hydro Capacity (GW) and hydro generation (TWh) per province in 2017
-    inData = {
-        'BC':  [15.407,  66.510],
-        'AB':  [1.218,   2.050],
-        'SAS': [0.867,   3.862],
-        'MAN': [5.461,   35.991],
-        'ONT': [9.122,   39.492],
-        'QC':  [40.438,  202.001],
-        'NB':  [0.968,   2.583],
-        'NL':  [6.762,   36.715],
-        'NS':  [0.370,   0.849],
-        'PEI': [0.000,   0.000]}
-    # Residual Capacity: https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=2510002201&pickMembers%5B0%5D=1.1&pickMembers%5B1%5D=2.1&cubeTimeFrame.startYear=2017&cubeTimeFrame.endYear=2017&referencePeriods=20170101%2C20170101
-    # Generation Source: https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=2510001501&pickMembers%5B0%5D=1.1&pickMembers%5B1%5D=2.1&cubeTimeFrame.startMonth=01&cubeTimeFrame.startYear=2017&cubeTimeFrame.endMonth=12&cubeTimeFrame.endYear=2017&referencePeriods=20170101%2C20171201
-  
     #calculate capacity factor for each province 
     cf = {}
     for region in regions:
@@ -261,8 +228,8 @@ def capFactorHydro(regions, seasons, years):
         capacity = 0 #TW
         #calcualte totals for region 
         for province in regions[region]:
-            capacity = capacity + inData[province][0]
-            generation = generation + inData[province][1]
+            capacity = capacity + functions.RESIDUAL_HYDRO_CAPACITY[province]
+            generation = generation + functions.HYDRO_GENERATION[province]
         
         #save total capacity factor
         cf[region] = (generation*(1000/8760))/capacity

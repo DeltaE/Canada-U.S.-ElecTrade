@@ -13,16 +13,12 @@ def main():
     ###########################################
 
     #Dictionary holds month to season Mapping 
-    seasons = {
-        'W':[1, 2, 12],
-        'SP':[3, 4, 5],
-        'S':[6, 7, 8],
-        'F':[9, 10, 11]}
+    seasons = functions.openYaml().get('seasons')
 
     # Parameters to print over
-    years = functions.initializeYears()
-    regions = functions.initializeRegions()
-    subregions = functions.initializeSubregionsAsDictionary()
+    years = functions.openYaml().get('years')
+    regions = functions.openYaml().get('regions')
+    subregions = functions.openYaml().get('subregions_dictionary')
 
     ###########################################
     # Calculate profile  

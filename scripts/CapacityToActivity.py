@@ -15,7 +15,7 @@ def main():
     ## ASSUMES ALL CAPACITIES IN GW AND ALL ENNERGY IN PJ
 
     # Regions to print over
-    regions = functions.initializeRegions()
+    regions = functions.openYaml().get('regions')
 
     #Technologies to print over
     df = pd.read_csv('../src/data/Canada/TECHNOLOGY.csv')
