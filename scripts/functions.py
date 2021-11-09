@@ -64,6 +64,15 @@ def openYaml():
     parsedYaml = yaml.load(originalYaml, Loader=yaml.FullLoader)
     return parsedYaml
 
+def getYears():
+    # PURPOSE: Retrieves a list of years used
+    # in the model from the config.yaml file
+    # INPUT:   None
+    # OUTPUT:  years = list of applicable years in the model
+    startYear = openYaml().get('start_year')
+    endYear = openYaml().get('end_year')
+    return range(startYear, endYear + 1)
+
 def getLoadValues():
     # PURPOSE: Takes hourly load value excel sheet and converts it into a master df
     # INPUT: None
@@ -422,12 +431,12 @@ def initializeCanadaUsaModelParameters(topLevelRegion):
     # get power generator technology list 
 
     regions = openYaml().get('regions')
-    years = openYaml().get('years')
     emissions = openYaml().get('emissions')
     techsMaster = openYaml().get('techs_master')
     rnwTechs = openYaml().get('rnw_techs')
     mineTechs = openYaml().get('mine_techs')
     stoTechs = openYaml().get('sto_techs')
+    years = getYears()
 
     #Countries and subregions in the model
     countries = {

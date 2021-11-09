@@ -13,7 +13,7 @@ def main():
     # Parameters to print over
     regions = functions.openYaml().get('regions')
     subregions = functions.openYaml().get('subregions_list')
-    years = functions.openYaml().get('years')
+    years = functions.getYears()
 
     #Techs to tag
     techs = functions.openYaml().get('rnw_techs')

@@ -18,7 +18,7 @@ def main():
     # Parameters to print over
     regions = functions.openYaml().get('regions')
     subregions = functions.openYaml().get('subregions_dictionary')
-    years = functions.openYaml().get('years')
+    years = functions.getYears()
 
     ###########################################
     # Operational Life

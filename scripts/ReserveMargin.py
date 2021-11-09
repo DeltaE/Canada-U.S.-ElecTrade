@@ -17,8 +17,8 @@ def main():
 
     regions = functions.openYaml().get('regions')
     subregions = functions.openYaml().get('subregions_dictionary')
-    years = functions.openYaml().get('years')
     seasons = functions.openYaml().get('seasons')
+    years = functions.getYears()
     
     # holds baseline reserve margin for each province based on NERC
     # 10 percent for hydro dominated provinces
@@ -39,8 +39,10 @@ def main():
     # fuelTag = ['ELC']
 
     # List of technologies to tag
-    # TECH_TAGS = ['HYD','BIO','CCG','CTG','URN','COA','COC','WND', 'SPV']
-    TECH_TAGS = ['HYD','BIO','CCG','CTG','URN','COA','COC']
+    techTags = functions.openYaml().get('techs_master')
+    nonDispachableTechs = functions.openYaml().get('non_dispachable_techs')
+    # Remove the non-dispachable techs from techTags
+    techTags = [x for x in techTags if x not in nonDispachableTechs]
 
     #For timeslicing 
     hours = range(1,25)
@@ -153,7 +155,7 @@ def main():
     for region in regions:
         for subregion in subregions:
             for year in years:
-                for tech in TECH_TAGS:
+                for tech in techTags:
                     techName = 'PWR' + tech + 'CAN' +subregion + '01'
                     reserveMarginTagTech.append([region, techName, year, 1])
 

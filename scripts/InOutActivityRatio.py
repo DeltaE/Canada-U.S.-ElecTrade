@@ -17,24 +17,10 @@ def main():
     # Parameters to print over
     regions = functions.openYaml().get('regions')
     subregions = functions.openYaml().get('subregions_list')
-    years = functions.openYaml().get('years')
+    years = functions.getYears()
 
-    ###########################################
     # Tech to Fuel Mapping
-    ###########################################
-    TECH_TO_FUEL = {
-        'BIO':'BIO',
-        'CCG':'GAS',
-        'CTG':'GAS',
-        'COA':'COA',
-        'COC':'COA',
-        'HYD':'HYD',
-        'SPV':'SPV',
-        'URN':'URN',
-        'WND':'WND',
-        'P2G':'ELC',
-        'FCL':'HY2'
-    }
+    techToFuel = functions.openYaml().get('tech_to_fuel')
 
     ###########################################
     # Get Min and Rnw techs
@@ -120,7 +106,7 @@ def main():
                     techName = 'PWR' + tech + 'CAN' + subregion + '01'
                     iar = dfIAR.loc[year,tech]
                     oar = dfOAR.loc[year,tech]
-                    fuelName = TECH_TO_FUEL[tech]
+                    fuelName = techToFuel[tech]
                     # if has international imports
                     if fuelName in minTechs:
                         inFuelModeOne = fuelName + 'CAN'

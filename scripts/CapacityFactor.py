@@ -14,9 +14,9 @@ def main():
 
     # Parameters to print over
     seasons = functions.openYaml().get('seasons')
-    years = functions.openYaml().get('years')
     regions = functions.openYaml().get('regions')
     subregions = functions.openYaml().get('subregions_dictionary')
+    years = functions.getYears()
 
     ###########################################
     # Capacity Factor Calculations

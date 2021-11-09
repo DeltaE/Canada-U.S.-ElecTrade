@@ -16,9 +16,9 @@ def main():
     seasons = functions.openYaml().get('seasons')
 
     # Parameters to print over
-    years = functions.openYaml().get('years')
     regions = functions.openYaml().get('regions')
     subregions = functions.openYaml().get('subregions_dictionary')
+    years = functions.getYears()
 
     ###########################################
     # Calculate profile  
