@@ -46,8 +46,8 @@ techs_master:
   - 'SPV' # Solar
   - 'URN' # Nuclear
   - 'WND' # Wind
-    #'P2G', # Power to Gas
-    #'FCL'  # Fuel Cell
+   #'P2G' # Power to Gas
+   #'FCL' # Fuel Cell
 
 # list of renewable technologies
 rnw_techs:
@@ -62,8 +62,8 @@ mine_techs:
   - 'GAS' # Gas
   - 'URN' # Nuclear
 
-# list of non-dispachable technologies
-non_dispachable_techs:
+# list of variable technologies
+variable_techs:
   - 'SPV'
   - 'WND'
 
@@ -81,5 +81,5 @@ tech_to_fuel:
   'SPV': 'SPV'
   'URN': 'URN'
   'WND': 'WND'
-  'P2G': 'ELC'
-  'FCL': 'HY2'
+ #'P2G': 'ELC' # Power to Gas
+ #'FCL': 'HY2' # Fuel Cell

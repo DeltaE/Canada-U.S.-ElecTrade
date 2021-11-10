@@ -214,50 +214,6 @@ def seasonalAverageCF(dfIn, seasons):
     dfOut = pd.DataFrame(data,columns = ['PROVINCE','SEASON','HOUR','VALUE'])
     return dfOut 
 
-def capFactorHydro(regions, seasons, years):
-    # PURPOSE: Calulates the capacityFactor for Hydro for Canadian regions 
-    # INPUT:   Regions: Disctionary showing region to province mapping 
-    #          Seasons: Dictionary showing season to month mapping 
-    #          Years: List of years to populate values for 
-    # OUTPUT:  otoole formatted dataframe holding hydro capacity factor values 
-    
-    #calculate capacity factor for each province 
-    cf = {}
-    for region in regions:
-        generation = 0 #TWh
-        capacity = 0 #TW
-        #calcualte totals for region 
-        for province in regions[region]:
-            capacity = capacity + functions.RESIDUAL_HYDRO_CAPACITY[province]
-            generation = generation + functions.HYDRO_GENERATION[province]
-        
-        #save total capacity factor
-        cf[region] = (generation*(1000/8760))/capacity
-
-    #TimeSlices to print over
-    hourList = range(1,25)
-    
-    #set up output dataframe 
-    df = pd.DataFrame(columns = ['REGION','TECHNOLOGY','TIMESLICE','YEAR','VALUE'])
-
-    print('need to update hydro')
-    exit()
-    '''
-    #Populate output dataframe 
-    for year in years:
-        print(f'Hydro {year}')
-        for region in regions:
-            for season in seasons:
-                for hour in hourList: 
-
-                    #create timeslice value 
-                    ts = season + str(hour)
-
-                    newRow = {'REGION':region,'TECHNOLOGY':'HYD','TIMESLICE':ts,'YEAR':year,'VALUE':cf[region]}
-                    df = df.append(newRow, ignore_index=True)
-    '''
-    return df
-
 def read_NREL(regions, subregions, seasons, years):
     # PURPOSE: reads the NREL raw excel data sheet
     # INPUT:   regions: List holding what regions to print values over
