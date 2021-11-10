@@ -15,14 +15,15 @@ def main():
     # Model Parameters
     ###########################################
 
-    regions = functions.initializeRegions()
-    subregions = functions.initializeSubregionsAsDictionary()
-    years = functions.initializeYears()
+    regions = functions.openYaml().get('regions')
+    subregions = functions.openYaml().get('subregions_dictionary')
+    seasons = functions.openYaml().get('seasons')
+    years = functions.getYears()
     
     # holds baseline reserve margin for each province based on NERC
     # 10 percent for hydro dominated provinces
     # 15 percent for thermal dominated regions 
-    provincialReserveMargin = {
+    PROVINCIAL_RESERVE_MARGIN = {
         'BC':1.10,
         'AB':1.15,
         'SAS':1.15,
@@ -34,22 +35,14 @@ def main():
         'NS':1.15,
         'PEI':1.15}
 
-    #Years to Print over
-    years = range(2019,2051,1)
-
     # List of fuels to tag
-    fuelTag = ['ELC']
+    # fuelTag = ['ELC']
 
     # List of technologies to tag
-    #techTags = ['HYD','BIO','CCG','CTG','URN','COA','COC','WND', 'SPV']
-    techTags = ['HYD','BIO','CCG','CTG','URN','COA','COC']
-
-    #Dictionary holds month to season Mapping 
-    seasons = {
-        'W':[1, 2, 3],
-        'SP':[4, 5, 6],
-        'S':[7, 8, 9],
-        'F':[10, 11, 12]}
+    techTags = functions.openYaml().get('techs_master')
+    variableTechs = functions.openYaml().get('variable_techs')
+    # Remove the non-dispachable techs from techTags
+    techTags = [x for x in techTags if x not in variableTechs]
 
     #For timeslicing 
     hours = range(1,25)
@@ -128,7 +121,7 @@ def main():
 
             #weighted reserve margin based on NERC numbers
             for province in provinces:
-                regionReserveMargin = regionReserveMargin + (dfDemand.loc[year, province] / totalDemand) * provincialReserveMargin[province]
+                regionReserveMargin = regionReserveMargin + (dfDemand.loc[year, province] / totalDemand) * PROVINCIAL_RESERVE_MARGIN[province]
             
             #add in squishing factor
             regionReserveMargin = regionReserveMargin + peakSquishFactor[subregion]

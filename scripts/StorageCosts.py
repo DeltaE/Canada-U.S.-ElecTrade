@@ -13,9 +13,9 @@ def main():
     # OUTPUT: none
 
     # Parameters to print over
-    regions = functions.initializeRegions()
-    subregions = functions.initializeSubregionsAsList()
-    years = functions.initializeYears()
+    regions = functions.openYaml().get('regions')
+    subregions = functions.openYaml().get('subregions_list')
+    years = functions.getYears()
 
     #Read in master list of technologies and get storage names
     dfGeneration_raw = pd.read_csv('../dataSources/techList_AUTO_GENERATED.csv')

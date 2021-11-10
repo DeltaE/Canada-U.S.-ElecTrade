@@ -13,10 +13,10 @@ def main():
     ###########################################
 
     # Parameters to print over
-    seasons = functions.initializeSeasons()
-    years = functions.initializeYears()
-    regions = functions.initializeRegions()
-    subregions = functions.initializeSubregionsAsDictionary()
+    seasons = functions.openYaml().get('seasons')
+    regions = functions.openYaml().get('regions')
+    subregions = functions.openYaml().get('subregions_dictionary')
+    years = functions.getYears()
 
     ###########################################
     # Capacity Factor Calculations
@@ -54,7 +54,7 @@ def renewableNinjaData(tech, regions, subregions, seasons, years):
     # OUTPUT:  otoole formatted dataframe holding capacity factor values for input tech type 
 
     #Dictionary to hold land area for averaging (thousand km2)
-    landArea = {
+    PROVINCIAL_LAND_AREAS = {
         'BC':945,
         'AB':661,
         'SAS':651,
@@ -86,7 +86,7 @@ def renewableNinjaData(tech, regions, subregions, seasons, years):
             #Find total land area of region for calcaulting weighted averages
             regionLandArea = 0
             for province in subregions[subregion]:
-                regionLandArea = regionLandArea + landArea[province]
+                regionLandArea = regionLandArea + PROVINCIAL_LAND_AREAS[province]
 
             #Filter dataframe for each season and timeslice 
             for year in years:
@@ -101,7 +101,7 @@ def renewableNinjaData(tech, regions, subregions, seasons, years):
                         #Find average weighted average capacity factor
                         cf = 0
                         for i in range(len(provinces)):
-                            weightingFactor = landArea[provinces[i]]/regionLandArea
+                            weightingFactor = PROVINCIAL_LAND_AREAS[provinces[i]]/regionLandArea
                             cf = cf + cfList[i]*weightingFactor
                         
                         #round cf
@@ -141,19 +141,6 @@ def readRenewableNinjaCSV(csvName, province):
     dateList = df['date'].tolist()
     cfList = df['value'].tolist()
 
-    #Dictionary to hold timezone shifting values 
-    timeZone = {
-        'BC':0,
-        'AB':1,
-        'SAS':2,
-        'MAN':2,
-        'ONT':3,
-        'QC':3,
-        'NB':4,
-        'NL':4,
-        'NS':4,
-        'PEI':4}
-
     #List to hold all data in to be written to a dataframe
     data = []
 
@@ -166,7 +153,7 @@ def readRenewableNinjaCSV(csvName, province):
         hourAdjusted = date.hour + 1
 
         #Shift time values to match BC time (ie. Shift 3pm Alberta time back one hour, so all timeslices represent the asme time)
-        hourAdjusted = hourAdjusted - timeZone[province]
+        hourAdjusted = hourAdjusted - functions.PROVINCIAL_TIME_ZONES[province]
         if hourAdjusted < 1:
             hourAdjusted = hourAdjusted + 24
         
@@ -226,70 +213,6 @@ def seasonalAverageCF(dfIn, seasons):
     #dataframe to output 
     dfOut = pd.DataFrame(data,columns = ['PROVINCE','SEASON','HOUR','VALUE'])
     return dfOut 
-
-def capFactorHydro(regions, seasons, years):
-    # PURPOSE: Calulates the capacityFactor for Hydro for Canadian regions 
-    # INPUT:   Regions: Disctionary showing region to province mapping 
-    #          Seasons: Dictionary showing season to month mapping 
-    #          Years: List of years to populate values for 
-    # OUTPUT:  otoole formatted dataframe holding hydro capacity factor values 
-    
-    #####################################################
-    ## CAPACITIES AND GENERATION FOR 2017 HARDCODED IN ##
-    ##              WILL NEED TO UPDATE                ##
-    #####################################################
-
-    # Residual Hydro Capacity (GW), Total Generation (TWh), and hydro generation (TWh) per province in 2017
-    inData = {
-        'BC':  [15.407,  74.483,  66.510],
-        'AB':  [1.218,   81.404,   2.050],
-        'SAS': [0.867,   24.739,   3.862],
-        'MAN': [5.461,   37.076,  35.991],
-        'ONT': [9.122,  152.745,  39.492],
-        'QC':  [40.438, 214.375, 202.001],
-        'NB':  [0.968,   13.404,   2.583],
-        'NL':  [6.762,   39.069,  36.715],
-        'NS':  [0.370,   10.034,   0.849],
-        'PEI': [0.000,    0.615,   0.000]}
-    # Residual Capacity: https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=2510002201&pickMembers%5B0%5D=1.1&pickMembers%5B1%5D=2.1&cubeTimeFrame.startYear=2017&cubeTimeFrame.endYear=2017&referencePeriods=20170101%2C20170101
-    # Generation Source: https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=2510001501&pickMembers%5B0%5D=1.1&pickMembers%5B1%5D=2.1&cubeTimeFrame.startMonth=01&cubeTimeFrame.startYear=2017&cubeTimeFrame.endMonth=12&cubeTimeFrame.endYear=2017&referencePeriods=20170101%2C20171201
-  
-    #calculate capacity factor for each province 
-    cf = {}
-    for region in regions:
-        generation = 0 #TWh
-        capacity = 0 #TW
-        #calcualte totals for region 
-        for province in regions[region]:
-            capacity = capacity + inData[province][0]
-            generation = generation + inData[province][2]
-        
-        #save total capacity factor
-        cf[region] = (generation*(1000/8760))/capacity
-
-    #TimeSlices to print over
-    hourList = range(1,25)
-    
-    #set up output dataframe 
-    df = pd.DataFrame(columns = ['REGION','TECHNOLOGY','TIMESLICE','YEAR','VALUE'])
-
-    print('need to update hydro')
-    exit()
-    '''
-    #Populate output dataframe 
-    for year in years:
-        print(f'Hydro {year}')
-        for region in regions:
-            for season in seasons:
-                for hour in hourList: 
-
-                    #create timeslice value 
-                    ts = season + str(hour)
-
-                    newRow = {'REGION':region,'TECHNOLOGY':'HYD','TIMESLICE':ts,'YEAR':year,'VALUE':cf[region]}
-                    df = df.append(newRow, ignore_index=True)
-    '''
-    return df
 
 def read_NREL(regions, subregions, seasons, years):
     # PURPOSE: reads the NREL raw excel data sheet

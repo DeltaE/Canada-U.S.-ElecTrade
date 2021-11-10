@@ -14,9 +14,9 @@ def main():
     ### EVERYTHING IS CO2 EMISSIONS
 
     # Parameters to print over
-    regions = functions.initializeRegions()
-    subregions = functions.initializeSubregionsAsList()
-    years = functions.initializeYears()
+    regions = functions.openYaml().get('regions')
+    subregions = functions.openYaml().get('subregions_list')
+    years = functions.getYears()
 
     ###########################################
     # Compile Emission Activity Ratio

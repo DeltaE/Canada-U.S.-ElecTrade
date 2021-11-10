@@ -12,8 +12,8 @@ def main():
     ###########################################
 
     # Parameters to print over
-    years = functions.initializeYears()
-    regions = functions.initializeRegions()
+    regions = functions.openYaml().get('regions')
+    years = functions.getYears()
 
     #Dictionary for subregion to province mappings
     subregions = defaultdict(list)

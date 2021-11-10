@@ -13,8 +13,8 @@ def main():
     ###########################################
 
     # Parameters to print over
-    regions = functions.initializeRegions()
-    years = functions.initializeYears()
+    regions = functions.openYaml().get('regions')
+    years = functions.getYears()
 
     ###########################################
     # Compile Emission Activity Ratio

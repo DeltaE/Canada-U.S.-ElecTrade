@@ -11,12 +11,12 @@ def main():
     ###########################################
 
     # Parameters to print over
-    regions = functions.initializeRegions()
-    subregions = functions.initializeSubregionsAsList()
-    years = functions.initializeYears()
+    regions = functions.openYaml().get('regions')
+    subregions = functions.openYaml().get('subregions_list')
+    years = functions.getYears()
 
     #Techs to tag
-    techs = ['HYD','WND','BIO','SPV']
+    techs = functions.openYaml().get('rnw_techs')
 
     ###########################################
     # Compile RE Tags

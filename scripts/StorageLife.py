@@ -11,10 +11,10 @@ def main():
     # OUTPUT: none
 
     # Parameters to print over
-    regions = functions.initializeRegions()
-    subregions = functions.initializeSubregionsAsList()
-    storages = functions.initializeStorages()
-
+    regions = functions.openYaml().get('regions')
+    subregions = functions.openYaml().get('subregions_list')
+    storages = functions.openYaml().get('sto_techs')
+    
     if not storages:
         df = pd.DataFrame(columns=['REGION','STORAGE','VALUE'])
         df.to_csv('../src/data/Canada/OperationalLifeStorage.csv', index=False)
