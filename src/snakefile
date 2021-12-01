@@ -311,6 +311,14 @@ rule TechToFromStorage:
 	shell:
 		'python ' + scriptsDir + 'TechToFromStorage.py'
 
+rule TotalAnnualMaxCapacity:
+	input:
+		# None
+	output:
+		outputDir + 'data/TotalAnnualMaxCapacity.csv'
+	shell:
+		'python ' + scriptsDir + 'TotalAnnualMaxCapacity.py'
+
 #############################################################################################
 # TO BE DELETED, RELEVANT INPUT FILES MOVED TO INDIVIDUAL RULES
 rule UsaData:

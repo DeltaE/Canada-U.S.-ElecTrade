@@ -90,3 +90,11 @@ def getVariableCost():
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','MODE_OF_OPERATION','YEAR','VALUE'])
     return dfOut
+
+def getTotalAnnualMaxCapacity():
+    # PURPOSE: Creates TotalAnnualMaxCapacity header data
+    # INPUT:   N/A
+    # OUTPUT:  dfOut = dataframe to be written to a csv
+
+    dfOut = pd.DataFrame(columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
+    return dfOut
