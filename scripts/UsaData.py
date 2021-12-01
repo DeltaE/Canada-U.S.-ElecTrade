@@ -774,44 +774,6 @@ def getFixedCost(techMap, df):
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
     return dfOut
 
-def getTotalAnnualMaxCapacity(techMap, df):
-    # PURPOSE: Creates totalAnnualMaxCapacity file from USA data
-    # INPUT:   techMap =  dictionary mapping USA naming to our naming for technologies
-    #                     df = raw data
-    # OUTPUT:  dfOut = dataframe to be written to a csv
-
-    #remove anything from years 2015 - 2018
-    df = df.loc[df['YEAR'] > 2018]
-    df.reset_index()
-
-    #Initialize filtered dataframe 
-    columns = list(df)
-    dfFiltered = pd.DataFrame(columns=columns)
-
-    #get rid of all techs we are not using 
-    for tech in techMap:
-        dfTemp = df.loc[df['TECHNOLOGY'] == tech]
-        dfFiltered = dfFiltered.append(dfTemp)
-
-    df = dfFiltered
-    df.reset_index()
-
-    #holds output data
-    outData = []
-
-    #map data
-    for i in range(len(df)):
-        region = 'NAmerica'
-        techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
-        tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
-        year = df['YEAR'].iloc[i]
-        value = df['TOTALANNUALMAXCAPACITY'].iloc[i]
-        outData.append([region,tech,year,value])
-
-    #create and return datafram
-    dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
-    return dfOut
-
 def getReserveMarginTagTechnology(techMap, df):
     # PURPOSE: Creates getReserveMarginTagTechnology file from USA data
     # INPUT:   techMap =  dictionary mapping USA naming to our naming for technologies
