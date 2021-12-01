@@ -1,5 +1,6 @@
 import pandas as pd
 import functions
+import usa_data_functions
 
 ####################################################
 ## ASSUMES ALL PROVINCES USE THE SAME COST VALUES ##
@@ -31,6 +32,7 @@ def main():
             outFile = 'FixedCost.csv'
         elif trigger == 3:
             costType = ['Variable O&M', 'Fuel']
+            dfUsa = usa_data_functions.getVariableCost()
             outFile = 'VariableCost.csv'
         else:
             print('Need to select a cost type. SCRIPT NOT RUN!')
@@ -61,6 +63,7 @@ def main():
         df = df.append(dfNREL)
         #df = df.append(dfP2gSystem)
         df = df.append(trade)
+        df = df.append(dfUsa)
 
         '''
         #add a mode of operation column for variable cost
@@ -72,7 +75,7 @@ def main():
         '''
 
         #Print capactiyFactor dataframe to a csv 
-        outLocation = '../src/data/Canada/' + outFile
+        outLocation = '../src/data/' + outFile
         df.to_csv(outLocation, index=False)
 
 
