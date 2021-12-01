@@ -27,15 +27,15 @@ def main():
 
     # Years set
     dfOut = pd.DataFrame(years,columns=['VALUE'])
-    dfOut.to_csv('../src/data/Canada/YEAR.csv', index=False)
+    dfOut.to_csv('../src/data/YEAR.csv', index=False)
 
     #Regions set
     dfOut = pd.DataFrame(regions, columns=['VALUE'])
-    dfOut.to_csv('../src/data/Canada/REGION.csv', index=False)
+    dfOut.to_csv('../src/data/REGION.csv', index=False)
 
     # Emissions set
     dfOut = pd.DataFrame(emissions, columns=['VALUE'])
-    dfOut.to_csv('../src/data/Canada/EMISSION.csv', index=False)
+    dfOut.to_csv('../src/data/EMISSION.csv', index=False)
 
     ####################################
     ## CREATE STORAGE SET
@@ -45,19 +45,19 @@ def main():
     stoList = getSTO(countries, stoTechs)
 
     dfOut = pd.DataFrame(stoList, columns=['VALUE'])
-    dfOut.to_csv('../src/data/Canada/STORAGE.csv', index=False)
+    dfOut.to_csv('../src/data/STORAGE.csv', index=False)
 
     ####################################
     ## CREATE TECHNOLOGY SET
     ####################################
 
-    functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', '../src/data/Canada/TECHNOLOGY.csv', 1)
+    functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', '../src/data/TECHNOLOGY.csv', 1)
 
     ####################################
     ## CREATE FUEL SET
     ####################################
 
-    functions.createFuelSet(countries, rnwTechs, mineTechs, '../src/data/Canada/FUEL.csv', True)
+    functions.createFuelSet(countries, rnwTechs, mineTechs, '../src/data/FUEL.csv', True)
 
     ####################################
     ## Extra Functions
