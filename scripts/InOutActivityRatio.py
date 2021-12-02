@@ -140,11 +140,11 @@ def main():
 
     #write IAR and OAR to files 
     dfInputOut = pd.DataFrame(masterIARList,columns=['REGION','TECHNOLOGY','FUEL','MODE_OF_OPERATION','YEAR','VALUE'])
-    dfInputUsa = usa_data_functions.getSpecifiedAnnualDemand()
+    dfInputUsa = usa_data_functions.getInputActivityRatio()
     dfInputOut = dfInputOut.append(dfInputUsa)
     dfInputOut.to_csv(f'../src/data/InputActivityRatio.csv', index=False)
     dfOutputOut = pd.DataFrame(masterOARList,columns=['REGION','TECHNOLOGY','FUEL','MODE_OF_OPERATION','YEAR','VALUE'])
-    dfOutputUsa = usa_data_functions.getSpecifiedAnnualDemand()
+    dfOutputUsa = usa_data_functions.getOutputActivityRatio()
     dfOutputOut = dfOutputOut.append(dfOutputUsa)
     dfOutputOut.to_csv(f'../src/data/OutputActivityRatio.csv', index=False)
 

@@ -162,17 +162,17 @@ def main():
 
     #write out all files
     dfReserveMargin = pd.DataFrame(reserveMargin,columns=['REGION','YEAR','VALUE'])
-    dfReserveMarginUsa = usa_data_functions.getSpecifiedAnnualDemand()
+    dfReserveMarginUsa = usa_data_functions.getReserveMargin()
     dfReserveMargin = dfReserveMargin.append(dfReserveMarginUsa)
     dfReserveMargin.to_csv('../src/data/ReserveMargin.csv', index=False)
 
     dfReserveMarginFuel = pd.DataFrame(reserveMarginTagFuel,columns=['REGION','FUEL','YEAR','VALUE'])
-    dfReserveMarginFuelUsa = usa_data_functions.getSpecifiedAnnualDemand()
+    dfReserveMarginFuelUsa = usa_data_functions.getReserveMarginTagFuel()
     dfReserveMarginFuel = dfReserveMarginFuel.append(dfReserveMarginFuelUsa)
     dfReserveMarginFuel.to_csv('../src/data/ReserveMarginTagFuel.csv', index=False)
 
     dfReserveMarginTech = pd.DataFrame(reserveMarginTagTech,columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
-    dfReserveMarginTechUsa = usa_data_functions.getSpecifiedAnnualDemand()
+    dfReserveMarginTechUsa = usa_data_functions.getReserveMarginTagTechnology()
     dfReserveMarginTech = dfReserveMarginTech.append(dfReserveMarginTechUsa)
     dfReserveMarginTech.to_csv('../src/data/ReserveMarginTagTechnology.csv', index=False)
 
