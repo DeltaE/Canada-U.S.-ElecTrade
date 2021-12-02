@@ -1,6 +1,7 @@
 import pandas as pd
 import functions
 from collections import defaultdict
+import usa_data_functions
 
 def main():
     # PURPOSE: Creates an otoole formatted CSV holding the specified annual demand for the model
@@ -52,7 +53,9 @@ def main():
     ###########################################
 
     df = pd.DataFrame(demand, columns = ['REGION', 'FUEL', 'YEAR', 'VALUE'])
-    df.to_csv('../src/data/Canada/SpecifiedAnnualDemand.csv', index=False)
+    dfUsa = usa_data_functions.getSpecifiedDemandProfile()
+    df = df.append(dfUsa)
+    df.to_csv('../src/data/SpecifiedAnnualDemand.csv', index=False)
 
 if __name__ == "__main__":
     main()
