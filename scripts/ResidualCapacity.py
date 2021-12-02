@@ -69,6 +69,8 @@ def main():
 
     #write operational life to a csv
     dfOut = pd.DataFrame(opLifeData,columns=['REGION','TECHNOLOGY','VALUE'])
+    dfOutUsa = usa_data_functions.getSpecifiedAnnualDemand()
+    dfOut = dfOut.append(dfOutUsa)
     dfOut.to_csv('../src/data/Canada/OperationalLife.csv', index=False)
 
     ###########################################

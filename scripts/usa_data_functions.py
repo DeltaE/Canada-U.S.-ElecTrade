@@ -577,3 +577,45 @@ def getInputActivityRatio():
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','FUEL','MODE_OF_OPERATION','YEAR','VALUE'])
     return dfOut
+
+def getOperationalLife():
+    # PURPOSE: Creates opertionalLife file from USA data
+    # INPUT:   N/A
+    # OUTPUT:  dfOut = dataframe to be written to a csv
+
+    techMap = functions.openYaml().get('usa_tech_map')
+    df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'OperationalLife(r,t)')
+
+    #Initialize filtered dataframe 
+    columns = list(df)
+    dfFiltered = pd.DataFrame(columns=columns)
+
+    #get rid of all techs we are not using 
+    for tech in techMap:
+        dfTemp = df.loc[df['TECHNOLOGY'] == tech]
+        dfFiltered = dfFiltered.append(dfTemp)
+
+    df = dfFiltered
+    df.reset_index()
+
+    #holds output data
+    outData = []
+
+    #map data
+    for i in range(len(df)):
+        region = 'NAmerica'
+        techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
+        tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
+        value = df['OPERATIONALLIFE'].iloc[i]
+        outData.append([region,tech,value])
+
+    #Transmission operational life 
+    dfTrade = pd.read_csv('../dataSources/USA_Trade.csv')
+    techListTrade = dfTrade['TECHNOLOGY'].tolist()
+    techListTrade = list(set(techListTrade)) #remove duplicates
+    for tech in techListTrade:
+        outData.append(['NAmerica',tech,100])
+
+    #create and return datafram
+    dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','VALUE'])
+    return dfOut
