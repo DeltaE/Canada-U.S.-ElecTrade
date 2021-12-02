@@ -51,8 +51,9 @@ def main():
     ## CREATE TECHNOLOGY SET
     ####################################
 
-    outputTechs, canadaDfOut = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', 1)
-    outputTechs, usaDfOut = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', 0)
+    # outputTechs is unused here
+    outputTechs, canadaDfOut = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', True)
+    outputTechs, usaDfOut = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', False)
     df = canadaDfOut.append(usaDfOut)
     df.to_csv('../src/data/TECHNOLOGY.csv')
 
@@ -60,7 +61,10 @@ def main():
     ## CREATE FUEL SET
     ####################################
 
-    functions.createFuelSet(countries, rnwTechs, mineTechs, '../src/data/Canada/FUEL.csv', True)
+    canadaDfOut = functions.createFuelSet(countries, rnwTechs, mineTechs, '../src/data/Canada/FUEL.csv', True)
+    usaDfOut = functions.createFuelSet(countries, rnwTechs, mineTechs, '../src/data/USA/FUEL.csv', False)
+    df = canadaDfOut.append(usaDfOut)
+    df.to_csv('../src/data/FUEL.csv')
 
     ####################################
     ## Extra Functions

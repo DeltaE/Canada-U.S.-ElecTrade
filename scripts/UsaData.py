@@ -199,7 +199,7 @@ def getCapToActivityUnit():
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
     years, regions, emissions, techsMaster, rnwTechs, mineTechs, stoTechs, countries = functions.initializeCanadaUsaModelParameters('USA')
-    techs, df = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', 0)
+    techs, dummy = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', 0)
 
     #This one is easier to manually do...
     outData = []

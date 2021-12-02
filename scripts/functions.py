@@ -301,15 +301,14 @@ def getELCfuels(regions):
     # Return list of electricty fuels
     return outList
 
-def createFuelSet(countries, rnwTechs, mineTechs, csvPath, generateInternational):
+def createFuelSet(countries, rnwTechs, mineTechs, generateInternational):
     # PURPOSE: Appends all fuel name lists together and writes them to a CSV
     # INPUT:   countries = Dictionary holding countries as the key and subregion as the values in a list
     #          rnwTechs = List of the technologies to print over for getRNWfuels
     #          mineTechs = List of the technologies to print over for getMINfuels
-    #          csvPath = Path for the output
     #          generateInternational = True/False for whether getMINfuels function needs to create all
     #                                  technology names for international import/export
-    # OUTPUT:  None
+    # OUTPUT:  dfOut = CSV datafile
 
     # Renewable fuels
     rnwFuelList = getRNWfuels(countries, rnwTechs)
@@ -327,10 +326,10 @@ def createFuelSet(countries, rnwTechs, mineTechs, csvPath, generateInternational
     #outputFuels = rnwFuelList + minFuelList + elcFuelList + hy2FuelList
     outputFuels = rnwFuelList + minFuelList + elcFuelList
     dfOut = pd.DataFrame(outputFuels, columns=['VALUE'])
-    dfOut.to_csv(csvPath, index=False)
+    return dfOut
 
 def createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsvPath, generateInternational):
-    # PURPOSE: Appends all technology name lists together and writes them to a CSV
+    # PURPOSE: Appends all technology name lists together and returns them as a CSV datafile
     # INPUT:   countries = Dictionary holding countries as the key
     #                      and subregion as the values in a list
     #          techsMaster = List of the technologies to print over for getPWRtechs
@@ -340,6 +339,7 @@ def createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsv
     #          generateInternational = True/False for whether function should
     #                                  create all international mining techs
     # OUTPUT:  outputTechs = All technology lists appended together
+    #          dfOut = CSV datafile
     # get power generator technology list 
     pwrList = getPWRtechs(countries, techsMaster)
 
