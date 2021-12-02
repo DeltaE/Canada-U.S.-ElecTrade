@@ -2,6 +2,7 @@ import pandas as pd
 import datetime
 import functions
 from collections import defaultdict
+import usa_data_functions
 
 def main():
     # PURPOSE: Creates an otoole formatted CSV holding the specified demand profile for the model. Accounts for time zones and daylight saving time   
@@ -73,7 +74,9 @@ def main():
     ###########################################
 
     df = pd.DataFrame(load, columns = ['REGION', 'FUEL', 'TIMESLICE', 'YEAR', 'VALUE'])
-    df.to_csv('../src/data/Canada/SpecifiedDemandProfile.csv', index=False)
+    dfUsa = usa_data_functions.getSpecifiedDemandProfile()
+    df = df.append(dfUsa)
+    df.to_csv('../src/data/SpecifiedDemandProfile.csv', index=False)
 
 if __name__ == "__main__":
     main()

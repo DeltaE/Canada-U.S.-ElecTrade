@@ -98,3 +98,31 @@ def getTotalAnnualMaxCapacity():
 
     dfOut = pd.DataFrame(columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
     return dfOut
+
+def getSpecifiedDemandProfile():
+    # PURPOSE: Creates specifiedDeamandProfile file from USA data
+    # INPUT:   N/A
+    # OUTPUT:  dfOut = dataframe to be written to a csv
+
+    df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'SpecifiedDemandProfile(r,f,l,y)')
+
+    #remove anything from years 2015 - 2018
+    df = df.loc[df['YEAR'] > 2018]
+    df.reset_index()
+
+    #holds output data
+    outData = []
+
+    #map data
+    for i in range(len(df)):
+        region = 'NAmerica'
+        fuel = 'ELC' + 'USA' + df['REGION'].iloc[i] + '02'
+        ts = df['TIMESLICE'].iloc[i]
+        year = df['YEAR'].iloc[i]
+        value = df['DEMAND'].iloc[i]
+        value = round(value,3)
+        outData.append([region,fuel,ts,year,value])
+
+    #create and return datafram
+    dfOut = pd.DataFrame(outData, columns = ['REGION', 'FUEL', 'TIMESLICE', 'YEAR', 'VALUE'])
+    return dfOut

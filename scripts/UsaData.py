@@ -168,8 +168,7 @@ def getSpecifiedAnnualDemand(techMap, df):
     
 def getSpecifiedDemandProfile(techMap, df):
     # PURPOSE: Creates specifiedDeamandProfile file from USA data
-    # INPUT:   techMap =  dictionary mapping USA naming to our naming for technologies
-    #                     df = raw data
+    # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
     #remove anything from years 2015 - 2018
