@@ -329,7 +329,7 @@ def createFuelSet(countries, rnwTechs, mineTechs, csvPath, generateInternational
     dfOut = pd.DataFrame(outputFuels, columns=['VALUE'])
     dfOut.to_csv(csvPath, index=False)
 
-def createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsvPath, outputCsvPath, generateInternational):
+def createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsvPath, generateInternational):
     # PURPOSE: Appends all technology name lists together and writes them to a CSV
     # INPUT:   countries = Dictionary holding countries as the key
     #                      and subregion as the values in a list
@@ -337,7 +337,6 @@ def createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsv
     #          mineTechs = List of the technologies to print over for getMINtechs
     #          rnwTechs = List of the technologies to print over for getRNWtechs
     #          trnTechsCsvPath = Trade csv datafile location
-    #          outputCsvPath = Path for the output
     #          generateInternational = True/False for whether function should
     #                                  create all international mining techs
     # OUTPUT:  outputTechs = All technology lists appended together
@@ -359,9 +358,8 @@ def createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsv
     #Append lists together and write to a csv
     outputTechs = pwrList + pwrTrnList + minList + rnwList + trnList
     dfOut = pd.DataFrame(outputTechs, columns=['VALUE'])
-    dfOut.to_csv(outputCsvPath, index=False)
 
-    return outputTechs
+    return outputTechs, dfOut
 
 def createTechLists(techsMaster, rnwTechs, mineTechs, stoTechs):
     # PURPOSE: Merges several tech lists into 'data' so that they can be printed over

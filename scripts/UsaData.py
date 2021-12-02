@@ -31,7 +31,8 @@ def main():
     ## CREATE TECHNOLOGY SET
     ####################################
 
-    outputTechs = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', '../src/data/USA/TECHNOLOGY.csv', 0)
+    outputTechs, dfOut = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', 0)
+    # dfOut.to_csv(outputCsvPath, index=False)
 
     ####################################
     ## CREATE FUEL SET
@@ -99,7 +100,7 @@ def main():
         elif param == 'SpecifiedDemandProfile':
             dfOut = getSpecifiedDemandProfile(techMap, df)
         elif param == 'CapacityToActivityUnit':
-            dfOut = getCapToActivityUnit(outputTechs)
+            dfOut = getCapToActivityUnit()
         elif param == 'CapacityFactor':
             dfOut = getCapacityFactor(techMap, df)
         elif param == 'OperationalLife':
@@ -192,10 +193,13 @@ def getSpecifiedDemandProfile(techMap, df):
     dfOut = pd.DataFrame(outData, columns = ['REGION', 'FUEL', 'TIMESLICE', 'YEAR', 'VALUE'])
     return dfOut
 
-def getCapToActivityUnit(techs):
+def getCapToActivityUnit():
     # PURPOSE: Creates capacityToActivity file from USA data
-    # INPUT:   techs = List of technologies to print over
+    # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
+
+    years, regions, emissions, techsMaster, rnwTechs, mineTechs, stoTechs, countries = functions.initializeCanadaUsaModelParameters('USA')
+    techs, df = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', 0)
 
     #This one is easier to manually do...
     outData = []

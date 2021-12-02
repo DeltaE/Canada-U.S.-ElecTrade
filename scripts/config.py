@@ -51,13 +51,16 @@ def main():
     ## CREATE TECHNOLOGY SET
     ####################################
 
-    functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', '../src/data/TECHNOLOGY.csv', 1)
+    outputTechs, canadaDfOut = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', 1)
+    outputTechs, usaDfOut = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', 0)
+    df = canadaDfOut.append(usaDfOut)
+    df.to_csv('../src/data/TECHNOLOGY.csv')
 
     ####################################
     ## CREATE FUEL SET
     ####################################
 
-    functions.createFuelSet(countries, rnwTechs, mineTechs, '../src/data/FUEL.csv', True)
+    functions.createFuelSet(countries, rnwTechs, mineTechs, '../src/data/Canada/FUEL.csv', True)
 
     ####################################
     ## Extra Functions
