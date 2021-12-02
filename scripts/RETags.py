@@ -1,5 +1,6 @@
 import pandas as pd
 import functions
+import usa_data_functions
 
 def main():
     # PURPOSE: Creates otoole formatted RETagTechnology CSVs 
@@ -36,7 +37,9 @@ def main():
     
     #write to a csv
     dfOut = pd.DataFrame(dataOut,columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
-    dfOut.to_csv('../src/data/Canada/RETagTechnology.csv', index=False)
+    dfUsa = usa_data_functions.getRETagTechnology()
+    dfOut = dfOut.append(dfUsa)
+    dfOut.to_csv('../src/data/RETagTechnology.csv', index=False)
 
 if __name__ == "__main__":
     main()

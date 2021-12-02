@@ -153,3 +153,27 @@ def getSpecifiedAnnualDemand():
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns = ['REGION', 'FUEL', 'YEAR', 'VALUE'])
     return dfOut
+
+def getRETagTechnology():
+    # PURPOSE: Creates RETagTechnology file from USA data
+    # INPUT:   none
+    # OUTPUT:  dfOut = dataframe to be written to a csv
+
+    dummy, regions, emissions, techsMaster, rnwTechs, mineTechs, stoTechs, subregions = functions.initializeCanadaUsaModelParameters('USA')
+
+    #easier to do this one manually 
+    techs = ['HYD','WND','BIO','SPV']
+    years = range(2019,2051)
+
+    outData = []
+
+    for year in years:
+        for subregion in subregions['USA']:
+            for tech in techs:
+                region = 'NAmerica'
+                techName = 'PWR' + tech + 'USA' + subregion + '01'
+                outData.append([region, techName, year, 1])
+
+    # create and return datafram
+    dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
+    return dfOut

@@ -53,7 +53,7 @@ def main():
     ###########################################
 
     df = pd.DataFrame(demand, columns = ['REGION', 'FUEL', 'YEAR', 'VALUE'])
-    dfUsa = usa_data_functions.getSpecifiedDemandProfile()
+    dfUsa = usa_data_functions.getSpecifiedAnnualDemand()
     df = df.append(dfUsa)
     df.to_csv('../src/data/SpecifiedAnnualDemand.csv', index=False)
 
