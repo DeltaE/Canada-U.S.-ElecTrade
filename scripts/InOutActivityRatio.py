@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import numpy as np
 import functions
+import usa_data_functions
 
 def main():
     # PURPOSE: Creates otoole formatted InputActivityRatio AND OutputActivityRatio CSVs  
@@ -138,10 +139,14 @@ def main():
                         masterOARList.append([region, techName, outFuel, 1, year, oar])
 
     #write IAR and OAR to files 
-    dfOut = pd.DataFrame(masterIARList,columns=['REGION','TECHNOLOGY','FUEL','MODE_OF_OPERATION','YEAR','VALUE'])
-    dfOut.to_csv(f'../src/data/Canada/InputActivityRatio.csv', index=False)
-    dfOut = pd.DataFrame(masterOARList,columns=['REGION','TECHNOLOGY','FUEL','MODE_OF_OPERATION','YEAR','VALUE'])
-    dfOut.to_csv(f'../src/data/Canada/OutputActivityRatio.csv', index=False)
+    dfInputOut = pd.DataFrame(masterIARList,columns=['REGION','TECHNOLOGY','FUEL','MODE_OF_OPERATION','YEAR','VALUE'])
+    dfInputUsa = usa_data_functions.getSpecifiedAnnualDemand()
+    dfInputOut = dfInputOut.append(dfInputUsa)
+    dfInputOut.to_csv(f'../src/data/InputActivityRatio.csv', index=False)
+    dfOutputOut = pd.DataFrame(masterOARList,columns=['REGION','TECHNOLOGY','FUEL','MODE_OF_OPERATION','YEAR','VALUE'])
+    dfOutputUsa = usa_data_functions.getSpecifiedAnnualDemand()
+    dfOutputOut = dfOutputOut.append(dfOutputUsa)
+    dfOutputOut.to_csv(f'../src/data/OutputActivityRatio.csv', index=False)
 
 if __name__ == "__main__":
     main()
