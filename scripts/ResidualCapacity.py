@@ -3,6 +3,7 @@ import os
 import numpy as np
 from collections import defaultdict
 import functions
+import usa_data_functions
 
 def main():
     # PURPOSE: Creates otoole formatted operational life and residual capacity data CSVs.  
@@ -130,7 +131,9 @@ def main():
 
     #wrirte to a csv 
     dfOut = pd.DataFrame(resCapData,columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
-    dfOut.to_csv('../src/data/Canada/ResidualCapacity.csv', index=False)
+    dfUsa = usa_data_functions.getResidualCapacity()
+    dfOut = dfOut.append(dfUsa)
+    dfOut.to_csv('../src/data/ResidualCapacity.csv', index=False)
 
 if __name__ == "__main__":
     main()

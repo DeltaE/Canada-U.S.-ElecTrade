@@ -3,6 +3,7 @@ import os
 import numpy as np
 import datetime
 import functions
+import usa_data_functions
 from collections import defaultdict
 
 def main():
@@ -161,13 +162,19 @@ def main():
 
     #write out all files
     dfReserveMargin = pd.DataFrame(reserveMargin,columns=['REGION','YEAR','VALUE'])
-    dfReserveMargin.to_csv('../src/data/Canada/ReserveMargin.csv', index=False)
+    dfReserveMarginUsa = usa_data_functions.getSpecifiedAnnualDemand()
+    dfReserveMargin = dfReserveMargin.append(dfReserveMarginUsa)
+    dfReserveMargin.to_csv('../src/data/ReserveMargin.csv', index=False)
 
     dfReserveMarginFuel = pd.DataFrame(reserveMarginTagFuel,columns=['REGION','FUEL','YEAR','VALUE'])
-    dfReserveMarginFuel.to_csv('../src/data/Canada/ReserveMarginTagFuel.csv', index=False)
+    dfReserveMarginFuelUsa = usa_data_functions.getSpecifiedAnnualDemand()
+    dfReserveMarginFuel = dfReserveMarginFuel.append(dfReserveMarginFuelUsa)
+    dfReserveMarginFuel.to_csv('../src/data/ReserveMarginTagFuel.csv', index=False)
 
     dfReserveMarginTech = pd.DataFrame(reserveMarginTagTech,columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
-    dfReserveMarginTech.to_csv('../src/data/Canada/ReserveMarginTagTechnology.csv', index=False)
+    dfReserveMarginTechUsa = usa_data_functions.getSpecifiedAnnualDemand()
+    dfReserveMarginTech = dfReserveMarginTech.append(dfReserveMarginTechUsa)
+    dfReserveMarginTech.to_csv('../src/data/ReserveMarginTagTechnology.csv', index=False)
 
     # Reference code before switching over to osemosys gloabl naming 
     '''
