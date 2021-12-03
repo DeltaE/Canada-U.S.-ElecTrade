@@ -1,5 +1,6 @@
 import pandas as pd
 import functions
+import usa_data_functions
 
 def main():
     # PURPOSE: Creates otoole formatted Emission Activity Ratio CSV 
@@ -48,7 +49,9 @@ def main():
     
     #write to a csv
     dfOut = pd.DataFrame(dataOut,columns=['REGION','TECHNOLOGY','EMISSION','MODE_OF_OPERATION','YEAR','VALUE'])
-    dfOut.to_csv('../src/data/Canada/EmissionActivityRatio.csv', index=False)
+    dfUsa = usa_data_functions.getEmissionActivityRatio()
+    dfOut = dfOut.append(dfUsa)
+    dfOut.to_csv('../src/data/EmissionActivityRatio.csv', index=False)
 
 if __name__ == "__main__":
     main()

@@ -775,3 +775,53 @@ def getFixedCost():
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
     return dfOut
+
+def getEmissionActivityRatio():
+    # PURPOSE: Creates EmissionActivityRatio file from USA data
+    # INPUT:   N/A
+    # OUTPUT:  dfOut = dataframe to be written to a csv
+
+    techMap = functions.openYaml().get('usa_tech_map')
+    inputFuelMap = functions.openYaml().get('tech_to_fuel')
+    df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'EmisionActivityRatio(r,t,e,m,y)')
+
+    #Only defined for year 2015
+    years = range(2019,2051)
+
+    #Initialize filtered dataframe 
+    columns = list(df)
+    dfFiltered = pd.DataFrame(columns=columns)
+
+    #get rid of all techs we are not using 
+    for tech in techMap:
+        dfTemp = df.loc[df['TECHNOLOGY'] == tech]
+        dfFiltered = dfFiltered.append(dfTemp)
+
+    df = dfFiltered
+    df.reset_index()
+
+    #holds output data
+    outData = []
+
+    #Fuels that have international trade options
+    intFuel = ['GAS','COA','URN']
+
+    #map data
+    for year in years:
+        for i in range(len(df)):
+            region = 'NAmerica'
+            techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
+            tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
+            emission = df['EMISSION'].iloc[i]
+            mode = 1
+            value = df['EMISSIONACTIVITYRATIO'].iloc[i]
+            value = round(value, 3)
+            outData.append([region,tech,emission,mode,year,value])
+            #checks if need to write value for mode 2
+            if inputFuelMap[techMapped] in intFuel:
+                mode = 2
+                outData.append([region,tech,emission,mode,year,value])
+
+    #create and return datafram
+    dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','EMISSION','MODE_OF_OPERATION','YEAR','VALUE'])
+    return dfOut
