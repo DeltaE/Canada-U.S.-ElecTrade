@@ -61,8 +61,8 @@ def main():
     ## CREATE FUEL SET
     ####################################
 
-    canadaDfOut = functions.createFuelSet(countries, rnwTechs, mineTechs, '../src/data/Canada/FUEL.csv', True)
-    usaDfOut = functions.createFuelSet(countries, rnwTechs, mineTechs, '../src/data/USA/FUEL.csv', False)
+    canadaDfOut = functions.createFuelSet(countries, rnwTechs, mineTechs, True)
+    usaDfOut = functions.createFuelSet(countries, rnwTechs, mineTechs, False)
     df = canadaDfOut.append(usaDfOut)
     df.to_csv('../src/data/FUEL.csv')
 

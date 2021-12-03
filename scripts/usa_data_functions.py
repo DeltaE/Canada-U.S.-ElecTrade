@@ -843,7 +843,7 @@ def getCapToActivityUnit():
     capToAct = 31.536
 
     #Technologies to print over
-    df = pd.read_csv('../src/data/USA/TECHNOLOGY.csv')
+    df = pd.read_csv('../src/data/TECHNOLOGY.csv')
     techs = df['VALUE'].tolist()
 
     #populate list

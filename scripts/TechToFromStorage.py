@@ -17,8 +17,8 @@ def main():
     
     if not storages:
         dfOut = pd.DataFrame(columns=['REGION','TECHNOLOGY','STORAGE', 'MODE_OF_OPERATION','VALUE'])
-        dfOut.to_csv('../src/data/Canada/TechnologyToStorage.csv', index=False)
-        dfOut.to_csv('../src/data/Canada/TechnologyFromStorage.csv', index=False)
+        dfOut.to_csv('../src/data/TechnologyToStorage.csv', index=False)
+        dfOut.to_csv('../src/data/TechnologyFromStorage.csv', index=False)
         return
 
     #TechnologyToStorage (Technology, Storage)
@@ -55,11 +55,11 @@ def main():
     
     #write tech to storage
     dfOut = pd.DataFrame(toStorageData,columns=['REGION','TECHNOLOGY','STORAGE', 'MODE_OF_OPERATION','VALUE'])
-    dfOut.to_csv('../src/data/Canada/TechnologyToStorage.csv', index=False)
+    dfOut.to_csv('../src/data/TechnologyToStorage.csv', index=False)
 
     #write tech from storage
     dfOut = pd.DataFrame(fromStorageData,columns=['REGION','TECHNOLOGY','STORAGE', 'MODE_OF_OPERATION','VALUE'])
-    dfOut.to_csv('../src/data/Canada/TechnologyFromStorage.csv', index=False)
+    dfOut.to_csv('../src/data/TechnologyFromStorage.csv', index=False)
 
 if __name__ == "__main__":
     main()

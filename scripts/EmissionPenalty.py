@@ -35,7 +35,7 @@ def main():
     
     #write to a csv
     dfOut = pd.DataFrame(dataOut,columns=['REGION','EMISSION','YEAR','VALUE'])
-    dfOut.to_csv('../src/data/Canada/EmissionsPenalty.csv', index=False)
+    dfOut.to_csv('../src/data/EmissionsPenalty.csv', index=False)
 
 if __name__ == "__main__":
     main()

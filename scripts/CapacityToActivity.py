@@ -20,7 +20,6 @@ def main():
     # Retrieve Canada-Only Technologies to print over
     years, dummy, emissions, techsMaster, rnwTechs, mineTechs, stoTechs, countries = functions.initializeCanadaUsaModelParameters('CAN')
     outputTechs, df = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', True)
-    df = pd.read_csv('../src/data/Canada/TECHNOLOGY.csv')
     technologies = df['VALUE'].tolist()
 
     '''
