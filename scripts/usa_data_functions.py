@@ -853,3 +853,70 @@ def getCapToActivityUnit():
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns = ['REGION','TECHNOLOGY', 'VALUE'])
     return dfOut
+
+def getCapacityOrAvailabilityFactor(isCapacity):
+    # PURPOSE: Creates capacityFactor file from USA data
+    # INPUT:   isCapacity = Boolean indicating Capacity Factor should be returned when True, and Availabiltiy Factor otherwise
+    # OUTPUT:  dfOut = dataframe to be written to a csv
+
+    #capacity factor only specified for 2015 and 2016
+    #df = df.loc[df['YEAR'] == 2016]
+    #df.reset_index()
+
+    techMap = functions.openYaml().get('usa_tech_map')
+    df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'CapacityFactor(r,t,l,y)')
+
+    #Initialize filtered dataframe 
+    columns = list(df)
+    dfFiltered = pd.DataFrame(columns=columns)
+
+    #get rid of all techs we are not using 
+    for tech in techMap:
+        dfTemp = df.loc[df['TECHNOLOGY'] == tech]
+        dfFiltered = dfFiltered.append(dfTemp)
+    df = dfFiltered
+    df.reset_index()
+
+    #years to print capacity factor over
+    years = range(2019,2051)
+
+    #holds output data
+    outDataCF = [] # Capacity Factor
+    outDataAF = [] # Availability Factor
+
+    #map data
+    for year in years:
+        for i in range(len(df)):
+            region = 'NAmerica'
+            techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
+            tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
+            ts = df['TIMESLICE'].iloc[i]
+            value = df['CAPACITYFACTOR'].iloc[i]
+            value = round(value, 3)
+            if techMapped == 'HYD':
+                outDataAF.append([region,tech,ts,year,value])
+            else:
+                outDataCF.append([region,tech,ts,year,value])
+
+    #create and return dataframe for CAPACITY FACTOR
+    dfOutCF = pd.DataFrame(outDataCF, columns = ['REGION','TECHNOLOGY','TIMESLICE','YEAR','VALUE'])
+
+    if isCapacity: # Return Capacity Factor
+        return dfOutCF
+    else: # Return Availability Factor
+        dfAf = pd.DataFrame(outDataAF, columns = ['REGION','TECHNOLOGY','TIMESLICE','YEAR','VALUE'])
+        afTechs = dfAf['TECHNOLOGY'].to_list()
+        afTechs = list(set(afTechs))
+
+        outDataAF = [] 
+        for tech in afTechs:
+            dfTemp = dfAf.loc[dfAf['TECHNOLOGY'] == tech]
+            for year in years:
+                dfYear = dfTemp.loc[dfTemp['YEAR'] == year]
+                af = dfYear['VALUE'].mean()
+                af = round(af, 3)
+                outDataAF.append(['NAmerica',tech,year,af])
+        
+        # return dataframe for CAPACITY FACTOR
+        dfOutAF = pd.DataFrame(outDataAF, columns = ['REGION','TECHNOLOGY','YEAR','VALUE'])
+        return dfOutAF

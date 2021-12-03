@@ -1,6 +1,7 @@
 import pandas as pd
 import datetime
 import functions
+import usa_data_functions
 from collections import defaultdict
 
 def main():
@@ -42,7 +43,9 @@ def main():
     df = df.append(dfFossil)
 
     #Print capactiyFactor dataframe to a csv 
-    df.to_csv('../src/data/Canada/CapacityFactor.csv', index=False)
+    dfUsa = usa_data_functions.getCapacityOrAvailabilityFactor(True)
+    df = df.append(dfUsa)
+    df.to_csv('../src/data/CapacityFactor.csv', index=False)
     
 def renewableNinjaData(tech, regions, subregions, seasons, years):
     # PURPOSE: Takes a folder of CSVs created by renewable Ninja and formats a dataframe to hold all capacity factor values 

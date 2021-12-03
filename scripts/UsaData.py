@@ -102,7 +102,7 @@ def main():
         elif param == 'CapacityToActivityUnit':
             dfOut = getCapToActivityUnit()
         elif param == 'CapacityFactor':
-            dfOut = getCapacityFactor(techMap, df)
+            dfOut = getCapacityOrAvailabilityFactor(techMap, df)
         elif param == 'OperationalLife':
             dfOut = getOperationalLife(techMap, df)
         elif param == 'ResidualCapacity':
@@ -220,7 +220,7 @@ def getCapToActivityUnit():
     dfOut = pd.DataFrame(outData, columns = ['REGION','TECHNOLOGY', 'VALUE'])
     return dfOut
 
-def getCapacityFactor(techMap, df):
+def getCapacityOrAvailabilityFactor(techMap, df):
     # PURPOSE: Creates capacityFactor file from USA data
     # INPUT:   techMap =  dictionary mapping USA naming to our naming for technologies
     #                     df = raw data
