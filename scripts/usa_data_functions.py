@@ -855,7 +855,7 @@ def getCapToActivityUnit():
     return dfOut
 
 def getCapacityOrAvailabilityFactor(isCapacity):
-    # PURPOSE: Creates capacityFactor file from USA data
+    # PURPOSE: Creates CapacityFactor or AvailabilityFactor file from USA data
     # INPUT:   isCapacity = Boolean indicating Capacity Factor should be returned when True, and Availabiltiy Factor otherwise
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
