@@ -26,9 +26,11 @@ def main():
         #Cost type
         if trigger == 1:
             costType = ['CAPEX']
+            dfUsa = usa_data_functions.getCapitalCost()
             outFile = 'CapitalCost.csv'
         elif trigger == 2:
             costType = ['Fixed O&M']
+            dfUsa = usa_data_functions.getFixedCost()
             outFile = 'FixedCost.csv'
         elif trigger == 3:
             costType = ['Variable O&M', 'Fuel']

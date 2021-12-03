@@ -619,3 +619,159 @@ def getOperationalLife():
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','VALUE'])
     return dfOut
+
+def getCapitalCost():
+    # PURPOSE: Creates capitalCost file from USA data
+    # INPUT:   N/A
+    # OUTPUT:  dfOut = dataframe to be written to a csv
+
+    techMap = functions.openYaml().get('usa_tech_map')
+    df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'CapitalCost(r,t,y)')
+
+    #remove anything from years 2015 - 2018
+    df = df.loc[df['YEAR'] > 2018]
+    df.reset_index()
+
+    #Initialize filtered dataframe 
+    columns = list(df)
+    dfFiltered = pd.DataFrame(columns=columns)
+
+    #get rid of all techs we are not using 
+    for tech in techMap:
+        dfTemp = df.loc[df['TECHNOLOGY'] == tech]
+        dfFiltered = dfFiltered.append(dfTemp)
+
+    df = dfFiltered
+    df.reset_index()
+
+    #holds output data
+    outData = []
+
+    #map data
+    for i in range(len(df)):
+        region = 'NAmerica'
+        techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
+        tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
+        year = df['YEAR'].iloc[i]
+        value = df['CAPITALCOST'].iloc[i]
+        value = round(value, 3)
+        #Convert from $/kW to M$/GW
+
+        outData.append([region,tech,year,value])
+
+    #Get trade costs
+    dfCosts = pd.read_csv('../dataSources/USA_Trade.csv')
+
+    #Cost data only populated on mode 1 data rows
+    dfCosts = dfCosts.loc[dfCosts['MODE'] == 1]
+
+    # get list of all the technologies
+    techList = dfCosts['TECHNOLOGY'].tolist()
+
+    #Regions to print over
+    regions = ['NAmerica']
+
+    #cost types to get data for
+    costType = ['CAPEX']
+
+    #populate data
+    for region in regions:
+        for tech in techList:
+
+            #remove all rows except for our technology
+            dfCostsFiltered = dfCosts.loc[dfCosts['TECHNOLOGY']==tech]
+            dfCostsFiltered.reset_index()
+
+            #reset costs
+            trnCost = 0
+
+            #get costs
+            for cost in costType:
+                trnCost = trnCost + float(dfCostsFiltered[cost].iloc[0])
+
+            trnCost = round(trnCost,3)
+
+            #save same value for all years 
+            for year in range(2019,2051):
+                outData.append([region,tech,year,trnCost])
+
+    #create and return datafram
+    dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
+    return dfOut
+
+def getFixedCost():
+    # PURPOSE: Creates FixedCost file from USA data
+    # INPUT:   N/A
+    # OUTPUT:  dfOut = dataframe to be written to a csv
+
+    techMap = functions.openYaml().get('usa_tech_map')
+    df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'FixedCost(r,t,y)')
+
+    #remove anything from years 2015 - 2018
+    df = df.loc[df['YEAR'] > 2018]
+    df.reset_index()
+
+    #Initialize filtered dataframe 
+    columns = list(df)
+    dfFiltered = pd.DataFrame(columns=columns)
+
+    #get rid of all techs we are not using 
+    for tech in techMap:
+        dfTemp = df.loc[df['TECHNOLOGY'] == tech]
+        dfFiltered = dfFiltered.append(dfTemp)
+
+    df = dfFiltered
+    df.reset_index()
+
+    #holds output data
+    outData = []
+
+    #map data
+    for i in range(len(df)):
+        region = 'NAmerica'
+        techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
+        tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
+        year = df['YEAR'].iloc[i]
+        value = df['FIXEDCOST'].iloc[i]
+        value = round(value, 3)
+        outData.append([region,tech,year,value])
+
+    #Get trade costs
+    dfCosts = pd.read_csv('../dataSources/USA_Trade.csv')
+
+    #Cost data only populated on mode 1 data rows
+    dfCosts = dfCosts.loc[dfCosts['MODE'] == 1]
+
+    # get list of all the technologies
+    techList = dfCosts['TECHNOLOGY'].tolist()
+
+    #Regions to print over
+    regions = ['NAmerica']
+
+    #cost types to get data for
+    costType = ['Fixed O&M']
+
+    #populate data
+    for region in regions:
+        for tech in techList:
+
+            #remove all rows except for our technology
+            dfCostsFiltered = dfCosts.loc[dfCosts['TECHNOLOGY']==tech]
+            dfCostsFiltered.reset_index()
+
+            #reset costs
+            trnCost = 0
+
+            #get costs
+            for cost in costType:
+                trnCost = trnCost + float(dfCostsFiltered[cost].iloc[0])
+
+            trnCost = round(trnCost, 3)
+            #save same value for all years 
+            for year in range(2019,2051):
+                outData.append([region,tech,year,trnCost])
+
+
+    #create and return datafram
+    dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
+    return dfOut
