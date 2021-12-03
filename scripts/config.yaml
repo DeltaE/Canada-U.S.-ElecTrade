@@ -95,23 +95,4 @@ tech_to_fuel:
   'PV': 'SPV'      # Solar
   'NUC': 'URN'     # Nuclear
   'WINDPP': 'WND'  # Wind
-
-# dictionary holding excel sheet name to parameter names
-excel_to_parameter:
-  'SpecifiedAnnualDemand(r,f,y)': 'SpecifiedAnnualDemand'
-  'SpecifiedDemandProfile(r,f,l,y)': 'SpecifiedDemandProfile'
-  'CapacityToActivityUnit(r,t)': 'CapacityToActivityUnit'
-  'CapacityFactor(r,t,l,y)': 'CapacityFactor'
-  'OperationalLife(r,t)': 'OperationalLife'
-  'ResidualCapacity(r,t,y)': 'ResidualCapacity'
-  'InputActivityRatio(r,t,f,m,y)': 'InputActivityRatio'
-  'OutputActivityRatio(r,t,f,m,y)': 'OutputActivityRatio'
-  'CapitalCost(r,t,y)': 'CapitalCost'
-  'VariableCost(r,t,m,y)': 'VariableCost'
-  'FixedCost(r,t,y)': 'FixedCost'
-  'TotalAnnualMaxCapacity(r,t,y)': 'TotalAnnualMaxCapacity'
-  'ReserveMarginInTagTech(r,t,y)': 'ReserveMarginTagTechnology'
-  'ReserveMarginInTagFuel(r,f,y)': 'ReserveMarginTagFuel'
-  'ReserveMargin(r,y)': 'ReserveMargin'
-  'RETagTechnology(r,t,y)': 'RETagTechnology'
-  'EmisionActivityRatio(r,t,e,m,y)': 'EmissionActivityRatio'
+  
