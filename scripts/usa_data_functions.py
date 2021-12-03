@@ -825,3 +825,31 @@ def getEmissionActivityRatio():
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','EMISSION','MODE_OF_OPERATION','YEAR','VALUE'])
     return dfOut
+
+def getCapToActivityUnit():
+    # PURPOSE: Creates capacityToActivity file from USA data
+    # INPUT:   N/A
+    # OUTPUT:  dfOut = dataframe to be written to a csv
+
+    years, regions, emissions, techsMaster, rnwTechs, mineTechs, stoTechs, countries = functions.initializeCanadaUsaModelParameters('USA')
+    techs, dummy = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', 0)
+
+    #This one is easier to manually do...
+    outData = []
+
+    # unit conversion from GWyr to PJ
+    # 1 GW (1 TW / 1000 GW)*(1 PW / 1000 TW)*(8760 hrs / yr)*(3600 sec / 1 hr) = 31.536
+    # If 1 GW of capacity works constantly throughout the year, it produced 31.536 PJ
+    capToAct = 31.536
+
+    #Technologies to print over
+    df = pd.read_csv('../src/data/USA/TECHNOLOGY.csv')
+    techs = df['VALUE'].tolist()
+
+    #populate list
+    for tech in techs:
+        outData.append(['NAmerica', tech, capToAct])
+
+    #create and return datafram
+    dfOut = pd.DataFrame(outData, columns = ['REGION','TECHNOLOGY', 'VALUE'])
+    return dfOut

@@ -76,8 +76,10 @@ def main():
             data.append([region, tech, capToAct])
 
     #write to csv
-    dfout = pd.DataFrame(data,columns=['REGION','TECHNOLOGY','VALUE'])
-    dfout.to_csv('../src/data/Canada/CapacityToActivityUnit.csv', index=False)
+    dfOut = pd.DataFrame(data,columns=['REGION','TECHNOLOGY','VALUE'])
+    dfUsa = usa_data_functions.getCapToActivityUnit()
+    dfOut = dfOut.append(dfUsa)
+    dfOut.to_csv('../src/data/CapacityToActivityUnit.csv', index=False)
 
 if __name__ == "__main__":
     main()  
