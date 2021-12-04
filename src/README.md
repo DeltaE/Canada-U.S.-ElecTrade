@@ -12,7 +12,7 @@ A [snakemake](https://snakemake.readthedocs.io/en/stable/) workflow has been imp
 The snakemake file, the 'snakefile' also lists the relationships between raw data files in the dataSources folder, the scripts, and the processed files in the src/data folder.
 
 ## 4. data folder 
-Contains CSV files that hold all parameter data in seperate files 
+Contains CSV files that holds all parameter data
 
 ## 5. datapackage.json file 
 Used by [otoole](https://github.com/OSeMOSYS/otoole) to create the datafile from the folder of CSVs
