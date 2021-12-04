@@ -2,6 +2,7 @@ import pandas as pd
 import os
 import numpy as np
 import functions
+import usa_data_functions
 
 def main():
     # PURPOSE: Creates otoole formatted CapacityToActivityUnit CSV. Assumes all usints are in GW and PJ  
