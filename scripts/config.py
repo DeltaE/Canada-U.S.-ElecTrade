@@ -51,9 +51,8 @@ def main():
     ## CREATE TECHNOLOGY SET
     ####################################
 
-    # outputTechs is unused here
-    outputTechs, canadaDfOut = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', True)
-    outputTechs, usaDfOut = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', False)
+    canadaDfOut = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', True)
+    usaDfOut = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', False)
     df = canadaDfOut.append(usaDfOut)
     df.to_csv('../src/data/TECHNOLOGY.csv')
 

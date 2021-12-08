@@ -308,7 +308,7 @@ def createFuelSet(countries, rnwTechs, mineTechs, generateInternational):
     #          mineTechs = List of the technologies to print over for getMINfuels
     #          generateInternational = True/False for whether getMINfuels function needs to create all
     #                                  technology names for international import/export
-    # OUTPUT:  dfOut = CSV datafile
+    # OUTPUT:  dfOut = fuel set dataframe
 
     # Renewable fuels
     rnwFuelList = getRNWfuels(countries, rnwTechs)
@@ -322,7 +322,7 @@ def createFuelSet(countries, rnwTechs, mineTechs, generateInternational):
     #Hydrogen Fuels
     #hy2FuelList = getHY2fuels(countries)
 
-    #Append lists together and write to a csv
+    #Append lists together and write to a dataframe
     #outputFuels = rnwFuelList + minFuelList + elcFuelList + hy2FuelList
     outputFuels = rnwFuelList + minFuelList + elcFuelList
     dfOut = pd.DataFrame(outputFuels, columns=['VALUE'])
@@ -338,8 +338,7 @@ def createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsv
     #          trnTechsCsvPath = Trade csv datafile location
     #          generateInternational = True/False for whether function should
     #                                  create all international mining techs
-    # OUTPUT:  outputTechs = All technology lists appended together
-    #          dfOut = CSV datafile
+    # OUTPUT:  dfOut = fuel set dataframe
     # get power generator technology list 
     pwrList = getPWRtechs(countries, techsMaster)
 
@@ -355,16 +354,15 @@ def createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsv
     # get trade technology list 
     trnList = getTRNtechs(trnTechsCsvPath)
 
-    #Append lists together and write to a csv
+    #Append lists together and write to a dataframe
     outputTechs = pwrList + pwrTrnList + minList + rnwList + trnList
     dfOut = pd.DataFrame(outputTechs, columns=['VALUE'])
 
-    return outputTechs, dfOut
+    return dfOut
 
 def createTechLists(techsMaster, rnwTechs, mineTechs, stoTechs):
     # PURPOSE: Merges several tech lists into 'data' so that they can be printed over
-    # INPUT:   countries = Dictionary holding countries as the key and subregion as the values in a list
-    #          techsMaster = List of the technologies to print over for power techs
+    # INPUT:   techsMaster = List of the technologies to print over for power techs
     #          rnwTechs = List of the technologies to print over for renewable techs
     #          mineTechs = List of the technologies to print over for mining techs
     #          stoTechs = List of the technologies to print over for storage techs

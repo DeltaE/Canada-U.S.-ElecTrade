@@ -83,7 +83,7 @@ def getVariableCost():
             trnCost = round(trnCost, 3)
 
             #save same value for all years 
-            for year in range(2019,2051):
+            for year in functions.getYears():
                 outData.append([region,tech,1,year,trnCost])
                 outData.append([region,tech,2,year,trnCost])
 
@@ -163,7 +163,7 @@ def getRETagTechnology():
 
     #easier to do this one manually 
     techs = ['HYD','WND','BIO','SPV']
-    years = range(2019,2051)
+    years = functions.getYears()
 
     outData = []
 
@@ -227,7 +227,7 @@ def getResidualCapacity():
         dfResCapTrd.reset_index()
         resCapTrd = dfResCapTrd['CAPACITY (GW)'].iloc[0]
         resCapTrd = round(float(resCapTrd),3)
-        for year in range(2019,2051):
+        for year in functions.getYears():
           outData.append([region, tech, year, resCapTrd])
 
     #create and return dataframe
@@ -256,7 +256,7 @@ def getReserveMarginTagTechnology():
 
     #populate data 
     for techOld in techMap:
-        for year in range(2019,2051):
+        for year in functions.getYears():
             for subregion in subregions:
                 region = 'NAmerica'
                 techMapped = techMap[techOld]
@@ -389,7 +389,7 @@ def getReserveMarginTagFuel():
     outData=[]
 
     #populate data 
-    for year in range(2019,2051):
+    for year in functions.getYears():
         for region in regions:
             fuel = 'ELC' + 'USA' + region + '01'
             value = reserveMargin[region]
@@ -407,7 +407,7 @@ def getReserveMargin():
     #this one is easier to manually do...
     outData = []
 
-    for year in range(2019,2051):
+    for year in functions.getYears():
         outData.append(['NAmerica',year,1])
 
     #create and return datafram
@@ -430,7 +430,7 @@ def getOutputActivityRatio():
     outData = []
 
     #year to print over
-    years = range(2019,2051)
+    years = functions.getYears()
 
     #renewables
     for year in years:
@@ -481,7 +481,7 @@ def getOutputActivityRatio():
     #OAR for transmission
     dfTrn = pd.read_csv('../dataSources/USA_Trade.csv')
     for region in ['NAmerica']:
-        for year in range(2019,2051):
+        for year in functions.getYears():
             for i in range(len(dfTrn)):
                 techName = dfTrn.iloc[i]['TECHNOLOGY']
                 outFuel = dfTrn.iloc[i]['OUTFUEL']
@@ -548,7 +548,7 @@ def getInputActivityRatio():
     #DONE IN CANADA SCRIPTS
     #Create input activity ration of international trade
     #for rawFuel in intFuel:
-    #    for year in range(2019,2051):
+    #    for year in functions.getYears():
     #        region = 'NAmerica'
     #        tech = 'MIN' + rawFuel + 'INT'
     #        fuel = rawFuel
@@ -557,7 +557,7 @@ def getInputActivityRatio():
 
     # IAR for PWRTRN technologies
     for subregion in subregions['USA']:
-        for year in range(2019,2051):
+        for year in functions.getYears():
             region = 'NAmerica'
             techName = 'PWR' + 'TRN' + 'USA' + subregion
             fuelIn = 'ELC' + 'USA' + subregion + '01'
@@ -566,7 +566,7 @@ def getInputActivityRatio():
     #IAR for transmission
     dfTrn = pd.read_csv('../dataSources/USA_Trade.csv')
     for region in ['NAmerica']:
-        for year in range(2019,2051):
+        for year in functions.getYears():
             for i in range(len(dfTrn)):
                 techName = dfTrn.iloc[i]['TECHNOLOGY']
                 inFuel = dfTrn.iloc[i]['INFUEL']
@@ -692,7 +692,7 @@ def getCapitalCost():
             trnCost = round(trnCost,3)
 
             #save same value for all years 
-            for year in range(2019,2051):
+            for year in functions.getYears():
                 outData.append([region,tech,year,trnCost])
 
     #create and return datafram
@@ -768,7 +768,7 @@ def getFixedCost():
 
             trnCost = round(trnCost, 3)
             #save same value for all years 
-            for year in range(2019,2051):
+            for year in functions.getYears():
                 outData.append([region,tech,year,trnCost])
 
 
@@ -786,7 +786,7 @@ def getEmissionActivityRatio():
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'EmisionActivityRatio(r,t,e,m,y)')
 
     #Only defined for year 2015
-    years = range(2019,2051)
+    years = functions.getYears()
 
     #Initialize filtered dataframe 
     columns = list(df)
@@ -832,7 +832,6 @@ def getCapToActivityUnit():
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
     years, regions, emissions, techsMaster, rnwTechs, mineTechs, stoTechs, countries = functions.initializeCanadaUsaModelParameters('USA')
-    techs, dummy = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', 0)
 
     #This one is easier to manually do...
     outData = []
@@ -878,7 +877,7 @@ def getCapacityOrAvailabilityFactor(isCapacity):
     df.reset_index()
 
     #years to print capacity factor over
-    years = range(2019,2051)
+    years = functions.getYears()
 
     #holds output data
     outDataCF = [] # Capacity Factor
