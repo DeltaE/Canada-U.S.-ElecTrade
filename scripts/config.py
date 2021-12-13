@@ -54,7 +54,7 @@ def main():
     canadaDfOut = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', True)
     usaDfOut = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', False)
     df = canadaDfOut.append(usaDfOut)
-    df.to_csv('../src/data/TECHNOLOGY.csv')
+    df.to_csv('../src/data/TECHNOLOGY.csv', index=False)
 
     ####################################
     ## CREATE FUEL SET
@@ -63,28 +63,11 @@ def main():
     canadaDfOut = functions.createFuelSet(countries, rnwTechs, mineTechs, True)
     usaDfOut = functions.createFuelSet(countries, rnwTechs, mineTechs, False)
     df = canadaDfOut.append(usaDfOut)
-    df.to_csv('../src/data/FUEL.csv')
+    df.to_csv('../src/data/FUEL.csv', index=False)
 
     ####################################
     ## Extra Functions
     ####################################
-
-def getHY2fuels(regions):
-    # PURPOSE: Creates Hydrogen Fuel names
-    # INPUT:   regions =  Dictionary holding region as the key and subregion as the values in a list
-    # OUTPUT:  outList =  List of all the ELC Fuels 
-
-    # list to hold technologies
-    outList = []
-
-    # Loop to create all technology names
-    for region, subregions in regions.items():
-        for subregion in subregions:
-            fuelName = 'HY2' + region + subregion + '01'
-            outList.append(fuelName)
-    
-    # Return list of hydrogen fuels
-    return outList
 
 def getSTO(regions, storages):
     # PURPOSE: Creates storage names
@@ -106,6 +89,25 @@ def getSTO(regions, storages):
     
     # Return list of hydrogen fuels
     return outList
+
+'''
+def getHY2fuels(regions):
+    # PURPOSE: Creates Hydrogen Fuel names
+    # INPUT:   regions =  Dictionary holding region as the key and subregion as the values in a list
+    # OUTPUT:  outList =  List of all the ELC Fuels 
+
+    # list to hold technologies
+    outList = []
+
+    # Loop to create all technology names
+    for region, subregions in regions.items():
+        for subregion in subregions:
+            fuelName = 'HY2' + region + subregion + '01'
+            outList.append(fuelName)
+    
+    # Return list of hydrogen fuels
+    return outList
+'''
 
 if __name__ == "__main__":
     main()  

@@ -1,6 +1,5 @@
 import pandas as pd
 import functions
-import usa_data_functions
 
 def main():
     # PURPOSE: Creates an otoole formatted CSV holding availability factors for Hydro. If Hydro Availability Factors are used, be sure to remove hydro capacity factor  
@@ -84,7 +83,7 @@ def main():
     ###########################################
 
     df = pd.DataFrame(outData, columns = ['REGION','TECHNOLOGY','YEAR','VALUE'])
-    dfUsa = usa_data_functions.getCapacityOrAvailabilityFactor(False)
+    dfUsa = functions.getUsaCapacityOrAvailabilityFactor(False)
     df = df.append(dfUsa)
     df.to_csv('../src/data/AvailabilityFactor.csv', index=False)
 

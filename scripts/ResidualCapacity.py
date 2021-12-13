@@ -3,7 +3,6 @@ import os
 import numpy as np
 from collections import defaultdict
 import functions
-import usa_data_functions
 
 def main():
     # PURPOSE: Creates otoole formatted operational life and residual capacity data CSVs.  
@@ -69,7 +68,7 @@ def main():
 
     #write operational life to a csv
     dfOut = pd.DataFrame(opLifeData,columns=['REGION','TECHNOLOGY','VALUE'])
-    dfOutUsa = usa_data_functions.getOperationalLife()
+    dfOutUsa = getUsaOperationalLife()
     dfOut = dfOut.append(dfOutUsa)
     dfOut.to_csv('../src/data/OperationalLife.csv', index=False)
 
@@ -133,9 +132,107 @@ def main():
 
     #wrirte to a csv 
     dfOut = pd.DataFrame(resCapData,columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
-    dfUsa = usa_data_functions.getResidualCapacity()
+    dfUsa = getUsaResidualCapacity()
     dfOut = dfOut.append(dfUsa)
     dfOut.to_csv('../src/data/ResidualCapacity.csv', index=False)
+
+def getUsaResidualCapacity():
+    # PURPOSE: Creates residualCapacity file from USA data
+    # INPUT:   N/A
+    # OUTPUT:  dfOut = dataframe to be written to a csv
+
+    techMap = functions.openYaml().get('usa_tech_map')
+    df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'ResidualCapacity(r,t,y)')
+
+    #remove anything from years 2015 - 2018
+    df = df.loc[df['YEAR'] > 2018]
+    df.reset_index()
+
+    #Initialize filtered dataframe 
+    columns = list(df)
+    dfFiltered = pd.DataFrame(columns=columns)
+
+    #get rid of all techs we are not using 
+    for tech in techMap:
+        dfTemp = df.loc[df['TECHNOLOGY'] == tech]
+        dfFiltered = dfFiltered.append(dfTemp)
+
+    df = dfFiltered
+    df.reset_index()
+
+    #holds output data
+    outData = []
+
+    #map data
+    for i in range(len(df)):
+        region = 'NAmerica'
+        techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
+        tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
+        year = df['YEAR'].iloc[i]
+        value = df['RESIDUALCAPACITY'].iloc[i]
+        value = round(value,3)
+        outData.append([region,tech,year,value])
+
+    #Transmission Residual Capacity
+    dfTrade = pd.read_csv('../dataSources/USA_Trade.csv')
+    techListTrade = dfTrade['TECHNOLOGY'].tolist()
+    techListTrade = list(set(techListTrade)) #remove duplicates
+
+    for region in ['NAmerica']:
+      for tech in techListTrade:
+        dfResCapTrd = dfTrade.loc[(dfTrade['TECHNOLOGY'] == tech) & 
+                                  (dfTrade['MODE'] == 1)]
+        dfResCapTrd.reset_index()
+        resCapTrd = dfResCapTrd['CAPACITY (GW)'].iloc[0]
+        resCapTrd = round(float(resCapTrd),3)
+        for year in functions.getYears():
+          outData.append([region, tech, year, resCapTrd])
+
+    #create and return dataframe
+    dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
+    return dfOut
+
+def getUsaOperationalLife():
+    # PURPOSE: Creates opertionalLife file from USA data
+    # INPUT:   N/A
+    # OUTPUT:  dfOut = dataframe to be written to a csv
+
+    techMap = functions.openYaml().get('usa_tech_map')
+    df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'OperationalLife(r,t)')
+
+    #Initialize filtered dataframe 
+    columns = list(df)
+    dfFiltered = pd.DataFrame(columns=columns)
+
+    #get rid of all techs we are not using 
+    for tech in techMap:
+        dfTemp = df.loc[df['TECHNOLOGY'] == tech]
+        dfFiltered = dfFiltered.append(dfTemp)
+
+    df = dfFiltered
+    df.reset_index()
+
+    #holds output data
+    outData = []
+
+    #map data
+    for i in range(len(df)):
+        region = 'NAmerica'
+        techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
+        tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
+        value = df['OPERATIONALLIFE'].iloc[i]
+        outData.append([region,tech,value])
+
+    #Transmission operational life 
+    dfTrade = pd.read_csv('../dataSources/USA_Trade.csv')
+    techListTrade = dfTrade['TECHNOLOGY'].tolist()
+    techListTrade = list(set(techListTrade)) #remove duplicates
+    for tech in techListTrade:
+        outData.append(['NAmerica',tech,100])
+
+    #create and return datafram
+    dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','VALUE'])
+    return dfOut
 
 if __name__ == "__main__":
     main()
