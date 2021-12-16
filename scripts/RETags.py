@@ -45,7 +45,7 @@ def getUsaRETagTechnology():
     # INPUT:   none
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
-    dummy, regions, emissions, techsMaster, rnwTechs, mineTechs, stoTechs, subregions = functions.initializeCanadaUsaModelParameters('USA')
+    subregions = functions.getRegionDictionary('USA')
 
     #easier to do this one manually 
     techs = ['HYD','WND','BIO','SPV']

@@ -17,8 +17,11 @@ def main():
     # Regions to print over
     regions = functions.openYaml().get('regions')
 
-    # Retrieve Canada-Only Technologies to print over
-    years, dummy, emissions, techsMaster, rnwTechs, mineTechs, stoTechs, countries = functions.initializeCanadaUsaModelParameters('CAN')
+    techsMaster = functions.openYaml().get('techs_master')
+    rnwTechs = functions.openYaml().get('rnw_techs')
+    mineTechs = functions.openYaml().get('mine_techs')
+    countries = functions.getRegionDictionary('CAN')
+
     df = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', True)
     technologies = df['VALUE'].tolist()
 
@@ -85,7 +88,10 @@ def getUsaCapToActivityUnit():
     # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
-    years, regions, emissions, techsMaster, rnwTechs, mineTechs, stoTechs, countries = functions.initializeCanadaUsaModelParameters('USA')
+    techsMaster = functions.openYaml().get('techs_master')
+    rnwTechs = functions.openYaml().get('rnw_techs')
+    mineTechs = functions.openYaml().get('mine_techs')
+    countries = functions.getRegionDictionary('USA')
 
     #This one is easier to manually do...
     outData = []

@@ -153,7 +153,7 @@ def getUsaOutputActivityRatio():
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
     techMap = functions.openYaml().get('usa_tech_map')
-    dummy, regions, emissions, techsMaster, rnwTechs, mineTechs, stoTechs, subregions = functions.initializeCanadaUsaModelParameters('USA')
+    subregions = functions.getRegionDictionary('USA')
 
     #Fuels that have international trade options
     intFuel = ['GAS','COA','URN']
@@ -233,7 +233,7 @@ def getUsaInputActivityRatio():
 
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'InputActivityRatio(r,t,f,m,y)')
     techMap = functions.openYaml().get('usa_tech_map')
-    dummy, regions, emissions, techsMaster, rnwTechs, mineTechs, stoTechs, subregions = functions.initializeCanadaUsaModelParameters('USA')
+    subregions = functions.getRegionDictionary('USA')
     inputFuelMap = functions.openYaml().get('tech_to_fuel')
 
     #remove anything from years 2015 - 2018

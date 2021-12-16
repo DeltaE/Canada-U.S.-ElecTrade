@@ -10,7 +10,14 @@ def main():
     ## MODEL PARAMETERS
     ####################################
 
-    years, regions, emissions, techsMaster, rnwTechs, mineTechs, stoTechs, countries = functions.initializeCanadaUsaModelParameters('CAN')
+    regions = functions.openYaml().get('regions')
+    emissions = functions.openYaml().get('emissions')
+    techsMaster = functions.openYaml().get('techs_master')
+    rnwTechs = functions.openYaml().get('rnw_techs')
+    mineTechs = functions.openYaml().get('mine_techs')
+    stoTechs = functions.openYaml().get('sto_techs')
+    years = functions.getYears()
+    countries = functions.getRegionDictionary('CAN')
 
     #######################################
     ## CREATE TECH LISTS FOR OTHER SCRIPTS

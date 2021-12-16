@@ -384,27 +384,12 @@ def createTechLists(techsMaster, rnwTechs, mineTechs, stoTechs):
     
     return data
 
-def initializeCanadaUsaModelParameters(topLevelRegion):
-    # PURPOSE: Initializes necessary parameters for config.py and UsaData.py, which create
-    # Tech and Fuel sets for Canada and the US, respectively
+def getRegionDictionary(topLevelRegion):
+    # PURPOSE: Returns a dictionary for either the CAN or USA region, with the
+    # region as the key and the list of subregions as the value
     # INPUT:   topLevelRegion = String indicating region: 'CAN' or 'USA'
-    # OUTPUT:  years = List from 2019 to 2051
-    #          regions = List for regions
-    #          emissions = List for CO2 emissions
-    #          techsMaster = List for power technologies
-    #          rnwTechs = List for renewable technologies
-    #          mineTechs = List for mining technologies
-    #          stoTechs = List for storage technologies
-    #          countries = Dictionary for holding countries as the key and subregion as the values in a list
-    # get power generator technology list 
-
-    regions = openYaml().get('regions')
-    emissions = openYaml().get('emissions')
-    techsMaster = openYaml().get('techs_master')
-    rnwTechs = openYaml().get('rnw_techs')
-    mineTechs = openYaml().get('mine_techs')
-    stoTechs = openYaml().get('sto_techs')
-    years = getYears()
+    # OUTPUT:  countries = Dictionary for holding countries as the key and
+    # subregion as the values in a list  
 
     #Countries and subregions in the model
     countries = {
@@ -419,7 +404,7 @@ def initializeCanadaUsaModelParameters(topLevelRegion):
     regionList = list(set(regionList)) # remove duplicates
     countries[topLevelRegion] = regionList # save to dictionary
     
-    return years, regions, emissions, techsMaster, rnwTechs, mineTechs, stoTechs, countries
+    return countries
 
 def getUsaCapacityOrAvailabilityFactor(isCapacity):
     # PURPOSE: Creates CapacityFactor or AvailabilityFactor file from USA data
