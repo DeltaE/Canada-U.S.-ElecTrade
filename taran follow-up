@@ -1,0 +1,1075 @@
+[33mcommit 7290bd8eb079298293a09066bf9dba68958e9596[m[33m ([m[1;36mHEAD -> [m[1;32mremove-merge[m[33m)[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Fri Dec 17 06:32:18 2021 -0800
+
+    removed initializeCanadaUsaModelParameters function
+
+[33mcommit 56da9ec0ead996aafd03955438874426d9fad2df[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Fri Dec 17 05:47:23 2021 -0800
+
+    removed usa_data_functions.py
+
+[33mcommit b3c00b6a71821fd7fd1918441f069a8517e976db[m[33m ([m[1;31morigin/remove-merge[m[33m)[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Wed Dec 8 09:56:23 2021 -0800
+
+    first set of code review changes
+
+[33mcommit e1396cba4b446b161c814b5bd128bd5a9710becf[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Fri Dec 3 22:00:09 2021 -0700
+
+    updated relevant README
+
+[33mcommit de0a9ae7a8f0b84d4ff95dc694779df9d467f96e[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Fri Dec 3 21:57:33 2021 -0700
+
+    automatic additions of previously removed files
+
+[33mcommit 6696fa764be71fd55999bd428bb476ce2ca1e96f[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Fri Dec 3 21:44:23 2021 -0700
+
+    added import usa_data_functions to CapacityToActivity.py
+
+[33mcommit 4cabc6dcd66cfac0f463e0e095f207d5306290de[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Fri Dec 3 21:24:40 2021 -0700
+
+    fixed formatting bug in config.yaml. this commit may come with some partial run deletions that will hopefully be corrected automatically
+
+[33mcommit 728186ffa8ff9b7f3e0ab3926b59f7e5d0f3b5db[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Fri Dec 3 14:39:38 2021 -0700
+
+    removed excel_to_parameter from yaml
+
+[33mcommit e4e5a0e00e01c7be9c35203269fe945bfd4363af[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Fri Dec 3 14:23:08 2021 -0700
+
+    removed Canada folder, USA folder, merge python file, and UsaData python file
+
+[33mcommit 393f4f875f3d75278c6a407b7f6350b64600f2ea[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Fri Dec 3 13:59:34 2021 -0700
+
+    removed references to Canada and USA folders, in particular in the snakefile
+
+[33mcommit 255bf5d5918ab5b3501efc74da8c99c04d217cd6[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Fri Dec 3 13:39:11 2021 -0700
+
+    usa_data_functions.py function description correction
+
+[33mcommit 24dbe4904775f78ad9281563f347f13eec084829[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Fri Dec 3 13:05:46 2021 -0700
+
+    removed USA merging process from CapacityFactor and ActivityFactor
+
+[33mcommit 57e5df407da2a78554f08a9faa4907c9678b0149[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Thu Dec 2 20:01:02 2021 -0700
+
+    removed USA merging process from CapacityToActivity
+
+[33mcommit 84a501a3811fb1db9b6dbae007e9482c19905582[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Thu Dec 2 19:46:46 2021 -0700
+
+    removed USA merging process from EmissionActivityRatio
+
+[33mcommit b0eb4253872abf1bc7e91871aacc2277f2cfc1f5[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Thu Dec 2 19:25:57 2021 -0700
+
+    removed USA merging process from FixedCost and CapitalCost
+
+[33mcommit a71bcd541caeb9fd0ae4e2a177d345a55a0ef10b[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Thu Dec 2 15:27:09 2021 -0700
+
+    fixed mistaken incorrect functions in a few added files
+
+[33mcommit 8bf59f698c9370cb8ddd65b40a11d053240c48be[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Thu Dec 2 15:03:30 2021 -0700
+
+    removed USA merging process from OperationalLife
+
+[33mcommit dd78c628c79a38bb64fa1122e3a34e44142bf08f[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Thu Dec 2 14:45:21 2021 -0700
+
+    removed USA merging process from OutputActivityRatio and InputActivityRatio
+
+[33mcommit 31a0cacce1ee77adbcc0e46851235285baa3e76b[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Thu Dec 2 13:59:20 2021 -0700
+
+    removed USA merging process from ResidualCapacity and ReserveMargin
+
+[33mcommit fa86bfd5e7da608351562d33442d06c73db3cc6f[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Thu Dec 2 13:24:09 2021 -0700
+
+    removed USA merging process from RETags
+
+[33mcommit 3697a4e1b3778e66fe8a4ab37c856e800747a7c0[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Thu Dec 2 13:01:07 2021 -0700
+
+    removed USA merging process from SpecifiedAnnualDemand
+
+[33mcommit 4d74d4b4c8e6c58d8be71e86cf026f9f55bce9d2[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Thu Dec 2 11:35:33 2021 -0700
+
+    removed USA merging process from SpecifiedDemandProfile
+
+[33mcommit 57218271893301b4b1ab4d057fe6a88eb0aa857f[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Thu Dec 2 11:05:55 2021 -0700
+
+    removed USA merging process from FUEL CSV
+
+[33mcommit 067058f558fa2231acf363bb3fe907b70294519b[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Wed Dec 1 17:12:22 2021 -0700
+
+    removed USA merging process from TECHNOLOGY CSV
+
+[33mcommit 6708c175a7e57fcae2634dc5763a5dcccc7d7eb5[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Wed Dec 1 16:20:12 2021 -0700
+
+    removed USA merging process from TotalAnnualMaxCapacity, added new file and snakefile rule for it
+
+[33mcommit eee5ea9a1de2de0518720f9ba76471b2ca1e296c[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Wed Dec 1 15:20:20 2021 -0700
+
+    removed USA merging process from VariableCost
+
+[33mcommit b8c0c44b32718a0bafa13fcf219771ec72ddd773[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Wed Dec 1 15:08:50 2021 -0700
+
+    added UsaData.py information to config.yaml
+
+[33mcommit 7318d197d85495e8c18070210afb5022ee8255fc[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Wed Dec 1 14:03:47 2021 -0700
+
+    added new file called usa_data_functions.py
+
+[33mcommit 4f6fc4bf5d5f5f2886c01c730e6afca4c610c5a9[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Wed Dec 1 13:40:10 2021 -0700
+
+    removed Canada folder references from config.py file
+
+[33mcommit 7a9a803ff6a84c3dfeb47beec9739a92d647b84a[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Wed Dec 1 13:11:03 2021 -0700
+
+    added comment suggesting need of deletion of some snakefile rules
+
+[33mcommit 286e642fc2524ae6b3ab3fa59d9d4f5ee0ac53cf[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Wed Dec 1 12:45:17 2021 -0700
+
+    removed getTotalAnnualMaxCapacity function
+
+[33mcommit fde8b97b6ef01e28ccd979b59cf548d732e36743[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mmain[m[33m, [m[1;32madd-config-yaml[m[33m)[m
+Merge: 5912fea 85b5cfe
+Author: trevorb1 <67297083+trevorb1@users.noreply.github.com>
+Date:   Wed Nov 10 10:45:40 2021 -0800
+
+    Merge pull request #72 from DeltaE/add-config-yaml
+    
+    Add config yaml
+
+[33mcommit 85b5cfebea6af3fa72532a98f1dc9f99c98c6bd2[m[33m ([m[1;31morigin/add-config-yaml[m[33m)[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Wed Nov 10 08:18:39 2021 -0800
+
+    renamed variavle, commented out lines that aren't yet being used, removed a function from CapacityFactor.py, moved two constants back into AvailabilityFactor.py
+
+[33mcommit 4e3113a7efe9a7b789c49d6be70c1becc0588fe2[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Tue Nov 9 14:52:44 2021 -0800
+
+    pull request changes
+
+[33mcommit 7d582ba5aa5d5224db303d96dd4eefe5dc4d8623[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Tue Nov 9 11:45:39 2021 -0800
+
+    added significant number of changes, which for some reason were not previously being added with git add ., I had to use git add --all instead
+
+[33mcommit e931b9175947f842ce2954004a0a77c75b53390e[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Tue Nov 9 11:33:49 2021 -0800
+
+    renamed more lists and dictionaries as constants, and updated several model parameter initializations
+
+[33mcommit d54f25b796ba701c487f3091476102aaace74421[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Tue Nov 9 10:42:24 2021 -0800
+
+    added constants section to functions.py for non configurable constants, including time zones, hydro capacity, and hydro generation
+
+[33mcommit 47ee6d66f60d2844f275a81a1f86a63f3caacbb5[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Tue Nov 9 10:17:43 2021 -0800
+
+    reduced the size of initializeCanadaUsaModelParamaters() further using the yaml file, but decided to keep the function
+
+[33mcommit 84372a14362133e4946b517be72e4c3ab779b5fe[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Mon Nov 8 17:00:08 2021 -0800
+
+    added the most obvious yaml imports to initializeCanadaUsaModelParameters function, in preperation for probably removing it
+
+[33mcommit bcebabedf752ae157d34b7a458fe9b6e36f5f24f[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Mon Nov 8 16:36:49 2021 -0800
+
+    removed all small setup functions that are no longer especially useful with the new yaml file
+
+[33mcommit 2f3e4e92b85957e5afc624dd1bfe7357f77e0ecf[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Mon Nov 8 16:24:00 2021 -0800
+
+    added regions, subregions list, subregions dictionary, years, and storages to the yaml file
+
+[33mcommit 85b253afa2596d7074dd9b0d994f54ec08f56422[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Fri Nov 5 16:02:18 2021 -0700
+
+    removed total energy capacity from inData dictionary variable in AvailabilityFactor.py and CapacityFactor.py
+
+[33mcommit b70ababa912932c459e66c398b21c638da1a1b13[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Fri Nov 5 15:51:35 2021 -0700
+
+    recapitalization of two variables, as they should be considered constants
+
+[33mcommit 89b3a1e770b86f74822cb482c393c2c7626003a1[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Thu Nov 4 14:58:11 2021 -0700
+
+    added seasons to the .yaml file
+
+[33mcommit e41482948ef85010fa67c90a9233447edfd2b0da[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Thu Nov 4 13:59:45 2021 -0700
+
+    added openYaml() function, which returns the configured config.yaml file
+
+[33mcommit 5912fea5e4defa784d36cf8c59e440fac250f289[m
+Merge: 2b2c08d 6bee0af
+Author: trevorb1 <67297083+trevorb1@users.noreply.github.com>
+Date:   Thu Nov 4 12:27:09 2021 -0700
+
+    Merge pull request #68 from DeltaE/adding-to-functions-file
+    
+    Adding to functions file
+
+[33mcommit 6bee0afe7b90870aad48cba0848092878266790c[m[33m ([m[1;31morigin/adding-to-functions-file[m[33m)[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Thu Nov 4 09:51:04 2021 -0700
+
+    pull request fixes
+
+[33mcommit f4d6b46773ddf9ce474f40bb21eb296a782d1353[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Mon Nov 1 22:01:08 2021 -0700
+
+    added initialization functions to the remainder of the script files
+
+[33mcommit f0fbdb2e9deaa7e21475a8138bfdd4bc8f02c853[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Mon Nov 1 19:30:31 2021 -0700
+
+    added more initialization functions in order to simplify StorageLife and TechToFromStorage
+
+[33mcommit 09297f728f38a491cd1ff82ed43a3c614c6b4541[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Mon Nov 1 16:55:05 2021 -0700
+
+    broke down initializeTemporalParameters into constituent parts (seasons and years), and continued adding these smaller initilization functions to different scripts.
+
+[33mcommit f01bbb538239996c8a5f113351e00db30fe8a9b4[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Fri Oct 29 17:08:20 2021 -0700
+
+    ACTUALLY broke down initializeSpatialParameters into constituent parts (regions and subregions), and started adding these smaller initilization functions to different scripts. Previous commit contained no changes
+
+[33mcommit 8a2e419055e3558684c3a8ba40ac0b1da37e2436[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Fri Oct 29 16:03:45 2021 -0700
+
+    renamed initializeSpatialFactorParameters and initializeTemporalFactorParametersto something more general, and added the former to ResidualCapacity.py and ReserveMargin.py
+
+[33mcommit a417746227f4114e3cf7dc349b1b2754e99df2ec[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Fri Oct 29 15:12:50 2021 -0700
+
+    added documentation to several functions on request for code review, continued refactoring
+
+[33mcommit 9008769776e23e3ee958fb9bb2967becdb531d8c[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Fri Oct 29 14:22:07 2021 -0700
+
+    broke down initializeFactorParameters function into two separate temporal and spatial functions, did code review refactoring
+
+[33mcommit 7953bc1e6c1f5de0de29e82c8f3f050ae0338d95[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Thu Oct 28 18:12:12 2021 -0700
+
+    fixed bug caused by improperly using Canada/Non-Canada specifying parameter
+
+[33mcommit e0ee2b5738eb848420da58e0b1c020a8ae7d9434[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Tue Oct 26 23:07:44 2021 -0700
+
+    collapsed duplicate functions in UsaData.py and config.py into single set of functions in functions.py
+
+[33mcommit e837e5d6f69dc9b373c1eecca3cb78a4e12eff1b[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Mon Oct 25 10:51:46 2021 -0700
+
+    Changed name of factorParametersSetup to initializeFactorParameters
+
+[33mcommit c015e804571fb456d9b30f0bcc5961b8f5576858[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Mon Oct 25 10:35:42 2021 -0700
+
+    Added factorParametersSetup function for setting up model parameters in AvailabilityFactor and CapacityFactor
+
+[33mcommit 2b2c08df76bd97a0435843e45599e60ca9518204[m
+Merge: af3ede5 7b84bcc
+Author: trevorb1 <67297083+trevorb1@users.noreply.github.com>
+Date:   Wed Oct 20 19:35:28 2021 -0700
+
+    Merge pull request #66 from DeltaE/auto-generated-files-removal
+    
+    Added header file, removed old scripts (issue #66) and files (issue #65). Added script to compare two data files
+
+[33mcommit 7b84bccf1c0b3684c357309705ef44dacdf8416c[m[33m ([m[1;31morigin/auto-generated-files-removal[m[33m, [m[1;32mauto-generated-files-removal[m[33m)[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Wed Oct 20 18:45:56 2021 -0700
+
+    seemingly, empty folders are not recognized by git, so I added dummy CanadaUSA.txt files to the dev tool. I also updated the README to md format.
+
+[33mcommit e9280eca8401a4b13bc963d9f1dd26ad8da3e476[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Wed Oct 20 18:29:26 2021 -0700
+
+    re-ran model to make sure there were no functionality changes from the code review changes. no important changes in this commit
+
+[33mcommit 55ebbf37de61c7f3c2ac478173ac2ab1ba78aff6[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Wed Oct 20 18:18:10 2021 -0700
+
+    added pycache to the gitignore file
+
+[33mcommit 94e8740d1622f02e13686f1e0a72354f72dae728[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Wed Oct 20 18:17:32 2021 -0700
+
+    third round of code review, including adding a folder for developer tools in scripts
+
+[33mcommit 4cd641a39a9eb4bc58bf666d5861eca80b029f91[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Wed Oct 20 17:14:19 2021 -0700
+
+    second set of code review changes
+
+[33mcommit 9ba867bf4572255cf094ab355069f0ab5fd8c24c[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Wed Oct 20 13:00:41 2021 -0700
+
+    first set of code review changes, including actually running the model
+
+[33mcommit 6b9ddd2486652daacedd1f0fac4eb8a9b5fb3796[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Tue Oct 19 23:34:10 2021 -0700
+
+    deleted two of the three AUTO_GENERATED files, with techList remaining, for future removal using a config file
+
+[33mcommit 3068f5ae750ddfc11acb5d3ce3393f889efae8b0[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Tue Oct 19 23:30:58 2021 -0700
+
+    moved getLoadValues function into functions.py in order to deprecate the ProvincialHourlyLoads_TimeAdjusted_AUTO_GENERATED.csv file
+
+[33mcommit 2669861b9b542e74e7334151dc70c19b07043c0f[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Tue Oct 19 23:00:55 2021 -0700
+
+    added functions.py file, for common functions
+
+[33mcommit 8cf608bc6c56960de4ec3e21c2191468e0beb84f[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Tue Oct 19 22:38:35 2021 -0700
+
+    renamed rules so that they are uniform with file names, changed capitalization of usaData to UsaData
+
+[33mcommit 844c08089de482b98ea33e91a951a138e67a9ee7[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Mon Oct 18 18:07:20 2021 -0700
+
+    deleted Regionalization.py, as it was unused
+
+[33mcommit b1d8f8983c87e271ba431c712f6bbdb314ed0024[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Mon Oct 18 18:04:46 2021 -0700
+
+    modified snakefile to correct for some missing files
+
+[33mcommit 235133e4c2f8000771f6a42e4f3e9370a77283e0[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Wed Oct 13 15:07:05 2021 -0700
+
+    added src/dag to the gitignore file
+
+[33mcommit af3ede5bd09fa69aa80affb8e4d72c39e7ea347a[m
+Merge: b930bdc 9300e2f
+Author: trevorb1 <67297083+trevorb1@users.noreply.github.com>
+Date:   Fri Oct 8 13:21:57 2021 -0700
+
+    Merge pull request #62 from DeltaE/pre-and-post-processing-folders
+    
+    Updated scripts descriptions, moved snakefile to `src`, organized pre and post processing scripts
+
+[33mcommit 9300e2fd7b07c27a7e1846dd5dd12726bfee39bf[m[33m ([m[1;31morigin/pre-and-post-processing-folders[m[33m, [m[1;32mpre-and-post-processing-folders[m[33m)[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Fri Oct 8 11:18:02 2021 -0700
+
+    reverted NREL_Costs.csv to original state
+
+[33mcommit 0259077d616c251a3522d48d33275bba8893a218[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Thu Oct 7 16:42:31 2021 -0700
+
+    re-added newline
+
+[33mcommit 7007263a7ae88b938dc8bda9cd62717ff1f3ac0f[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Thu Oct 7 16:33:35 2021 -0700
+
+    code review changes, and editing snakefile so that it works again
+
+[33mcommit 9db1b7dfcd9dc06a3681a4f3aea28b4cc4b50821[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Thu Oct 7 13:08:06 2021 -0700
+
+    Moved the snakefile to the src folder, including information on the file
+
+[33mcommit 815d8f1de8eabe0a4735058a124407f6e6a831bc[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Thu Oct 7 13:02:35 2021 -0700
+
+    Edited How to Run section of src/README
+
+[33mcommit 8355b2a8ad112b2169375a5aef14733844630b63[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Thu Oct 7 12:55:16 2021 -0700
+
+    Added CBC_results and mode_list to postprocessing folder
+
+[33mcommit 19d77b24bc4d3b398b18f86524ab3565a962ea95[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Thu Oct 7 12:49:38 2021 -0700
+
+    Re-added CanadaUSA.txt to files
+
+[33mcommit 4619eda626c59e6d21e916c377fa3e5f38f9cb65[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Wed Oct 6 14:34:15 2021 -0700
+
+    made correction to snakemake run instructions
+
+[33mcommit df1b6ba5001359d4be178057c145fcdefa24399d[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Wed Oct 6 14:30:46 2021 -0700
+
+    made some minor refactoring spacing changes
+
+[33mcommit b732d04355ba49ace43bf9a84d8d0a9c1fcc5366[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Wed Oct 6 14:01:35 2021 -0700
+
+    removed descriptions from scripts/README for any files that already have descriptions in their header
+
+[33mcommit fdce4b95988a6394884b792d6368b9d939932389[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Tue Oct 5 17:54:37 2021 -0700
+
+    added README file to new postprocessing folder and added new descriptions to README file in scripts folder
+
+[33mcommit 17a0d6643decc93987bb2813de7107a4cc04757b[m
+Author: KH <khenkelm@sfu.ca>
+Date:   Tue Oct 5 17:02:03 2021 -0700
+
+    added new folder for containing post-processing scripts
+
+[33mcommit b930bdcf1dc3e7dcb4636ba9d138ae3504c76d71[m
+Merge: ea5982c db06b02
+Author: trevorb1 <67297083+trevorb1@users.noreply.github.com>
+Date:   Mon Sep 20 11:22:57 2021 -0700
+
+    Merge pull request #61 from DeltaE/trevorWork
+    
+    Updated ReadMe Files
+
+[33mcommit db06b02d3fec792f052df75de792a83e46109f83[m[33m ([m[1;31morigin/trevorWork[m[33m)[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Mon Sep 20 11:20:40 2021 -0700
+
+    Updated ReadMe Files
+
+[33mcommit ea5982c5548989835fe2ba3feeb15567f8f0a99a[m
+Merge: 778944f 2c60c31
+Author: trevorb1 <67297083+trevorb1@users.noreply.github.com>
+Date:   Thu Sep 16 16:15:57 2021 -0700
+
+    Merge pull request #60 from DeltaE/trevorWork
+    
+    Base Model with Updated Reserve Margin
+
+[33mcommit 2c60c314748f2ffbadbfc510064326369bd6cb9f[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Thu Aug 5 22:10:24 2021 -0700
+
+    Updated to Base with correct RM code
+
+[33mcommit 33378f466a9679f4ef515535bb726c3a4d21914f[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Wed Jul 14 07:44:24 2021 -0700
+
+    Demand and Residual Coal Updates
+
+[33mcommit 1d38b49c32b97fb5b3770a72d40432ada7bb1dbf[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Tue Jul 13 17:44:54 2021 -0700
+
+    Fixed usa residual naming and demand
+
+[33mcommit 778944f370a41bd99ea7a00bc5fbab97ba37fbd9[m
+Merge: 3000fd7 0d29e9f
+Author: Sfusina <71353787+Sfusina@users.noreply.github.com>
+Date:   Tue Jul 13 17:34:45 2021 -0700
+
+    Merge pull request #58 from DeltaE/trevorWork
+    
+    Reserve Margin and Cost Updates
+
+[33mcommit 0d29e9ff3f94ee42ad1811ae3e630dcf8d56737e[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Tue Jul 13 01:26:08 2021 -0700
+
+    Fixed Emission Penalty, Varaible Costs. Updated Residual Capacity
+
+[33mcommit a7db4ad1d33ea0f5e7c0238e8b727d48a05b3d91[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Mon Jul 12 10:05:33 2021 -0700
+
+    Reverted trade CAPEX back to original
+
+[33mcommit 065b7c20c1d4e80c5fd06c60f1b0c51f27ce6290[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Mon Jul 12 08:46:54 2021 -0700
+
+    Reserve Margin and Cost Updates
+
+[33mcommit 3000fd7013297f0571ea0facac8a273dd5d97e9c[m
+Merge: 53e3ade 7eebae8
+Author: Sfusina <71353787+Sfusina@users.noreply.github.com>
+Date:   Mon Jul 5 17:35:48 2021 -0700
+
+    Merge pull request #50 from DeltaE/trevorWork
+    
+    Base Model
+
+[33mcommit 7eebae856021820a06de081e37ec3c1103db0d09[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Mon Jul 5 09:58:31 2021 -0700
+
+    Added trade plots
+
+[33mcommit 6c9f97973959221bbdb1ddb5d8c77b238c3e44e6[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Sat Jul 3 19:55:39 2021 -0700
+
+    base model
+
+[33mcommit c4e5c9604a1018dddf8d5c86e19a9610689477df[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Sat Jun 26 16:16:54 2021 -0700
+
+    Updated USA Residuals and Costs
+
+[33mcommit 90810318d0258d2a5f4e59eb53dc49c05a0ace07[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Sat Jun 26 10:19:06 2021 -0700
+
+    Updated USA Activity Ratios
+
+[33mcommit e5c7182b41584563c0f328d8330f51375c2cf4f0[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Wed Jun 23 20:54:16 2021 -0700
+
+    Updated gitignore
+
+[33mcommit 993535f865d30e9f350fbb925155bda0bb98f864[m
+Merge: 80b6244 c5e4781
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Wed Jun 23 20:53:24 2021 -0700
+
+    Updated gitignore conflict
+
+[33mcommit 80b6244db6f853c385d7c8ae440a26757f43a090[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Wed Jun 23 20:44:01 2021 -0700
+
+    USA Updated Residual Capacities
+
+[33mcommit 736b362184cc7be3d01ae41db856781e8195cf1c[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Wed Jun 23 17:56:35 2021 -0700
+
+    Updated plots and emission penalty
+
+[33mcommit 53e3ade33e80f186c3cbd7c510a00be2a65f61b9[m
+Merge: 095dbc3 c5e4781
+Author: Sfusina <71353787+Sfusina@users.noreply.github.com>
+Date:   Tue Jun 22 08:41:35 2021 -0700
+
+    Merge pull request #49 from DeltaE/trevorWork
+    
+    Rounded Numbers and Seasons Update
+
+[33mcommit c5e4781dc83739b5bd1d48fa5a559485527a26ef[m
+Merge: 7380af2 095dbc3
+Author: trevorb1 <67297083+trevorb1@users.noreply.github.com>
+Date:   Mon Jun 21 23:50:52 2021 -0700
+
+    Merge branch 'main' into trevorWork
+
+[33mcommit 7380af2a98e7975ec9f5de269561ac7b82e6aba4[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Mon Jun 21 23:44:40 2021 -0700
+
+    Update Season Months V2
+
+[33mcommit 2a4c8101030973eb2a65bda2974db9972d3d11af[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Mon Jun 21 23:43:26 2021 -0700
+
+    Updated Season Months
+
+[33mcommit ddb7deabea28fb519e273ce0b974adc3eac2c7b9[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Mon Jun 21 20:40:39 2021 -0700
+
+    folder organization
+
+[33mcommit 75fb29e12768367332afc6782e3dacddca503c8d[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Mon Jun 21 20:15:15 2021 -0700
+
+    rounded numbers in scripts
+
+[33mcommit 095dbc3e59ab3d48b369f1d7bb21a388f3721db2[m
+Merge: 29395f4 983c63d
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Thu Jun 10 22:08:24 2021 -0700
+
+    Added USA Data and all Trade
+
+[33mcommit 983c63dae46b9e693b48f12356c95dbbf4855eb7[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Thu Jun 10 16:19:45 2021 -0700
+
+    Fixed trade values
+
+[33mcommit 095e7dcd3c1cc02292de408b2b53d193d10385c8[m
+Merge: 9aa3752 b7f1d3f
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Thu Jun 10 12:31:03 2021 -0700
+
+    Incorporate trade revisions
+    Merge branch 'trevorWork' of https://github.com/DeltaE/Canada-U.S.-ElecTrade into trevorWork
+
+[33mcommit 9aa37522da0e66b2102554d5de2f8dc5419fe4cc[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Thu Jun 10 12:29:10 2021 -0700
+
+    Updated USA and trade data
+
+[33mcommit 29395f4d561086b94e5f8178a80541f72e1a429b[m
+Merge: cf15f40 f28e45d
+Author: trevorb1 <67297083+trevorb1@users.noreply.github.com>
+Date:   Thu Jun 10 00:01:54 2021 -0700
+
+    Merge pull request #47 from DeltaE/sinabranch
+    
+    Update to Canada Trade
+
+[33mcommit f28e45d8bef7aa32e7ff469812e1e7a353272791[m[33m ([m[1;31morigin/sinabranch[m[33m)[m
+Author: Sfusina <sina.motalebi@sfu.ca>
+Date:   Wed Jun 9 19:50:19 2021 -0700
+
+    updated trade efficiency
+
+[33mcommit 9d4c1641f9d0d70aa6245404d1f8b4e40b0e797f[m
+Author: Sfusina <sina.motalebi@sfu.ca>
+Date:   Wed Jun 9 18:15:34 2021 -0700
+
+    updated canada trade values
+
+[33mcommit aa081e0cb7b717f538696d66dc3b2c4db475889b[m
+Author: Sfusina <sina.motalebi@sfu.ca>
+Date:   Wed Jun 9 18:03:04 2021 -0700
+
+    updated demand folder
+
+[33mcommit 93c03259465cee194cccf44a45d7363af7fed096[m
+Author: Sfusina <sina.motalebi@sfu.ca>
+Date:   Wed Jun 9 17:55:31 2021 -0700
+
+    deleted items
+
+[33mcommit 70d4369bd9402021987d0f7c0d5104a10a515dbe[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Wed Jun 9 10:09:22 2021 -0700
+
+    Added USA data exculding trade
+
+[33mcommit 103b4642d6ffc79a65c4de746ccba12747fee354[m
+Author: Sfusina <sina.motalebi@sfu.ca>
+Date:   Mon Jun 7 18:52:47 2021 -0700
+
+    updated Trade.csv
+
+[33mcommit db32ef2e7f61e20468e83eba0f8faef2560947d5[m
+Merge: 910e179 b06b8bf
+Author: Sfusina <sina.motalebi@sfu.ca>
+Date:   Mon Jun 7 18:10:46 2021 -0700
+
+    GeneralUpdate Merge branch 'sinabranch' of https://github.com/DeltaE/Canada-U.S.-ElecTrade into sinabranch
+
+[33mcommit 910e1793d8fa3504337bd173f7486ed35cc1ffcc[m
+Author: Sfusina <sina.motalebi@sfu.ca>
+Date:   Sat Jun 5 20:11:05 2021 -0700
+
+    updated trade capital cost & residual cap
+
+[33mcommit 4ac62e30d5aa2986a65606f2f914b1e691a7cab7[m
+Author: Sfusina <sina.motalebi@sfu.ca>
+Date:   Sat Jun 5 13:10:05 2021 -0700
+
+    updated_residualcap
+
+[33mcommit 8c6938a5844ec241301b7748358e98ebf1d24b61[m
+Author: Sfusina <sina.motalebi@sfu.ca>
+Date:   Sat Jun 5 07:42:12 2021 -0700
+
+    update2
+
+[33mcommit a32eb16e72c3eb9da7352f7251f85f24b5c4722d[m
+Author: Sfusina <sina.motalebi@sfu.ca>
+Date:   Sat Jun 5 07:41:00 2021 -0700
+
+    update
+
+[33mcommit b06b8bfbd5918f0b9c08e31ef9dc71d7e20f19d6[m
+Author: Sfusina <sina.motalebi@sfu.ca>
+Date:   Sat Jun 5 20:11:05 2021 -0700
+
+    updated trade capital cost & residual cap
+
+[33mcommit cf15f40a977e0f6f8ace22fc6f7473de7d8d289b[m
+Merge: edd5dc4 8baa836
+Author: trevorb1 <67297083+trevorb1@users.noreply.github.com>
+Date:   Sat Jun 5 15:33:12 2021 -0700
+
+    Merge pull request #44 from DeltaE/revert-43-sinabranch
+    
+    Revert "Sinabranch"
+
+[33mcommit 8baa8366ddd70f66f535c32d124c12299f85456e[m
+Author: trevorb1 <67297083+trevorb1@users.noreply.github.com>
+Date:   Sat Jun 5 15:31:37 2021 -0700
+
+    Revert "Sinabranch"
+
+[33mcommit edd5dc4b85f4d99ed7ff97d8328dae4742b0b770[m
+Merge: 4a80d57 8f34db5
+Author: Sfusina <71353787+Sfusina@users.noreply.github.com>
+Date:   Sat Jun 5 14:44:39 2021 -0700
+
+    Merge pull request #43 from DeltaE/sinabranch
+    
+    Sinabranch
+
+[33mcommit 8f34db588e2a5dc17d1b82e1831013c898f27ca5[m
+Author: Sfusina <sina.motalebi@sfu.ca>
+Date:   Sat Jun 5 13:10:05 2021 -0700
+
+    updated_residualcap
+
+[33mcommit 712dc6ced625d4f6464c49356a668ce22dadbbfa[m
+Merge: 60d28a9 4a80d57
+Author: Sfusina <sina.motalebi@sfu.ca>
+Date:   Sat Jun 5 11:58:23 2021 -0700
+
+    updated to main
+
+[33mcommit 60d28a984b018f4b0bca5214489da3ee4bb8ad2b[m
+Author: Sfusina <sina.motalebi@sfu.ca>
+Date:   Sat Jun 5 07:42:12 2021 -0700
+
+    update2
+
+[33mcommit a9a29f38fcf80b1bfc66d492e399460584468273[m
+Author: Sfusina <sina.motalebi@sfu.ca>
+Date:   Sat Jun 5 07:41:00 2021 -0700
+
+    update
+
+[33mcommit 4a80d57afaf6b819f657e7ec71445ec8ce96fae9[m
+Merge: a5fab3c b7f1d3f
+Author: Sfusina <71353787+Sfusina@users.noreply.github.com>
+Date:   Fri Jun 4 08:41:13 2021 -0700
+
+    Merge pull request #42 from DeltaE/trevorWork
+    
+    Osemosys Global Naming Update
+
+[33mcommit b7f1d3ff9f1b6a20964d9567ce31d6d4fad15a90[m
+Merge: b0f5bb4 a5fab3c
+Author: trevorb1 <67297083+trevorb1@users.noreply.github.com>
+Date:   Fri Jun 4 07:48:30 2021 -0700
+
+    Merge branch 'main' into trevorWork
+
+[33mcommit b0f5bb45b4678a52ded41518cdde412e7eb86a7f[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Wed Jun 2 23:09:15 2021 -0700
+
+    Fixed minor issues with og naming
+
+[33mcommit a5fab3c7e2e07cfbbad3d696fa58be062356474e[m
+Merge: b03d2d5 391e91d
+Author: trevorb1 <67297083+trevorb1@users.noreply.github.com>
+Date:   Mon May 31 18:14:37 2021 -0700
+
+    Merge pull request #41 from DeltaE/sinabranch
+    
+    FC OP Update
+
+[33mcommit 391e91d7ac5e6a681577a6bfaede2a3ad21a2c20[m
+Author: Sfusina <sina.motalebi@sfu.ca>
+Date:   Mon May 31 18:11:56 2021 -0700
+
+    this should work
+
+[33mcommit e5d31df55e5a05a41b8e6b67af9f758d87fd2b9b[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Sun May 30 18:01:39 2021 -0700
+
+    Osemosys Global Naming Convention
+
+[33mcommit b03d2d5b18bd741151ba7d2213bee8c70f95925f[m
+Merge: 9b0091d 9f87cef
+Author: Sfusina <71353787+Sfusina@users.noreply.github.com>
+Date:   Sun May 30 09:01:02 2021 -0700
+
+    Merge pull request #39 from DeltaE/trevorWork
+    
+    ReserveMargin, Regionalization, and Snakmake Updates
+
+[33mcommit 9f87cef267389a63201a4b41b3f8a34b09685946[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Thu May 27 20:26:43 2021 -0700
+
+    Updated ReadMe files
+
+[33mcommit a1d2a84876a26dfe9bb62e38a665f9f56e38ded7[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Thu May 27 16:08:07 2021 -0700
+
+    Updated cost and emission units
+
+[33mcommit f37c753a741dce2d01b9e9eb9e8063e7c56397e9[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Thu May 27 14:18:43 2021 -0700
+
+    Flexible region allocation
+
+[33mcommit 6dfe2dfbedf16f7714ac8665aced1640d45bcb87[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Thu May 27 12:02:29 2021 -0700
+
+    reserve margin and snakemake updated
+
+[33mcommit 53220d4b31a7b8c5a0562b9f018b45f11340382f[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Tue May 25 15:41:22 2021 -0700
+
+    Cost updates. Added Snakemake
+
+[33mcommit 9b0091df0b697ec02e5470e756f44c090f755595[m
+Merge: 1bfe00f ad663d4
+Author: Sfusina <71353787+Sfusina@users.noreply.github.com>
+Date:   Mon May 24 10:57:50 2021 -0700
+
+    Merge pull request #38 from DeltaE/trevorWork
+    
+    P2G and Fuel Cell Updates
+
+[33mcommit ad663d4d731501bfdba8f3450f1a711c2119fd58[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Wed May 19 19:34:58 2021 -0700
+
+    p2g and fc updates
+
+[33mcommit 1bfe00fe35e1f8d99ab59f9c1dfa7c4977fd5bae[m
+Merge: 99b7cb7 c38c188
+Author: Sfusina <71353787+Sfusina@users.noreply.github.com>
+Date:   Mon May 17 17:22:07 2021 -0700
+
+    Merge pull request #35 from DeltaE/trevorWork
+    
+    Pre Processing Script Updates
+
+[33mcommit c38c1884eb7ca9c84fd905388357e153e3ef9516[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Mon May 17 13:00:32 2021 -0700
+
+    Solvable Model with updated techs
+
+[33mcommit 99b7cb71534096ad92fdfc7f472999ba7cd02ef2[m
+Merge: bda0581 50501dc
+Author: Sfusina <71353787+Sfusina@users.noreply.github.com>
+Date:   Fri May 14 15:01:51 2021 -0700
+
+    Merge pull request #34 from DeltaE/trevorWork
+    
+    Operational Life and Residual Capacity Update
+
+[33mcommit 50501dc64d5c2a62e7c6a77fc594aa2e2a86e61d[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Thu May 13 22:26:59 2021 -0700
+
+    Operational Life and Residual Capacity Update
+
+[33mcommit bda0581fad1b7c13948d474c88c2d05e8cc39dca[m
+Merge: 64a14eb ed42f57
+Author: Sfusina <71353787+Sfusina@users.noreply.github.com>
+Date:   Mon May 10 20:19:17 2021 -0700
+
+    Merge pull request #31 from DeltaE/trevorWork
+    
+    Updated Costs
+
+[33mcommit ed42f579e53bede412e4e339affef8ced844c2ce[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Sun May 9 14:44:39 2021 -0700
+
+    Updated Costs
+
+[33mcommit 64a14ebb5b868b8ade74cd9e03854812b59d50dd[m
+Merge: 8543ca5 37d688a
+Author: Sfusina <71353787+Sfusina@users.noreply.github.com>
+Date:   Thu May 6 21:23:29 2021 -0700
+
+    Merge pull request #28 from DeltaE/trevorWork
+    
+    Updated Demand
+
+[33mcommit 37d688a9f08d81e989609abc4bd6c8bef133b2d4[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Thu May 6 12:43:53 2021 -0700
+
+    Added demand sources and python scripts to generate demand csvs
+
+[33mcommit 8e43b5afc127a9b1d586c1467e70727cfb9bc36f[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Thu May 6 12:41:20 2021 -0700
+
+    Updated Model Input Demand Data
+
+[33mcommit 8543ca5f8ddd4bdd7c8f3962e72016ea786aacec[m
+Merge: 7d9f087 c0d153d
+Author: Sfusina <71353787+Sfusina@users.noreply.github.com>
+Date:   Mon May 3 21:13:58 2021 -0700
+
+    Merge pull request #24 from DeltaE/trevorWork
+    
+    Capacity Factor Updates
+
+[33mcommit c0d153daf0f0ad7de0dd8f9ec6b93a6be5974989[m
+Merge: acf0dc2 7d9f087
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Mon May 3 15:28:58 2021 -0700
+
+    Merge remote-tracking branch 'origin' into trevorWork
+
+[33mcommit acf0dc28e47eae8c698b0aad58d303cdb552feab[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Mon May 3 14:08:42 2021 -0700
+
+    Capacity Factor Update
+
+[33mcommit 7d9f087a8b45747c2c9e29d1ee6d0fcc1978813f[m
+Merge: 3a1263a 3566bd6
+Author: Sfusina <71353787+Sfusina@users.noreply.github.com>
+Date:   Fri Apr 30 19:24:43 2021 -0700
+
+    Merge pull request #22 from DeltaE/trevorWork
+    
+    Removed results folder
+
+[33mcommit 3566bd69ee3d52b5be0c32e0d66ffeb3e855c950[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Thu Apr 29 21:27:27 2021 -0700
+
+    Removed results folder
+
+[33mcommit 3a1263a61b5aadcfe4380452bfe9074e98ba5982[m
+Merge: 731af93 7da2c56
+Author: Sfusina <71353787+Sfusina@users.noreply.github.com>
+Date:   Thu Apr 29 19:28:17 2021 -0700
+
+    Merge pull request #20 from DeltaE/trevorWork
+    
+    Repository Organization
+
+[33mcommit 7da2c56fa1ba9b4842f15d85df04f493e8145436[m
+Author: Trevor Barnes <trevor_barnes@sfu.ca>
+Date:   Thu Apr 29 19:16:21 2021 -0700
+
+    Repository Organization
+
+[33mcommit 731af934c9534e1b6eafa7219bf63dfa025d7c8b[m
+Author: sammy1193 <44882755+sammy1193@users.noreply.github.com>
+Date:   Thu Apr 1 12:34:34 2021 -0700
+
+    Initial Commit - Canada Data with 24HR Timeslices
+    
+    datafile, modelfile, and production graphing script
+
+[33mcommit 62284b215625edbb07334ed7210f58faec2bf379[m
+Author: Sfusina <71353787+Sfusina@users.noreply.github.com>
+Date:   Wed Mar 31 21:54:33 2021 -0700
+
+    Initial commit

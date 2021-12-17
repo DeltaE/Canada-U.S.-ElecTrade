@@ -17,7 +17,8 @@ def main():
     mineTechs = functions.openYaml().get('mine_techs')
     stoTechs = functions.openYaml().get('sto_techs')
     years = functions.getYears()
-    countries = functions.getRegionDictionary('CAN')
+    canCountries = functions.getRegionDictionary('CAN')
+    usaCountries = functions.getRegionDictionary('USA')
 
     #######################################
     ## CREATE TECH LISTS FOR OTHER SCRIPTS
@@ -49,7 +50,7 @@ def main():
     ####################################
 
     #get storages for each region 
-    stoList = getSTO(countries, stoTechs)
+    stoList = getSTO(canCountries, stoTechs)
 
     dfOut = pd.DataFrame(stoList, columns=['VALUE'])
     dfOut.to_csv('../src/data/STORAGE.csv', index=False)
@@ -58,8 +59,8 @@ def main():
     ## CREATE TECHNOLOGY SET
     ####################################
 
-    canadaDfOut = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', True)
-    usaDfOut = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', False)
+    canadaDfOut = functions.createTechnologySet(canCountries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', True)
+    usaDfOut = functions.createTechnologySet(usaCountries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', False)
     df = canadaDfOut.append(usaDfOut)
     df.to_csv('../src/data/TECHNOLOGY.csv', index=False)
 
@@ -67,8 +68,8 @@ def main():
     ## CREATE FUEL SET
     ####################################
 
-    canadaDfOut = functions.createFuelSet(countries, rnwTechs, mineTechs, True)
-    usaDfOut = functions.createFuelSet(countries, rnwTechs, mineTechs, False)
+    canadaDfOut = functions.createFuelSet(canCountries, rnwTechs, mineTechs, True)
+    usaDfOut = functions.createFuelSet(usaCountries, rnwTechs, mineTechs, False)
     df = canadaDfOut.append(usaDfOut)
     df.to_csv('../src/data/FUEL.csv', index=False)
 

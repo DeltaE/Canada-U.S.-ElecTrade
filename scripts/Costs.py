@@ -285,7 +285,6 @@ def tradeCosts(costType, regions, years):
     # PURPOSE: populates trade capital, fixed, OR variable costs 
     # INPUT:   costType: List holding what cost we are looking for (names sasme as NREL)
     #          regions: List holding what regions to print values over
-    #          subregions: List holding what subregions to print values over
     #          years: list holding what years to print data over
     # OUTPUT:  otoole formatted dataframe holding cost values for trade 
 
