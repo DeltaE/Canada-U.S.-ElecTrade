@@ -328,7 +328,7 @@ def createFuelSet(countries, rnwTechs, mineTechs, generateInternational):
     dfOut = pd.DataFrame(outputFuels, columns=['VALUE'])
     return dfOut
 
-def createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsvPath, generateInternational):
+def createTechDatafile(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsvPath, generateInternational):
     # PURPOSE: Appends all technology name lists together and returns them as a CSV datafile
     # INPUT:   countries = Dictionary holding countries as the key
     #                      and subregion as the values in a list
@@ -360,7 +360,7 @@ def createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsv
 
     return dfOut
 
-def createTechLists(techsMaster, rnwTechs, mineTechs, stoTechs):
+def createTechList(techsMaster, rnwTechs, mineTechs, stoTechs):
     # PURPOSE: Merges several tech lists into 'data' so that they can be printed over
     # INPUT:   techsMaster = List of the technologies to print over for power techs
     #          rnwTechs = List of the technologies to print over for renewable techs

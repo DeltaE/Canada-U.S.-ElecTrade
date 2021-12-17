@@ -22,7 +22,7 @@ def main():
     mineTechs = functions.openYaml().get('mine_techs')
     countries = functions.getRegionDictionary('CAN')
 
-    df = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', True)
+    df = functions.createTechDatafile(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', True)
     technologies = df['VALUE'].tolist()
 
     '''
@@ -102,7 +102,7 @@ def getUsaCapToActivityUnit():
     capToAct = 31.536
 
     #Technologies to print over
-    df = functions.createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', False)
+    df = functions.createTechDatafile(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', False)
     techs = df['VALUE'].tolist()
 
     #populate list

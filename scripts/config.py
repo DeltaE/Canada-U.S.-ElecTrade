@@ -24,7 +24,7 @@ def main():
     ## CREATE TECH LISTS FOR OTHER SCRIPTS
     #######################################
     
-    data = functions.createTechLists(techsMaster, rnwTechs, mineTechs, stoTechs)
+    data = functions.createTechList(techsMaster, rnwTechs, mineTechs, stoTechs)
 
     dfGenerationType = pd.DataFrame(data, columns=['GENERATION','VALUE'])
     dfGenerationType.to_csv('../dataSources/techList_AUTO_GENERATED.csv', index = False)
@@ -59,8 +59,8 @@ def main():
     ## CREATE TECHNOLOGY SET
     ####################################
 
-    canadaDfOut = functions.createTechnologySet(canCountries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', True)
-    usaDfOut = functions.createTechnologySet(usaCountries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', False)
+    canadaDfOut = functions.createTechDatafile(canCountries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', True)
+    usaDfOut = functions.createTechDatafile(usaCountries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', False)
     df = canadaDfOut.append(usaDfOut)
     df.to_csv('../src/data/TECHNOLOGY.csv', index=False)
 
