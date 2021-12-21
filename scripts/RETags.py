@@ -48,7 +48,7 @@ def getUsaRETagTechnology():
     subregions = functions.getRegionDictionary('USA')
 
     #easier to do this one manually 
-    techs = ['HYD','WND','BIO','SPV']
+    techs = functions.openYaml().get('rnw_techs')
     years = functions.getYears()
 
     outData = []

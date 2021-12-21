@@ -213,6 +213,7 @@ def getUsaReserveMarginTagTechnology():
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'ReserveMarginInTagTech(r,t,y)')
 
     techMap = functions.openYaml().get('usa_tech_map')
+    variableTechs = functions.openYaml().get('variable_techs')
 
     #remove anything from years 2015 - 2018
     df = df.loc[df['YEAR'] > 2018]
@@ -232,7 +233,7 @@ def getUsaReserveMarginTagTechnology():
                 region = 'NAmerica'
                 techMapped = techMap[techOld]
                 tech = 'PWR' + techMapped + 'USA' + subregion + '01'
-                if (techMapped == 'WND') or (techMapped == 'SPV'):
+                if techMapped in variableTechs:
                     value = 0
                 else:
                     value = 1
@@ -311,7 +312,7 @@ def getUsaReserveMarginTagFuel():
                                         'TEN Demand (MWh)':'SE',
                                         'TEX Demand (MWh)':'TX'})
 
-    #Fill in ovelap;ping regons (these will have the same reserve margin)
+    #Fill in overlapping regions (these will have the same reserve margin)
     dfProfile = dfProfile.drop(columns=['CAR Demand (MWh)'])
     dfProfile['MN'] = dfProfile['NW']
 

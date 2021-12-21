@@ -328,14 +328,14 @@ def createFuelSet(countries, rnwTechs, mineTechs, generateInternational):
     dfOut = pd.DataFrame(outputFuels, columns=['VALUE'])
     return dfOut
 
-def createTechDatafile(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsvPath, generateInternational):
-    # PURPOSE: Appends all technology name lists together and returns them as a CSV datafile
+def createTechDataframe(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsvPath, generateInternational):
+    # PURPOSE: Appends all technology name lists together and returns them as a CSV dataframe
     # INPUT:   countries = Dictionary holding countries as the key
     #                      and subregion as the values in a list
     #          techsMaster = List of the technologies to print over for getPWRtechs
     #          mineTechs = List of the technologies to print over for getMINtechs
     #          rnwTechs = List of the technologies to print over for getRNWtechs
-    #          trnTechsCsvPath = Trade csv datafile location
+    #          trnTechsCsvPath = Trade csv dataframe location
     #          generateInternational = True/False for whether function should
     #                                  create all international mining techs
     # OUTPUT:  dfOut = fuel set dataframe
@@ -408,7 +408,8 @@ def getRegionDictionary(topLevelRegion):
 
 def getUsaCapacityOrAvailabilityFactor(isCapacity):
     # PURPOSE: Creates CapacityFactor or AvailabilityFactor file from USA data
-    # INPUT:   isCapacity = Boolean indicating Capacity Factor should be returned when True, and Availabiltiy Factor otherwise
+    # INPUT:   isCapacity = Boolean indicating Capacity Factor should be returned
+    # when True, and Availabiltiy Factor otherwise
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
     #capacity factor only specified for 2015 and 2016

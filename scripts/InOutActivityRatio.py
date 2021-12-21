@@ -156,8 +156,8 @@ def getUsaOutputActivityRatio():
     subregions = functions.getRegionDictionary('USA')
 
     #Fuels that have international trade options
-    intFuel = ['GAS','COA','URN']
-    rnwFuel = ['HYD', 'SPV', 'WND', 'BIO']
+    intFuel = functions.openYaml().get('mine_techs')
+    rnwFuel = functions.openYaml().get('rnw_techs')
 
     #holds output data
     outData = []
@@ -181,16 +181,6 @@ def getUsaOutputActivityRatio():
             techName = 'MIN' + rawFuel + 'USA'
             fuel = rawFuel + 'USA'
             outData.append([region, techName, fuel, 1, year, 1])
-
-    # DONE IN CANADA SCRIPTS
-    #mining internationl
-    #for year in years:
-    #    for rawFuel in intFuel:
-    #        for subregion in subregions:
-    #            region = 'NAmerica'
-    #            techName = 'MIN' + rawFuel + 'INT'
-    #            fuel = rawFuel + 'INT'
-    #            outData.append([region, techName, fuel, 1, year, 1])
 
     # OAR for PWRTRN technologies
     for subregion in subregions['USA']:
@@ -253,7 +243,7 @@ def getUsaInputActivityRatio():
     df.reset_index()    
 
     #Fuels that have international trade options
-    intFuel = ['GAS','COA','URN']
+    intFuel = functions.openYaml().get('mine_techs')
 
     #holds output data
     outData = []
@@ -277,16 +267,6 @@ def getUsaInputActivityRatio():
         else:
             fuel = fuelMapped + 'USA' + df['REGION'].iloc[i]
             outData.append([region,tech,fuel,1,year,value])
-
-    #DONE IN CANADA SCRIPTS
-    #Create input activity ration of international trade
-    #for rawFuel in intFuel:
-    #    for year in functions.getYears():
-    #        region = 'NAmerica'
-    #        tech = 'MIN' + rawFuel + 'INT'
-    #        fuel = rawFuel
-    #        value = 1
-    #        outData.append([region,tech,fuel,1,year,value])
 
     # IAR for PWRTRN technologies
     for subregion in subregions['USA']:

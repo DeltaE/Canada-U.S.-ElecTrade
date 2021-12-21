@@ -80,7 +80,7 @@ def getUsaEmissionActivityRatio():
     outData = []
 
     #Fuels that have international trade options
-    intFuel = ['GAS','COA','URN']
+    intFuel = functions.openYaml().get('mine_techs')
 
     #map data
     for year in years:
