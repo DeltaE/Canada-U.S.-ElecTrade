@@ -23,7 +23,7 @@ def main():
     storages = dfGeneration['VALUE'].tolist()
     if not storages:
         df = pd.DataFrame(columns=['REGION','STORAGE','YEAR','VALUE'])
-        df.to_csv('../src/data/Canada/CapitalCostStorage.csv', index=False)
+        df.to_csv('../src/data/CapitalCostStorage.csv', index=False)
         return
 
     #Dictory to hold storage ype and cost in M$/GW
@@ -45,7 +45,7 @@ def main():
                     data.append([region,stoName,year,cost])
 
     df = pd.DataFrame(data, columns=['REGION','STORAGE','YEAR','VALUE'])
-    df.to_csv('../src/data/Canada/CapitalCostStorage.csv', index=False)
+    df.to_csv('../src/data/CapitalCostStorage.csv', index=False)
     
 
 

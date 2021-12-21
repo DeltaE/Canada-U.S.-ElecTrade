@@ -301,15 +301,14 @@ def getELCfuels(regions):
     # Return list of electricty fuels
     return outList
 
-def createFuelSet(countries, rnwTechs, mineTechs, csvPath, generateInternational):
+def createFuelDataframe(countries, rnwTechs, mineTechs, generateInternational):
     # PURPOSE: Appends all fuel name lists together and writes them to a CSV
     # INPUT:   countries = Dictionary holding countries as the key and subregion as the values in a list
     #          rnwTechs = List of the technologies to print over for getRNWfuels
     #          mineTechs = List of the technologies to print over for getMINfuels
-    #          csvPath = Path for the output
     #          generateInternational = True/False for whether getMINfuels function needs to create all
     #                                  technology names for international import/export
-    # OUTPUT:  None
+    # OUTPUT:  dfOut = fuel set dataframe
 
     # Renewable fuels
     rnwFuelList = getRNWfuels(countries, rnwTechs)
@@ -323,24 +322,23 @@ def createFuelSet(countries, rnwTechs, mineTechs, csvPath, generateInternational
     #Hydrogen Fuels
     #hy2FuelList = getHY2fuels(countries)
 
-    #Append lists together and write to a csv
+    #Append lists together and write to a dataframe
     #outputFuels = rnwFuelList + minFuelList + elcFuelList + hy2FuelList
     outputFuels = rnwFuelList + minFuelList + elcFuelList
     dfOut = pd.DataFrame(outputFuels, columns=['VALUE'])
-    dfOut.to_csv(csvPath, index=False)
+    return dfOut
 
-def createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsvPath, outputCsvPath, generateInternational):
-    # PURPOSE: Appends all technology name lists together and writes them to a CSV
+def createTechDataframe(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsvPath, generateInternational):
+    # PURPOSE: Appends all technology name lists together and returns them as a CSV dataframe
     # INPUT:   countries = Dictionary holding countries as the key
     #                      and subregion as the values in a list
     #          techsMaster = List of the technologies to print over for getPWRtechs
     #          mineTechs = List of the technologies to print over for getMINtechs
     #          rnwTechs = List of the technologies to print over for getRNWtechs
-    #          trnTechsCsvPath = Trade csv datafile location
-    #          outputCsvPath = Path for the output
+    #          trnTechsCsvPath = Trade csv dataframe location
     #          generateInternational = True/False for whether function should
     #                                  create all international mining techs
-    # OUTPUT:  outputTechs = All technology lists appended together
+    # OUTPUT:  dfOut = tech set dataframe
     # get power generator technology list 
     pwrList = getPWRtechs(countries, techsMaster)
 
@@ -356,17 +354,15 @@ def createTechnologySet(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsv
     # get trade technology list 
     trnList = getTRNtechs(trnTechsCsvPath)
 
-    #Append lists together and write to a csv
+    #Append lists together and write to a dataframe
     outputTechs = pwrList + pwrTrnList + minList + rnwList + trnList
     dfOut = pd.DataFrame(outputTechs, columns=['VALUE'])
-    dfOut.to_csv(outputCsvPath, index=False)
 
-    return outputTechs
+    return dfOut
 
-def createTechLists(techsMaster, rnwTechs, mineTechs, stoTechs):
+def createTechList(techsMaster, rnwTechs, mineTechs, stoTechs):
     # PURPOSE: Merges several tech lists into 'data' so that they can be printed over
-    # INPUT:   countries = Dictionary holding countries as the key and subregion as the values in a list
-    #          techsMaster = List of the technologies to print over for power techs
+    # INPUT:   techsMaster = List of the technologies to print over for power techs
     #          rnwTechs = List of the technologies to print over for renewable techs
     #          mineTechs = List of the technologies to print over for mining techs
     #          stoTechs = List of the technologies to print over for storage techs
@@ -388,27 +384,12 @@ def createTechLists(techsMaster, rnwTechs, mineTechs, stoTechs):
     
     return data
 
-def initializeCanadaUsaModelParameters(topLevelRegion):
-    # PURPOSE: Initializes necessary parameters for config.py and UsaData.py, which create
-    # Tech and Fuel sets for Canada and the US, respectively
+def getRegionDictionary(topLevelRegion):
+    # PURPOSE: Returns a dictionary for either the CAN or USA region, with the
+    # region as the key and the list of subregions as the value
     # INPUT:   topLevelRegion = String indicating region: 'CAN' or 'USA'
-    # OUTPUT:  years = List from 2019 to 2051
-    #          regions = List for regions
-    #          emissions = List for CO2 emissions
-    #          techsMaster = List for power technologies
-    #          rnwTechs = List for renewable technologies
-    #          mineTechs = List for mining technologies
-    #          stoTechs = List for storage technologies
-    #          countries = Dictionary for holding countries as the key and subregion as the values in a list
-    # get power generator technology list 
-
-    regions = openYaml().get('regions')
-    emissions = openYaml().get('emissions')
-    techsMaster = openYaml().get('techs_master')
-    rnwTechs = openYaml().get('rnw_techs')
-    mineTechs = openYaml().get('mine_techs')
-    stoTechs = openYaml().get('sto_techs')
-    years = getYears()
+    # OUTPUT:  countries = Dictionary for holding countries as the key and
+    # subregion as the values in a list  
 
     #Countries and subregions in the model
     countries = {
@@ -423,4 +404,72 @@ def initializeCanadaUsaModelParameters(topLevelRegion):
     regionList = list(set(regionList)) # remove duplicates
     countries[topLevelRegion] = regionList # save to dictionary
     
-    return years, regions, emissions, techsMaster, rnwTechs, mineTechs, stoTechs, countries
+    return countries
+
+def getUsaCapacityOrAvailabilityFactor(isCapacity):
+    # PURPOSE: Creates CapacityFactor or AvailabilityFactor file from USA data
+    # INPUT:   isCapacity = Boolean indicating Capacity Factor should be returned
+    # when True, and Availabiltiy Factor otherwise
+    # OUTPUT:  dfOut = dataframe to be written to a csv
+
+    #capacity factor only specified for 2015 and 2016
+    #df = df.loc[df['YEAR'] == 2016]
+    #df.reset_index()
+
+    techMap = openYaml().get('usa_tech_map')
+    df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'CapacityFactor(r,t,l,y)')
+
+    #Initialize filtered dataframe 
+    columns = list(df)
+    dfFiltered = pd.DataFrame(columns=columns)
+
+    #get rid of all techs we are not using 
+    for tech in techMap:
+        dfTemp = df.loc[df['TECHNOLOGY'] == tech]
+        dfFiltered = dfFiltered.append(dfTemp)
+    df = dfFiltered
+    df.reset_index()
+
+    #years to print capacity factor over
+    years = getYears()
+
+    #holds output data
+    outDataCF = [] # Capacity Factor
+    outDataAF = [] # Availability Factor
+
+    #map data
+    for year in years:
+        for i in range(len(df)):
+            region = 'NAmerica'
+            techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
+            tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
+            ts = df['TIMESLICE'].iloc[i]
+            value = df['CAPACITYFACTOR'].iloc[i]
+            value = round(value, 3)
+            if techMapped == 'HYD':
+                outDataAF.append([region,tech,ts,year,value])
+            else:
+                outDataCF.append([region,tech,ts,year,value])
+
+    #create and return dataframe for CAPACITY FACTOR
+    dfOutCF = pd.DataFrame(outDataCF, columns = ['REGION','TECHNOLOGY','TIMESLICE','YEAR','VALUE'])
+
+    if isCapacity: # Return Capacity Factor
+        return dfOutCF
+    else: # Return Availability Factor
+        dfAf = pd.DataFrame(outDataAF, columns = ['REGION','TECHNOLOGY','TIMESLICE','YEAR','VALUE'])
+        afTechs = dfAf['TECHNOLOGY'].to_list()
+        afTechs = list(set(afTechs))
+
+        outDataAF = [] 
+        for tech in afTechs:
+            dfTemp = dfAf.loc[dfAf['TECHNOLOGY'] == tech]
+            for year in years:
+                dfYear = dfTemp.loc[dfTemp['YEAR'] == year]
+                af = dfYear['VALUE'].mean()
+                af = round(af, 3)
+                outDataAF.append(['NAmerica',tech,year,af])
+        
+        # return dataframe for CAPACITY FACTOR
+        dfOutAF = pd.DataFrame(outDataAF, columns = ['REGION','TECHNOLOGY','YEAR','VALUE'])
+        return dfOutAF

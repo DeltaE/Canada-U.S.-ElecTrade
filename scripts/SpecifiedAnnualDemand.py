@@ -52,7 +52,36 @@ def main():
     ###########################################
 
     df = pd.DataFrame(demand, columns = ['REGION', 'FUEL', 'YEAR', 'VALUE'])
-    df.to_csv('../src/data/Canada/SpecifiedAnnualDemand.csv', index=False)
+    dfUsa = getUsaSpecifiedAnnualDemand()
+    df = df.append(dfUsa)
+    df.to_csv('../src/data/SpecifiedAnnualDemand.csv', index=False)
+
+def getUsaSpecifiedAnnualDemand():
+    # PURPOSE: Creates specifiedAnnualDemand file from USA data
+    # INPUT:   N/A
+    # OUTPUT:  dfOut = dataframe to be written to a csv
+
+    df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'SpecifiedAnnualDemand(r,f,y)')
+
+    #remove anything from years 2015 - 2018
+    df = df.loc[df['YEAR'] > 2018]
+    df.reset_index()
+
+    #holds output data
+    outData = []
+
+    #map data
+    for i in range(len(df)):
+        region = 'NAmerica'
+        fuel = 'ELC' + 'USA' + df['REGION'].iloc[i] + '02'
+        year = df['YEAR'].iloc[i]
+        value = df['DEMAND'].iloc[i]
+        value = round(value,3)
+        outData.append([region,fuel,year,value])
+
+    #create and return datafram
+    dfOut = pd.DataFrame(outData, columns = ['REGION', 'FUEL', 'YEAR', 'VALUE'])
+    return dfOut
 
 if __name__ == "__main__":
     main()

@@ -17,7 +17,7 @@ def main():
     
     if not storages:
         df = pd.DataFrame(columns=['REGION','STORAGE','VALUE'])
-        df.to_csv('../src/data/Canada/OperationalLifeStorage.csv', index=False)
+        df.to_csv('../src/data/OperationalLifeStorage.csv', index=False)
         return
 
     #Dictory to hold storage ype and op life in years
@@ -35,7 +35,7 @@ def main():
                 data.append([region,stoName,life])
 
     df = pd.DataFrame(data, columns=['REGION','STORAGE','VALUE'])
-    df.to_csv('../src/data/Canada/OperationalLifeStorage.csv', index=False)
+    df.to_csv('../src/data/OperationalLifeStorage.csv', index=False)
     
 if __name__ == "__main__":
     main()

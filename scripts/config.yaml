@@ -83,3 +83,15 @@ tech_to_fuel:
   'WND': 'WND'
  #'P2G': 'ELC' # Power to Gas
  #'FCL': 'HY2' # Fuel Cell
+
+# tech mapping USA Name -> Our Name
+usa_tech_map:
+  'BIOPP': 'BIO'   # Biomass
+  'NGCC': 'CCG'    # Gas Combind Cycle 
+  'NGCT': 'CTG'    # Gas Combustion Turbine
+  'COALPP': 'COA'  # Coal
+  'COALCCS': 'COC' # Coal CCS
+  'HYDROPP': 'HYD' # Hydro 
+  'PV': 'SPV'      # Solar
+  'NUC': 'URN'     # Nuclear
+  'WINDPP': 'WND'  # Wind

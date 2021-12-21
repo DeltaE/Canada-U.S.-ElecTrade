@@ -42,7 +42,9 @@ def main():
     df = df.append(dfFossil)
 
     #Print capactiyFactor dataframe to a csv 
-    df.to_csv('../src/data/Canada/CapacityFactor.csv', index=False)
+    dfUsa = functions.getUsaCapacityOrAvailabilityFactor(True)
+    df = df.append(dfUsa)
+    df.to_csv('../src/data/CapacityFactor.csv', index=False)
     
 def renewableNinjaData(tech, regions, subregions, seasons, years):
     # PURPOSE: Takes a folder of CSVs created by renewable Ninja and formats a dataframe to hold all capacity factor values 

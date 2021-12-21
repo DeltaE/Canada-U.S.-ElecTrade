@@ -83,7 +83,9 @@ def main():
     ###########################################
 
     df = pd.DataFrame(outData, columns = ['REGION','TECHNOLOGY','YEAR','VALUE'])
-    df.to_csv('../src/data/Canada/AvailabilityFactor.csv', index=False)
+    dfUsa = functions.getUsaCapacityOrAvailabilityFactor(False)
+    df = df.append(dfUsa)
+    df.to_csv('../src/data/AvailabilityFactor.csv', index=False)
 
 if __name__ == "__main__":
     main()
