@@ -301,7 +301,7 @@ def getELCfuels(regions):
     # Return list of electricty fuels
     return outList
 
-def createFuelSet(countries, rnwTechs, mineTechs, generateInternational):
+def createFuelDataframe(countries, rnwTechs, mineTechs, generateInternational):
     # PURPOSE: Appends all fuel name lists together and writes them to a CSV
     # INPUT:   countries = Dictionary holding countries as the key and subregion as the values in a list
     #          rnwTechs = List of the technologies to print over for getRNWfuels
@@ -338,7 +338,7 @@ def createTechDataframe(countries, techsMaster, mineTechs, rnwTechs, trnTechsCsv
     #          trnTechsCsvPath = Trade csv dataframe location
     #          generateInternational = True/False for whether function should
     #                                  create all international mining techs
-    # OUTPUT:  dfOut = fuel set dataframe
+    # OUTPUT:  dfOut = tech set dataframe
     # get power generator technology list 
     pwrList = getPWRtechs(countries, techsMaster)
 
