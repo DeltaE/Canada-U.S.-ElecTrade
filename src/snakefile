@@ -120,7 +120,7 @@ rule lpFile:
 ## INTERMEDIATE RULES
 #####################################
 
-rule ConfigRule:
+rule MakeSets:
 	input:
 		inputDir + 'Regionalization.xlsx',
 		inputDir + 'Trade.csv',
@@ -135,7 +135,7 @@ rule ConfigRule:
 		outputDir + 'data/TECHNOLOGY.csv',
 		outputDir + 'data/FUEL.csv'
 	shell:
-		'python ' + scriptsDir + 'config.py'
+		'python ' + scriptsDir + 'MakeSets.py'
 
 rule AvailabilityFactor:
 	input:
