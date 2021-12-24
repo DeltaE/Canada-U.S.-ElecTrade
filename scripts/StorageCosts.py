@@ -14,7 +14,7 @@ def main():
 
     # Parameters to print over
     regions = functions.openYaml().get('regions')
-    subregions = functions.openYaml().get('subregions_list')
+    subregions = (functions.openYaml().get('subregions_dictionary')).keys()
     years = functions.getYears()
 
     #Read in master list of technologies and get storage names
