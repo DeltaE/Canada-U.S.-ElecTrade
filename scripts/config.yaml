@@ -9,7 +9,7 @@ seasons:
 regions: 
   - 'NAmerica'
 
-# Canadian provinces to subregions mapping
+# Provinces and states to subregions mapping
 subregions_dictionary:
   - 'CAN':
     'WS': [ 'BC', 'AB' ]
