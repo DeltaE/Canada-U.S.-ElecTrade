@@ -17,11 +17,11 @@ def main():
     subregions = functions.openYaml().get('subregions_list')
     years = functions.getYears()
 
-    # Here, we would read in master list of technologies and get storage names, but none exist yet
-    # if not storages:
-    df = pd.DataFrame(columns=['REGION','STORAGE','YEAR','VALUE'])
-    df.to_csv('../src/data/CapitalCostStorage.csv', index=False)
-    return
+    storages = functions.openYaml().get('sto_techs')
+    if not storages: # sto_techs is an empty list, so the program always steps in here
+        df = pd.DataFrame(columns=['REGION','STORAGE','YEAR','VALUE'])
+        df.to_csv('../src/data/CapitalCostStorage.csv', index=False)
+        return
 
     #Dictory to hold storage ype and cost in M$/GW
     storageCosts = {'TNK':11.673152}
