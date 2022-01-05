@@ -20,15 +20,6 @@ def main():
     canCountries = functions.getRegionDictionary('CAN')
     usaCountries = functions.getRegionDictionary('USA')
 
-    #######################################
-    ## CREATE TECH LISTS FOR OTHER SCRIPTS
-    #######################################
-    
-    techLists = functions.createTechList(techsMaster, rnwTechs, mineTechs, stoTechs)
-
-    dfGenerationType = pd.DataFrame(techLists, columns=['GENERATION','VALUE'])
-    dfGenerationType.to_csv('../dataSources/techList_AUTO_GENERATED.csv', index = False)
-
     ####################################
     ## CREATE STANDARD SETS
     ####################################

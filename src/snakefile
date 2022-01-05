@@ -127,7 +127,6 @@ rule MakeSets:
 		inputDir + 'USA_Trade.csv',
 		inputDir + 'USA_Data.xlsx'
 	output:
-		inputDir + 'techList_AUTO_GENERATED.csv',
 		outputDir + 'data/YEAR.csv',
 		outputDir + 'data/REGION.csv',
 		outputDir + 'data/EMISSION.csv',
@@ -209,7 +208,6 @@ rule InOutActivityRatio:
 		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/YEAR.csv',
 		outputDir + 'data/REGION.csv',
-		inputDir + 'techList_AUTO_GENERATED.csv',
 		inputDir + 'Trade.csv',
 		inputDir + 'USA_Trade.csv',
 		inputDir + 'USA_Data.xlsx'
@@ -279,7 +277,6 @@ rule StorageCosts:
 		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/YEAR.csv',
 		outputDir + 'data/REGION.csv',
-		inputDir + 'techList_AUTO_GENERATED.csv',
 		inputDir + 'USA_Data.xlsx'
 	output:
 		outputDir + 'data/CapitalCostStorage.csv'
@@ -291,7 +288,6 @@ rule StorageLife:
 		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/YEAR.csv',
 		outputDir + 'data/REGION.csv',
-		inputDir + 'techList_AUTO_GENERATED.csv',
 		inputDir + 'USA_Data.xlsx'
 	output:
 		outputDir + 'data/OperationalLifeStorage.csv'
@@ -325,7 +321,6 @@ rule TechToFromStorage:
 		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/YEAR.csv',
 		outputDir + 'data/REGION.csv',
-		inputDir + 'techList_AUTO_GENERATED.csv',
 		inputDir + 'USA_Data.xlsx'
 	output:
 		outputDir + 'data/TechnologyToStorage.csv',
