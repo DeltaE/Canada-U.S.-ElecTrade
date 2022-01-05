@@ -17,14 +17,6 @@ subregions_dictionary:
   'QC': [ 'QC' ]
   'AT': [ 'NB', 'NS', 'PEI', 'NL' ]
 
-# Canadian subregions without mapping
-subregions_list:
-  - 'WS'
-  - 'MW'
-  - 'OT'
-  - 'QC'
-  - 'AT'
-
 # Initial year used in model (inclusive)
 start_year: 2019
 
