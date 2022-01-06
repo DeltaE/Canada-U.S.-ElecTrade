@@ -16,7 +16,7 @@ def main():
 
     # Parameters to print over
     regions = functions.openYaml().get('regions')
-    subregions = (functions.openYaml().get('subregions_dictionary')).keys()
+    subregions = (functions.openYaml().get('subregions_dictionary')[0]).keys() # Canadian subregions
     years = functions.getYears()
 
     #Trigger used to print capital, fixed and variable costs one at a time

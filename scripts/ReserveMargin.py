@@ -16,7 +16,7 @@ def main():
     ###########################################
 
     regions = functions.openYaml().get('regions')
-    subregions = functions.openYaml().get('subregions_dictionary')
+    subregions = functions.openYaml().get('subregions_dictionary')[0] # Canadian subregions
     seasons = functions.openYaml().get('seasons')
     years = functions.getYears()
     
