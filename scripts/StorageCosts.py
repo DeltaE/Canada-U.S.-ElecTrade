@@ -17,11 +17,8 @@ def main():
     subregions = (functions.openYaml().get('subregions_dictionary')).keys()
     years = functions.getYears()
 
-    #Read in master list of technologies and get storage names
-    dfGeneration_raw = pd.read_csv('../dataSources/techList_AUTO_GENERATED.csv')
-    dfGeneration = dfGeneration_raw.loc[dfGeneration_raw['GENERATION'] == 'STO']
-    storages = dfGeneration['VALUE'].tolist()
-    if not storages:
+    storages = functions.openYaml().get('sto_techs')
+    if not storages: # sto_techs is an empty list, so the program always steps in here
         df = pd.DataFrame(columns=['REGION','STORAGE','YEAR','VALUE'])
         df.to_csv('../src/data/CapitalCostStorage.csv', index=False)
         return

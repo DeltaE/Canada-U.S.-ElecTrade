@@ -22,20 +22,10 @@ def main():
     # Tech to Fuel Mapping
     techToFuel = functions.openYaml().get('tech_to_fuel')
 
-    ###########################################
-    # Get Min and Rnw techs
-    ###########################################
-
-    #Read in master list of technologies
-    dfGeneration_raw = pd.read_csv('../dataSources/techList_AUTO_GENERATED.csv')
-
-    #Populate techs by type dictionary
-    dfGeneration = dfGeneration_raw.loc[dfGeneration_raw['GENERATION'] == 'RNW']
-    rnwTechs = dfGeneration['VALUE'].tolist()
-    dfGeneration = dfGeneration_raw.loc[dfGeneration_raw['GENERATION'] == 'MIN']
-    minTechs = dfGeneration['VALUE'].tolist()
-    dfGeneration = dfGeneration_raw.loc[dfGeneration_raw['GENERATION'] == 'PWR']
-    pwrTechs = dfGeneration['VALUE'].tolist()
+    # Renewable, Mining, Power Techs
+    rnwTechs = functions.openYaml().get('rnw_techs')
+    minTechs = functions.openYaml().get('mine_techs')
+    pwrTechs = functions.openYaml().get('techs_master')
 
     ###########################################
     # IAR and OAR of One
