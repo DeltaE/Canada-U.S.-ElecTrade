@@ -16,7 +16,7 @@ def main():
 
     # Parameters to print over
     regions = functions.openYaml().get('regions')
-    subregions = ((functions.openYaml().get('subregions_dictionary'))[0]).keys() # Canadian subregions
+    subregions = ((functions.openYaml().get('subregions_dictionary'))['CAN']).keys() # Canadian subregions
     years = functions.getYears()
 
     # Tech to Fuel Mapping

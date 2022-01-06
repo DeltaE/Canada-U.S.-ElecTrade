@@ -15,7 +15,7 @@ def main():
     # Parameters to print over
     seasons = functions.openYaml().get('seasons')
     regions = functions.openYaml().get('regions')
-    subregions = (functions.openYaml().get('subregions_dictionary'))[0] # Canadian subregions
+    subregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
     years = functions.getYears()
 
     ###########################################
