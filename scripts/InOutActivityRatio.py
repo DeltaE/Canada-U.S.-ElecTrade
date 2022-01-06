@@ -22,9 +22,9 @@ def main():
     # Tech to Fuel Mapping
     techToFuel = functions.openYaml().get('tech_to_fuel')
 
-    # Renewable, Mining, Power Techs
+    # Renewable, Mining Fuels, Power Techs
     rnwTechs = functions.openYaml().get('rnw_techs')
-    minTechs = functions.openYaml().get('mine_techs')
+    minFuels = functions.openYaml().get('mine_fuels')
     pwrTechs = functions.openYaml().get('techs_master')
 
     ###########################################
@@ -47,7 +47,7 @@ def main():
     # OAR Domestic Mining
     for region in regions:
         for year in years:
-            for tech in minTechs:
+            for tech in minFuels:
                 techName = 'MIN' + tech + 'CAN'
                 fuelOut = tech + 'CAN'
                 masterOARList.append([region, techName, fuelOut, 1, year, 1])
@@ -55,7 +55,7 @@ def main():
     # IAR and OAR International Mining
     for region in regions:
         for year in years:
-            for tech in minTechs:
+            for tech in minFuels:
                 techName = 'MIN' + tech + 'INT'
                 fuelIn = tech
                 fuelOut = tech + 'INT'
@@ -98,7 +98,7 @@ def main():
                     oar = dfOAR.loc[year,tech]
                     fuelName = techToFuel[tech]
                     # if has international imports
-                    if fuelName in minTechs:
+                    if fuelName in minFuels:
                         inFuelModeOne = fuelName + 'CAN'
                         inFuelModeTwo = fuelName + 'INT'
                         outFuel = 'ELC' + 'CAN' + subregion + '01'
@@ -146,7 +146,7 @@ def getUsaOutputActivityRatio():
     subregions = functions.getRegionDictionary('USA')
 
     #Fuels that have international trade options
-    intFuel = functions.openYaml().get('mine_techs')
+    intFuel = functions.openYaml().get('mine_fuels')
     rnwFuel = functions.openYaml().get('rnw_techs')
 
     #holds output data
@@ -233,7 +233,7 @@ def getUsaInputActivityRatio():
     df.reset_index()    
 
     #Fuels that have international trade options
-    intFuel = functions.openYaml().get('mine_techs')
+    intFuel = functions.openYaml().get('mine_fuels')
 
     #holds output data
     outData = []

@@ -48,8 +48,8 @@ rnw_techs:
   - 'WND' # Wind
   - 'BIO' # Biomass
 
-# list of mining technologies
-mine_techs:
+# list of mining fuels
+mine_fuels:
   - 'COA' # Coal
   - 'GAS' # Gas
   - 'URN' # Nuclear

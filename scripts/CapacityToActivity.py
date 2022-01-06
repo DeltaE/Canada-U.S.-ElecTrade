@@ -19,10 +19,10 @@ def main():
 
     techsMaster = functions.openYaml().get('techs_master')
     rnwTechs = functions.openYaml().get('rnw_techs')
-    mineTechs = functions.openYaml().get('mine_techs')
+    mineFuels = functions.openYaml().get('mine_fuels')
     countries = functions.getRegionDictionary('CAN')
 
-    df = functions.createTechDataframe(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', True)
+    df = functions.createTechDataframe(countries, techsMaster, mineFuels, rnwTechs, '../dataSources/Trade.csv', True)
     technologies = df['VALUE'].tolist()
 
     ###########################################
@@ -70,7 +70,7 @@ def getUsaCapToActivityUnit():
 
     techsMaster = functions.openYaml().get('techs_master')
     rnwTechs = functions.openYaml().get('rnw_techs')
-    mineTechs = functions.openYaml().get('mine_techs')
+    mineFuels = functions.openYaml().get('mine_fuels')
     countries = functions.getRegionDictionary('USA')
 
     #This one is easier to manually do...
@@ -82,7 +82,7 @@ def getUsaCapToActivityUnit():
     capToAct = 31.536
 
     #Technologies to print over
-    df = functions.createTechDataframe(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', False)
+    df = functions.createTechDataframe(countries, techsMaster, mineFuels, rnwTechs, '../dataSources/USA_Trade.csv', False)
     techs = df['VALUE'].tolist()
 
     #populate list

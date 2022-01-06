@@ -14,7 +14,7 @@ def main():
     emissions = functions.openYaml().get('emissions')
     techsMaster = functions.openYaml().get('techs_master')
     rnwTechs = functions.openYaml().get('rnw_techs')
-    mineTechs = functions.openYaml().get('mine_techs')
+    mineTechs = functions.openYaml().get('mine_fuels')
     stoTechs = functions.openYaml().get('sto_techs')
     years = functions.getYears()
     canCountries = functions.getRegionDictionary('CAN')
