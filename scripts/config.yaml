@@ -11,13 +11,13 @@ regions:
 
 # Provinces and states to subregions mapping
 subregions_dictionary:
-  - 'CAN':
+  'CAN':
     'WS': [ 'BC', 'AB' ]
     'MW': [ 'SAS', 'MAN' ]
     'OT': [ 'ONT' ]
     'QC': [ 'QC' ]
     'AT': [ 'NB', 'NS', 'PEI', 'NL' ]
-  - 'USA':
+  'USA':
     'NW': [ 'WA', 'OR' ]
     'CA': [ 'CA' ]
     'MN': [ 'MT', 'ID', 'WY', 'NV', 'UT', 'CO' ]
