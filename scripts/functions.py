@@ -345,11 +345,11 @@ def createTechDataframe(countries, techsMaster, mineFuels, rnwFuels, trnTechsCsv
     # get grid distribution technology list (PWRTRN<Reg><SubReg>)
     pwrTrnList = getPWRTRNtechs(countries)
 
-    # get Mining fuels list
-    minList = getMINfuels(countries, mineFuels, generateInternational)
+    # get Mining techs list
+    minList = getMINtechs(countries, mineFuels, generateInternational)
 
     # get Renewables fuels list 
-    rnwList = getRNWfuels(countries, rnwFuels)
+    rnwList = getRNWtechs(countries, rnwFuels)
 
     # get trade technology list 
     trnList = getTRNtechs(trnTechsCsvPath)
