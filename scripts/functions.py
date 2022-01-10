@@ -384,28 +384,6 @@ def createTechList(techsMaster, rnwTechs, mineTechs, stoTechs):
     
     return data
 
-def getRegionDictionary(topLevelRegion):
-    # PURPOSE: Returns a dictionary for either the CAN or USA region, with the
-    # region as the key and the list of subregions as the value
-    # INPUT:   topLevelRegion = String indicating region: 'CAN' or 'USA'
-    # OUTPUT:  countries = Dictionary for holding countries as the key and
-    # subregion as the values in a list  
-
-    #Countries and subregions in the model
-    countries = {
-        topLevelRegion:[]
-        }
-
-    #Read in subregions. This step is needed cause other scripts use the 
-    #provincial breakdown by subregion in the excel file 
-    sourceFile = '../dataSources/Regionalization.xlsx'
-    dfCountry = pd.read_excel(sourceFile, sheet_name=topLevelRegion)
-    regionList = dfCountry['REGION'].tolist()
-    regionList = list(set(regionList)) # remove duplicates
-    countries[topLevelRegion] = regionList # save to dictionary
-    
-    return countries
-
 def getUsaCapacityOrAvailabilityFactor(isCapacity):
     # PURPOSE: Creates CapacityFactor or AvailabilityFactor file from USA data
     # INPUT:   isCapacity = Boolean indicating Capacity Factor should be returned

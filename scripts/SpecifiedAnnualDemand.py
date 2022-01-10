@@ -16,14 +16,7 @@ def main():
     years = functions.getYears()
 
     #Dictionary for subregion to province mappings
-    subregions = defaultdict(list)
-
-    # Read in regionalization file to get provincial seperation
-    df = pd.read_excel('../dataSources/Regionalization.xlsx', sheet_name='CAN')
-    for i in range(len(df)):    
-        subregion = df['REGION'].iloc[i]
-        province = df['PROVINCE'].iloc[i]
-        subregions[subregion].append(province)
+    subregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
 
     ###########################################
     # Calculate demand  

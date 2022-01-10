@@ -143,7 +143,7 @@ def getUsaOutputActivityRatio():
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
     techMap = functions.openYaml().get('usa_tech_map')
-    subregions = functions.getRegionDictionary('USA')
+    subregions = (functions.openYaml().get('subregions_dictionary'))['USA'] # American subregions
 
     #Fuels that have international trade options
     intFuel = functions.openYaml().get('mine_techs')
@@ -158,7 +158,7 @@ def getUsaOutputActivityRatio():
     #renewables
     for year in years:
         for rawFuel in rnwFuel:
-            for subregion in subregions['USA']:
+            for subregion in subregions:
                 region = 'NAmerica'
                 techName = 'RNW' + rawFuel + 'USA' + subregion
                 fuel = rawFuel + 'USA' + subregion 
@@ -173,7 +173,7 @@ def getUsaOutputActivityRatio():
             outData.append([region, techName, fuel, 1, year, 1])
 
     # OAR for PWRTRN technologies
-    for subregion in subregions['USA']:
+    for subregion in subregions:
         for year in years:
             region = 'NAmerica'
             techName = 'PWR' + 'TRN' + 'USA' + subregion
@@ -182,7 +182,7 @@ def getUsaOutputActivityRatio():
 
     # OAR for PWR technologies
     for year in years:
-        for subregion in subregions['USA']:
+        for subregion in subregions:
             for tech in techMap:
                 region = 'NAmerica'
                 techName = 'PWR' + techMap[tech] + 'USA' + subregion + '01'
@@ -213,7 +213,7 @@ def getUsaInputActivityRatio():
 
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'InputActivityRatio(r,t,f,m,y)')
     techMap = functions.openYaml().get('usa_tech_map')
-    subregions = functions.getRegionDictionary('USA')
+    subregions = (functions.openYaml().get('subregions_dictionary'))['USA'] # American subregions
     inputFuelMap = functions.openYaml().get('tech_to_fuel')
 
     #remove anything from years 2015 - 2018
@@ -259,7 +259,7 @@ def getUsaInputActivityRatio():
             outData.append([region,tech,fuel,1,year,value])
 
     # IAR for PWRTRN technologies
-    for subregion in subregions['USA']:
+    for subregion in subregions:
         for year in functions.getYears():
             region = 'NAmerica'
             techName = 'PWR' + 'TRN' + 'USA' + subregion

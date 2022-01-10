@@ -45,7 +45,7 @@ def getUsaRETagTechnology():
     # INPUT:   none
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
-    subregions = functions.getRegionDictionary('USA')
+    subregions = (functions.openYaml().get('subregions_dictionary'))['USA'] # American subregions
 
     techs = functions.openYaml().get('rnw_techs')
     years = functions.getYears()
@@ -53,7 +53,7 @@ def getUsaRETagTechnology():
     outData = []
 
     for year in years:
-        for subregion in subregions['USA']:
+        for subregion in subregions:
             for tech in techs:
                 region = 'NAmerica'
                 techName = 'PWR' + tech + 'USA' + subregion + '01'

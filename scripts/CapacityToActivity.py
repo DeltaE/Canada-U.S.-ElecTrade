@@ -20,7 +20,7 @@ def main():
     techsMaster = functions.openYaml().get('techs_master')
     rnwTechs = functions.openYaml().get('rnw_techs')
     mineTechs = functions.openYaml().get('mine_techs')
-    countries = functions.getRegionDictionary('CAN')
+    countries = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
 
     df = functions.createTechDataframe(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', True)
     technologies = df['VALUE'].tolist()
@@ -71,7 +71,7 @@ def getUsaCapToActivityUnit():
     techsMaster = functions.openYaml().get('techs_master')
     rnwTechs = functions.openYaml().get('rnw_techs')
     mineTechs = functions.openYaml().get('mine_techs')
-    countries = functions.getRegionDictionary('USA')
+    countries = (functions.openYaml().get('subregions_dictionary')) # American subregions
 
     #This one is easier to manually do...
     outData = []

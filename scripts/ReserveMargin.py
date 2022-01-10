@@ -258,7 +258,7 @@ def getUsaReserveMarginTagFuel():
     # Account for peak squishing 
     ##################################################
     # Region Dictionary
-    regions = (functions.openYaml().get('subregions_dictionary'))['USA']
+    regions = (functions.openYaml().get('subregions_dictionary'))['USA'] # American subregions
 
     # Should update this for individual states
     # should be 10 percent for hydro dominated provinces or 

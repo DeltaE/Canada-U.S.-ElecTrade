@@ -17,8 +17,8 @@ def main():
     mineTechs = functions.openYaml().get('mine_techs')
     stoTechs = functions.openYaml().get('sto_techs')
     years = functions.getYears()
-    canCountries = functions.getRegionDictionary('CAN')
-    usaCountries = functions.getRegionDictionary('USA')
+    canCountries = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
+    usaCountries = (functions.openYaml().get('subregions_dictionary'))['USA'] # American subregions
 
     ####################################
     ## CREATE STANDARD SETS
