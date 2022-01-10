@@ -13,8 +13,8 @@ def main():
     regions = functions.openYaml().get('regions')
     emissions = functions.openYaml().get('emissions')
     techsMaster = functions.openYaml().get('techs_master')
-    rnwTechs = functions.openYaml().get('rnw_techs')
-    mineTechs = functions.openYaml().get('mine_fuels')
+    rnwFuels = functions.openYaml().get('rnw_fuels')
+    mineFuels = functions.openYaml().get('mine_fuels')
     stoTechs = functions.openYaml().get('sto_techs')
     years = functions.getYears()
     canCountries = functions.getRegionDictionary('CAN')
@@ -50,8 +50,8 @@ def main():
     ## CREATE TECHNOLOGY SET
     ####################################
 
-    canadaDfOut = functions.createTechDataframe(canCountries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', True)
-    usaDfOut = functions.createTechDataframe(usaCountries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', False)
+    canadaDfOut = functions.createTechDataframe(canCountries, techsMaster, mineFuels, rnwFuels, '../dataSources/Trade.csv', True)
+    usaDfOut = functions.createTechDataframe(usaCountries, techsMaster, mineFuels, rnwFuels, '../dataSources/USA_Trade.csv', False)
     df = canadaDfOut.append(usaDfOut)
     df.to_csv('../src/data/TECHNOLOGY.csv', index=False)
 
@@ -59,8 +59,8 @@ def main():
     ## CREATE FUEL SET
     ####################################
 
-    canadaDfOut = functions.createFuelDataframe(canCountries, rnwTechs, mineTechs, True)
-    usaDfOut = functions.createFuelDataframe(usaCountries, rnwTechs, mineTechs, False)
+    canadaDfOut = functions.createFuelDataframe(canCountries, rnwFuels, mineFuels, True)
+    usaDfOut = functions.createFuelDataframe(usaCountries, rnwFuels, mineFuels, False)
     df = canadaDfOut.append(usaDfOut)
     df.to_csv('../src/data/FUEL.csv', index=False)
 

@@ -23,7 +23,7 @@ def main():
     techToFuel = functions.openYaml().get('tech_to_fuel')
 
     # Renewable, Mining Fuels, Power Techs
-    rnwTechs = functions.openYaml().get('rnw_techs')
+    rnwFuels = functions.openYaml().get('rnw_fuels')
     minFuels = functions.openYaml().get('mine_fuels')
     pwrTechs = functions.openYaml().get('techs_master')
 
@@ -39,26 +39,26 @@ def main():
     for region in regions:
         for year in years:
             for subregion in subregions:
-                for tech in rnwTechs:
-                    techName = 'RNW' + tech + 'CAN' + subregion
-                    fuelOut = tech + 'CAN' + subregion
+                for fuel in rnwFuels:
+                    techName = 'RNW' + fuel + 'CAN' + subregion
+                    fuelOut = fuel + 'CAN' + subregion
                     masterOARList.append([region, techName, fuelOut, 1, year, 1])
     
     # OAR Domestic Mining
     for region in regions:
         for year in years:
-            for tech in minFuels:
-                techName = 'MIN' + tech + 'CAN'
-                fuelOut = tech + 'CAN'
+            for fuel in minFuels:
+                techName = 'MIN' + fuel + 'CAN'
+                fuelOut = fuel + 'CAN'
                 masterOARList.append([region, techName, fuelOut, 1, year, 1])
 
     # IAR and OAR International Mining
     for region in regions:
         for year in years:
-            for tech in minFuels:
-                techName = 'MIN' + tech + 'INT'
-                fuelIn = tech
-                fuelOut = tech + 'INT'
+            for fuel in minFuels:
+                techName = 'MIN' + fuel + 'INT'
+                fuelIn = fuel
+                fuelOut = fuel + 'INT'
                 masterIARList.append([region, techName, fuelIn, 1, year, 1])
                 masterOARList.append([region, techName, fuelOut, 1, year, 1])
 
@@ -92,11 +92,11 @@ def main():
     for region in regions:
         for year in years:
             for subregion in subregions:
-                for tech in pwrTechs:
-                    techName = 'PWR' + tech + 'CAN' + subregion + '01'
-                    iar = dfIAR.loc[year,tech]
-                    oar = dfOAR.loc[year,tech]
-                    fuelName = techToFuel[tech]
+                for fuel in pwrTechs:
+                    techName = 'PWR' + fuel + 'CAN' + subregion + '01'
+                    iar = dfIAR.loc[year,fuel]
+                    oar = dfOAR.loc[year,fuel]
+                    fuelName = techToFuel[fuel]
                     # if has international imports
                     if fuelName in minFuels:
                         inFuelModeOne = fuelName + 'CAN'
@@ -107,15 +107,15 @@ def main():
                         masterOARList.append([region, techName, outFuel, 1, year, oar])
                         masterOARList.append([region, techName, outFuel, 2, year, oar])
                     # edge case of storage. This is super hacked together... will need to update
-                    elif tech == 'P2G' or tech == 'FCL':
+                    elif fuel == 'P2G' or fuel == 'FCL':
                         # P2G will only have input activity ratio 
-                        if tech == 'P2G':
+                        if fuel == 'P2G':
                             inFuel = 'ELC' + 'CAN' + subregion + '02'
                             outFuel = 'HY2' + 'CAN' + subregion + '01'
                             masterIARList.append([region, techName, inFuel, 1, year, iar])
                             masterOARList.append([region, techName, outFuel, 1, year, 0])
                         # P2G will only have output activity ratio 
-                        elif tech == 'FCL':
+                        elif fuel == 'FCL':
                             inFuel = 'HY2' + 'CAN' + subregion + '01'
                             outFuel = 'ELC' + 'CAN' + subregion + '02'
                             masterIARList.append([region, techName, inFuel, 1, year, 0])
@@ -147,7 +147,7 @@ def getUsaOutputActivityRatio():
 
     #Fuels that have international trade options
     intFuel = functions.openYaml().get('mine_fuels')
-    rnwFuel = functions.openYaml().get('rnw_techs')
+    rnwFuel = functions.openYaml().get('rnw_fuels')
 
     #holds output data
     outData = []

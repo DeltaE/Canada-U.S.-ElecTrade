@@ -40,9 +40,9 @@ def main():
 
     # List of technologies to tag
     techTags = functions.openYaml().get('techs_master')
-    variableTechs = functions.openYaml().get('variable_techs')
+    variableFuels = functions.openYaml().get('variable_techs')
     # Remove the non-dispachable techs from techTags
-    techTags = [x for x in techTags if x not in variableTechs]
+    techTags = [x for x in techTags if x not in variableFuels]
 
     #For timeslicing 
     hours = range(1,25)
