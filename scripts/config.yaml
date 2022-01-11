@@ -41,20 +41,20 @@ techs_master:
    #'P2G' # Power to Gas
    #'FCL' # Fuel Cell
 
-# list of renewable technologies
-rnw_techs:
+# list of renewable fuels
+rnw_fuels:
   - 'HYD' # Hydro 
   - 'SPV' # Solar
   - 'WND' # Wind
   - 'BIO' # Biomass
 
-# list of mining technologies
-mine_techs:
+# list of mining fuels
+mine_fuels:
   - 'COA' # Coal
   - 'GAS' # Gas
   - 'URN' # Nuclear
 
-# list of variable technologies
+# list of variable techs
 variable_techs:
   - 'SPV'
   - 'WND'
