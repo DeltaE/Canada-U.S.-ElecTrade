@@ -1,5 +1,6 @@
 import pandas as pd
 import functions
+from itertools import islice
 
 def main():
     # PURPOSE: Creates Tech and Fuel sets. Writes our files that are referenced by other scripts
@@ -17,8 +18,12 @@ def main():
     mineTechs = functions.openYaml().get('mine_techs')
     stoTechs = functions.openYaml().get('sto_techs')
     years = functions.getYears()
-    canCountries = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
-    usaCountries = (functions.openYaml().get('subregions_dictionary'))['USA'] # American subregions
+    subregionsDict = functions.openYaml().get('subregions_dictionary')
+    for key, value in subregionsDict.items():
+        if key == 'CAN':
+            canCountries = {key:value} # Canadian subregions
+        else:
+            usaCountries = {key:value} # American subregions
 
     ####################################
     ## CREATE STANDARD SETS
