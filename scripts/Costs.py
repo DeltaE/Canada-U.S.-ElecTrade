@@ -513,7 +513,7 @@ def getUsaVariableCost():
     df.reset_index()
 
     #Fuels that have international trade options
-    intFuel = functions.openYaml().get('mine_techs')
+    intFuel = functions.openYaml().get('mine_fuels')
 
     #holds output data
     outData = []

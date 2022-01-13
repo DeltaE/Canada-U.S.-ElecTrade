@@ -18,14 +18,14 @@ def main():
     regions = functions.openYaml().get('regions')
 
     techsMaster = functions.openYaml().get('techs_master')
-    rnwTechs = functions.openYaml().get('rnw_techs')
-    mineTechs = functions.openYaml().get('mine_techs')
+    rnwFuels = functions.openYaml().get('rnw_fuels')
+    mineFuels = functions.openYaml().get('mine_fuels')
     subregionsDict = functions.openYaml().get('subregions_dictionary')
     for key, value in subregionsDict.items():
         if key == 'CAN':
             countries = {key:value} # Canadian subregions
 
-    df = functions.createTechDataframe(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', True)
+    df = functions.createTechDataframe(countries, techsMaster, mineFuels, rnwFuels, '../dataSources/Trade.csv', True)
     technologies = df['VALUE'].tolist()
 
     ###########################################
@@ -72,9 +72,9 @@ def getUsaCapToActivityUnit():
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
     techsMaster = functions.openYaml().get('techs_master')
-    rnwTechs = functions.openYaml().get('rnw_techs')
-    mineTechs = functions.openYaml().get('mine_techs')
     subregionsDict = functions.openYaml().get('subregions_dictionary')
+    rnwFuels = functions.openYaml().get('rnw_fuels')
+    mineFuels = functions.openYaml().get('mine_fuels')
     for key, value in subregionsDict.items():
         if key == 'USA':
             countries = {key:value} # American subregions
@@ -87,8 +87,8 @@ def getUsaCapToActivityUnit():
     # If 1 GW of capacity works constantly throughout the year, it produced 31.536 PJ
     capToAct = 31.536
 
-    #Technologies to print over
-    df = functions.createTechDataframe(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', False)
+    #Technologies and fuels to print over
+    df = functions.createTechDataframe(countries, techsMaster, mineFuels, rnwFuels, '../dataSources/USA_Trade.csv', False)
     techs = df['VALUE'].tolist()
 
     #populate list
