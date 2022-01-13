@@ -18,8 +18,8 @@ def main():
     regions = functions.openYaml().get('regions')
 
     techsMaster = functions.openYaml().get('techs_master')
-    rnwTechs = functions.openYaml().get('rnw_techs')
-    mineTechs = functions.openYaml().get('mine_techs')
+    rnwFuels = functions.openYaml().get('rnw_fuels')
+    mineFuels = functions.openYaml().get('mine_fuels')
     subregionsDict = functions.openYaml().get('subregions_dictionary')
     for key, value in subregionsDict.items():
         if key == 'CAN':
@@ -72,8 +72,8 @@ def getUsaCapToActivityUnit():
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
     techsMaster = functions.openYaml().get('techs_master')
-    rnwTechs = functions.openYaml().get('rnw_techs')
-    mineTechs = functions.openYaml().get('mine_techs')
+    rnwFuels = functions.openYaml().get('rnw_fuels')
+    mineFuels = functions.openYaml().get('mine_fuels')
     subregionsDict = functions.openYaml().get('subregions_dictionary')
     for key, value in subregionsDict.items():
         if key == 'USA':
