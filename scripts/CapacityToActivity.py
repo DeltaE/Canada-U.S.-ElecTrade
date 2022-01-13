@@ -25,7 +25,7 @@ def main():
         if key == 'CAN':
             countries = {key:value} # Canadian subregions
 
-    df = functions.createTechDataframe(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/Trade.csv', True)
+    df = functions.createTechDataframe(countries, techsMaster, mineFuels, rnwFuels, '../dataSources/Trade.csv', True)
     technologies = df['VALUE'].tolist()
 
     ###########################################
@@ -87,8 +87,8 @@ def getUsaCapToActivityUnit():
     # If 1 GW of capacity works constantly throughout the year, it produced 31.536 PJ
     capToAct = 31.536
 
-    #Technologies to print over
-    df = functions.createTechDataframe(countries, techsMaster, mineTechs, rnwTechs, '../dataSources/USA_Trade.csv', False)
+    #Technologies and fuels to print over
+    df = functions.createTechDataframe(countries, techsMaster, mineFuels, rnwFuels, '../dataSources/USA_Trade.csv', False)
     techs = df['VALUE'].tolist()
 
     #populate list

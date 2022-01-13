@@ -15,8 +15,8 @@ def main():
     subregions = ((functions.openYaml().get('subregions_dictionary')['CAN'])).keys() # Canadian subregions
     years = functions.getYears()
 
-    #Techs to tag
-    techs = functions.openYaml().get('rnw_techs')
+    #Fuels to tag
+    fuels = functions.openYaml().get('rnw_fuels')
 
     ###########################################
     # Compile RE Tags
@@ -30,8 +30,8 @@ def main():
     for region in regions:
         for year in years:
             for subregion in subregions:
-                for tech in techs:
-                    techName = 'PWR' + tech + 'CAN' + subregion + '01'
+                for fuel in fuels:
+                    techName = 'PWR' + fuel + 'CAN' + subregion + '01'
                     dataOut.append([region, techName, year, 1])
     
     #write to a csv
@@ -47,16 +47,16 @@ def getUsaRETagTechnology():
 
     subregions = (functions.openYaml().get('subregions_dictionary'))['USA'] # American subregions
 
-    techs = functions.openYaml().get('rnw_techs')
+    fuels = functions.openYaml().get('rnw_fuels')
     years = functions.getYears()
 
     outData = []
 
     for year in years:
         for subregion in subregions:
-            for tech in techs:
+            for fuel in fuels:
                 region = 'NAmerica'
-                techName = 'PWR' + tech + 'USA' + subregion + '01'
+                techName = 'PWR' + fuel + 'USA' + subregion + '01'
                 outData.append([region, techName, year, 1])
 
     # create and return datafram
