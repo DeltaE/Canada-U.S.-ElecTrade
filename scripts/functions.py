@@ -254,7 +254,7 @@ def getRNWfuels(regions, techs):
     # Return list of rnw fuels
     return outList
 
-def getMINfuels(regions, techs, generateInternational):
+def getMINfuels(regions, techs):
     # PURPOSE: Creates Fuel names for Mined Fuels
     # INPUT:   regions =  Dictionary holding region as the key and subregion as the values in a list
     #          techs =    List of the technologies to print over 
@@ -270,15 +270,6 @@ def getMINfuels(regions, techs, generateInternational):
         for tech in techs:
             fuelName = tech + region
             outList.append(fuelName)
-    
-    # Created once in Canada scripts
-    # Loop to create all technology names for international import/export
-    if generateInternational:
-        for tech in techs:
-            fuelName = tech + 'INT'
-            outList.append(fuelName)
-        for tech in techs:
-            outList.append(tech)
 
     # Return list of min TFuels
     return outList
@@ -301,31 +292,41 @@ def getELCfuels(regions):
     # Return list of electricty fuels
     return outList
 
-def createFuelDataframe(countries, rnwFuels, mineFuels, generateInternational):
+def createFuelDataframe(subregions, rnwFuels, mineFuels):
     # PURPOSE: Appends all fuel name lists together and writes them to a CSV
-    # INPUT:   countries = Dictionary holding countries as the key and subregion as the values in a list
+    # INPUT:   subregions = List of dictionaries holding subregions as the key and subregion as the values in a list
     #          rnwFuels = List of the fuels to print over for getRNWfuels
     #          mineFuels = List of the fuels to print over for getMINfuels
-    #          generateInternational = True/False for whether getMINfuels function needs to create all
-    #                                  technology names for international import/export
     # OUTPUT:  dfOut = fuel set dataframe
+    outputFuels = []
+    for i in range(0, len(subregions)):
+        # Renewable fuels
+        rnwFuelList = getRNWfuels(subregions[i], rnwFuels)
 
-    # Renewable fuels
-    rnwFuelList = getRNWfuels(countries, rnwFuels)
+        # Mining fuels
+        minFuelList = getMINfuels(subregions[i], mineFuels)
 
-    # Mining fuels
-    minFuelList = getMINfuels(countries, mineFuels, generateInternational)
+        #ELC fuels
+        elcFuelList = getELCfuels(subregions[i])
 
-    #ELC fuels
-    elcFuelList = getELCfuels(countries)
+        #Hydrogen Fuels
+        #hy2FuelList = getHY2fuels(countries)
 
-    #Hydrogen Fuels
-    #hy2FuelList = getHY2fuels(countries)
+        #Append lists together
+        outputFuels += rnwFuelList
+        outputFuels += minFuelList
+        outputFuels += elcFuelList
+        #outputFuels.append(hy2FuelList)
+    
+    # Loop to create all technology names for international import/export
+    for tech in mineFuels:
+        fuelName = tech + 'INT'
+        outputFuels.append(fuelName)
+    for tech in mineFuels:
+        outputFuels.append(tech)
 
-    #Append lists together and write to a dataframe
-    #outputFuels = rnwFuelList + minFuelList + elcFuelList + hy2FuelList
-    outputFuels = rnwFuelList + minFuelList + elcFuelList
     dfOut = pd.DataFrame(outputFuels, columns=['VALUE'])
+    
     return dfOut
 
 def createTechDataframe(countries, techsMaster, mineFuels, rnwFuels, trnTechsCsvPath, generateInternational):
