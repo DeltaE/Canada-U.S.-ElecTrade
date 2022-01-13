@@ -23,13 +23,9 @@ def main():
     subregionsDict = functions.openYaml().get('subregions_dictionary')
     for key, value in subregionsDict.items():
         if key == 'CAN':
-<<<<<<< HEAD
             canCountries = {key:value} # Canadian subregions
         if key == 'USA':
             usaCountries = {key:value} # American subregions
-=======
-            countries = {key:value} # Canadian subregions
->>>>>>> 6332b76afcb81f5b8507268c99a0acce17088b8e
 
     canadaAndUsaSubregions = [canCountries, usaCountries]
     technologies = functions.createTechDataframe(canadaAndUsaSubregions, techsMaster, mineFuels, rnwFuels, ['../dataSources/Trade.csv', '../dataSources/USA_Trade.csv'])
@@ -72,41 +68,5 @@ def main():
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','VALUE'])
     dfOut.to_csv('../src/data/CapacityToActivityUnit.csv', index=False)
 
-<<<<<<< HEAD
-=======
-def getUsaCapToActivityUnit():
-    # PURPOSE: Creates capacityToActivity file from USA data
-    # INPUT:   N/A
-    # OUTPUT:  dfOut = dataframe to be written to a csv
-
-    techsMaster = functions.openYaml().get('techs_master')
-    subregionsDict = functions.openYaml().get('subregions_dictionary')
-    rnwFuels = functions.openYaml().get('rnw_fuels')
-    mineFuels = functions.openYaml().get('mine_fuels')
-    for key, value in subregionsDict.items():
-        if key == 'USA':
-            countries = {key:value} # American subregions
-
-    #This one is easier to manually do...
-    outData = []
-
-    # unit conversion from GWyr to PJ
-    # 1 GW (1 TW / 1000 GW)*(1 PW / 1000 TW)*(8760 hrs / yr)*(3600 sec / 1 hr) = 31.536
-    # If 1 GW of capacity works constantly throughout the year, it produced 31.536 PJ
-    capToAct = 31.536
-
-    #Technologies and fuels to print over
-    df = functions.createTechDataframe(countries, techsMaster, mineFuels, rnwFuels, '../dataSources/USA_Trade.csv', False)
-    techs = df['VALUE'].tolist()
-
-    #populate list
-    for tech in techs:
-        outData.append(['NAmerica', tech, capToAct])
-
-    #create and return datafram
-    dfOut = pd.DataFrame(outData, columns = ['REGION','TECHNOLOGY', 'VALUE'])
-    return dfOut
-
->>>>>>> 6332b76afcb81f5b8507268c99a0acce17088b8e
 if __name__ == "__main__":
     main()  
