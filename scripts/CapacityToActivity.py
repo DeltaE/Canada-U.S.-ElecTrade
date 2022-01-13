@@ -23,17 +23,22 @@ def main():
     subregionsDict = functions.openYaml().get('subregions_dictionary')
     for key, value in subregionsDict.items():
         if key == 'CAN':
-            countries = {key:value} # Canadian subregions
+            canCountries = {key:value} # Canadian subregions
+        if key == 'USA':
+            usaCountries = {key:value} # American subregions
 
-    df = functions.createTechDataframe(countries, techsMaster, mineFuels, rnwFuels, '../dataSources/Trade.csv', True)
-    technologies = df['VALUE'].tolist()
+    canDf = functions.createTechDataframe(canCountries, techsMaster, mineFuels, rnwFuels, '../dataSources/Trade.csv', True)
+    usaDf = functions.createTechDataframe(usaCountries, techsMaster, mineFuels, rnwFuels, '../dataSources/USA_Trade.csv', False)
+    canTechnologies = canDf['VALUE'].tolist()
+    usaTechnologies = usaDf['VALUE'].tolist()
 
     ###########################################
     # CREATE FILE
     ###########################################
 
     #capacity to activity columns = Region, Technology, Value
-    data = []
+    canOutData = []
+    usaOutData = []
 
     # unit conversion from GWyr to PJ
     # 1 GW (1 TW / 1000 GW)*(1 PW / 1000 TW)*(8760 hrs / yr)*(3600 sec / 1 hr) = 31.536
@@ -57,47 +62,16 @@ def main():
 
     #populate list
     for region in regions:
-        for tech in technologies:
-            data.append([region, tech, capToAct])
+        for tech in canTechnologies:
+            canOutData.append([region, tech, capToAct])
+        for tech in usaTechnologies:
+            usaOutData.append([region, tech, capToAct])
 
     #write to csv
-    dfOut = pd.DataFrame(data,columns=['REGION','TECHNOLOGY','VALUE'])
-    dfUsa = getUsaCapToActivityUnit()
+    dfOut = pd.DataFrame(canOutData, columns=['REGION','TECHNOLOGY','VALUE'])
+    dfUsa = pd.DataFrame(usaOutData, columns = ['REGION','TECHNOLOGY', 'VALUE'])
     dfOut = dfOut.append(dfUsa)
     dfOut.to_csv('../src/data/CapacityToActivityUnit.csv', index=False)
-
-def getUsaCapToActivityUnit():
-    # PURPOSE: Creates capacityToActivity file from USA data
-    # INPUT:   N/A
-    # OUTPUT:  dfOut = dataframe to be written to a csv
-
-    techsMaster = functions.openYaml().get('techs_master')
-    rnwFuels = functions.openYaml().get('rnw_fuels')
-    mineFuels = functions.openYaml().get('mine_fuels')
-    subregionsDict = functions.openYaml().get('subregions_dictionary')
-    for key, value in subregionsDict.items():
-        if key == 'USA':
-            countries = {key:value} # American subregions
-
-    #This one is easier to manually do...
-    outData = []
-
-    # unit conversion from GWyr to PJ
-    # 1 GW (1 TW / 1000 GW)*(1 PW / 1000 TW)*(8760 hrs / yr)*(3600 sec / 1 hr) = 31.536
-    # If 1 GW of capacity works constantly throughout the year, it produced 31.536 PJ
-    capToAct = 31.536
-
-    #Technologies and fuels to print over
-    df = functions.createTechDataframe(countries, techsMaster, mineFuels, rnwFuels, '../dataSources/USA_Trade.csv', False)
-    techs = df['VALUE'].tolist()
-
-    #populate list
-    for tech in techs:
-        outData.append(['NAmerica', tech, capToAct])
-
-    #create and return datafram
-    dfOut = pd.DataFrame(outData, columns = ['REGION','TECHNOLOGY', 'VALUE'])
-    return dfOut
 
 if __name__ == "__main__":
     main()  
