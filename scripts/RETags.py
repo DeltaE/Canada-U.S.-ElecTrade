@@ -53,7 +53,7 @@ def getUsaRETagTechnology():
     outData = []
 
     for year in years:
-        for subregion in subregions['USA']:
+        for subregion in subregions:
             for fuel in fuels:
                 region = 'NAmerica'
                 techName = 'PWR' + fuel + 'USA' + subregion + '01'
