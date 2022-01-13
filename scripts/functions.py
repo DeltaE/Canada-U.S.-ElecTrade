@@ -173,7 +173,7 @@ def getPWRTRNtechs(regions):
     # Return list of pwr Technologes
     return outList
 
-def getMINtechs(regions, techs, generateInternational):
+def getMINtechs(regions, techs):
     # PURPOSE: Creates all the MIN naming technologies
     # INPUT:   regions =  Dictionary holding region as the key and subregion as the values in a list
     #          techs =    List of the technologies to print over 
@@ -188,13 +188,6 @@ def getMINtechs(regions, techs, generateInternational):
     for region in regions:
         for tech in techs:
             techName = 'MIN' + tech + region
-            outList.append(techName)
-    
-    # DONE ONLY IN THE CANADA SCRIPTS
-    # Loop to create all international mining techs
-    if generateInternational:
-        for tech in techs:
-            techName = 'MIN' + tech + 'INT'
             outList.append(techName)
 
     # Return list of min Technologes
@@ -294,7 +287,7 @@ def getELCfuels(regions):
 
 def createFuelDataframe(subregions, rnwFuels, mineFuels):
     # PURPOSE: Appends all fuel name lists together and writes them to a CSV
-    # INPUT:   subregions = List of dictionaries holding subregions as the key and subregion as the values in a list
+    # INPUT:   subregions = List of dictionaries holding the country as the key and subregions as the values in a list
     #          rnwFuels = List of the fuels to print over for getRNWfuels
     #          mineFuels = List of the fuels to print over for getMINfuels
     # OUTPUT:  dfOut = fuel set dataframe
@@ -329,34 +322,42 @@ def createFuelDataframe(subregions, rnwFuels, mineFuels):
     
     return dfOut
 
-def createTechDataframe(countries, techsMaster, mineFuels, rnwFuels, trnTechsCsvPath, generateInternational):
+def createTechDataframe(subregions, techsMaster, mineFuels, rnwFuels, trnTechsCsvPaths):
     # PURPOSE: Appends technology and fuel name lists together and returns them as a CSV dataframe
-    # INPUT:   countries = Dictionary holding countries as the key
-    #                      and subregion as the values in a list
+    # INPUT:   subregions = List of dictionaries holding the country as the key and subregions as the values in a list
     #          techsMaster = List of the technologies to print over for getPWRtechs
     #          mineFuels = List of the fuels to print over for getMINfuels
     #          rnwFuels = List of the fuels to print over for getRNWfuels
-    #          trnTechsCsvPath = Trade csv dataframe location
-    #          generateInternational = True/False for whether function should
-    #                                  create all international mining techs
+    #          trnTechsCsvPaths = List of trade csv dataframe locations (with indices matching with subregions)
     # OUTPUT:  dfOut = tech set dataframe
     # get power generator technology list 
-    pwrList = getPWRtechs(countries, techsMaster)
+    outputTechs = []
+    for i in range(0, len(subregions)):
+        pwrList = getPWRtechs(subregions[i], techsMaster)
 
-    # get grid distribution technology list (PWRTRN<Reg><SubReg>)
-    pwrTrnList = getPWRTRNtechs(countries)
+        # get grid distribution technology list (PWRTRN<Reg><SubReg>)
+        pwrTrnList = getPWRTRNtechs(subregions[i])
 
-    # get Mining techs list
-    minList = getMINtechs(countries, mineFuels, generateInternational)
+        # get Mining techs list
+        minList = getMINtechs(subregions[i], mineFuels)
 
-    # get Renewables fuels list 
-    rnwList = getRNWtechs(countries, rnwFuels)
+        # get Renewables fuels list 
+        rnwList = getRNWtechs(subregions[i], rnwFuels)
 
-    # get trade technology list 
-    trnList = getTRNtechs(trnTechsCsvPath)
+        # get trade technology list 
+        trnList = getTRNtechs(trnTechsCsvPaths[i])
 
-    #Append lists together and write to a dataframe
-    outputTechs = pwrList + pwrTrnList + minList + rnwList + trnList
+        #Append lists together and write to a dataframe
+        outputTechs += pwrList
+        outputTechs += pwrTrnList
+        outputTechs += minList
+        outputTechs += rnwList 
+        outputTechs += trnList
+    
+    for tech in mineFuels:
+        techName = 'MIN' + tech + 'INT'
+        outputTechs.append(techName)
+
     dfOut = pd.DataFrame(outputTechs, columns=['VALUE'])
 
     return dfOut

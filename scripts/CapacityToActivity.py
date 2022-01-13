@@ -27,18 +27,16 @@ def main():
         if key == 'USA':
             usaCountries = {key:value} # American subregions
 
-    canDf = functions.createTechDataframe(canCountries, techsMaster, mineFuels, rnwFuels, '../dataSources/Trade.csv', True)
-    usaDf = functions.createTechDataframe(usaCountries, techsMaster, mineFuels, rnwFuels, '../dataSources/USA_Trade.csv', False)
-    canTechnologies = canDf['VALUE'].tolist()
-    usaTechnologies = usaDf['VALUE'].tolist()
+    canadaAndUsaSubregions = [canCountries, usaCountries]
+    technologies = functions.createTechDataframe(canadaAndUsaSubregions, techsMaster, mineFuels, rnwFuels, ['../dataSources/Trade.csv', '../dataSources/USA_Trade.csv'])
+    technologiesList = technologies['VALUE'].tolist()
 
     ###########################################
     # CREATE FILE
     ###########################################
 
     #capacity to activity columns = Region, Technology, Value
-    canOutData = []
-    usaOutData = []
+    outData = []
 
     # unit conversion from GWyr to PJ
     # 1 GW (1 TW / 1000 GW)*(1 PW / 1000 TW)*(8760 hrs / yr)*(3600 sec / 1 hr) = 31.536
@@ -62,15 +60,12 @@ def main():
 
     #populate list
     for region in regions:
-        for tech in canTechnologies:
-            canOutData.append([region, tech, capToAct])
-        for tech in usaTechnologies:
-            usaOutData.append([region, tech, capToAct])
+        for tech in technologiesList:
+            outData.append([region, tech, capToAct])
+
 
     #write to csv
-    dfOut = pd.DataFrame(canOutData, columns=['REGION','TECHNOLOGY','VALUE'])
-    dfUsa = pd.DataFrame(usaOutData, columns = ['REGION','TECHNOLOGY', 'VALUE'])
-    dfOut = dfOut.append(dfUsa)
+    dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','VALUE'])
     dfOut.to_csv('../src/data/CapacityToActivityUnit.csv', index=False)
 
 if __name__ == "__main__":

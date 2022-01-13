@@ -55,16 +55,14 @@ def main():
     ## CREATE TECHNOLOGY SET
     ####################################
 
-    canadaDfOut = functions.createTechDataframe(canCountries, techsMaster, mineFuels, rnwFuels, '../dataSources/Trade.csv', True)
-    usaDfOut = functions.createTechDataframe(usaCountries, techsMaster, mineFuels, rnwFuels, '../dataSources/USA_Trade.csv', False)
-    df = canadaDfOut.append(usaDfOut)
+    canadaAndUsaSubregions = [canCountries, usaCountries]
+    df = functions.createTechDataframe(canadaAndUsaSubregions, techsMaster, mineFuels, rnwFuels, ['../dataSources/Trade.csv', '../dataSources/USA_Trade.csv'])
     df.to_csv('../src/data/TECHNOLOGY.csv', index=False)
 
     ####################################
     ## CREATE FUEL SET
     ####################################
 
-    canadaAndUsaSubregions = [canCountries, usaCountries]
     df = functions.createFuelDataframe(canadaAndUsaSubregions, rnwFuels, mineFuels)
     df.to_csv('../src/data/FUEL.csv', index=False)
 
