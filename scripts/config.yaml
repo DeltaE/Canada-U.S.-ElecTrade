@@ -9,13 +9,28 @@ seasons:
 regions: 
   - 'NAmerica'
 
-# Canadian provinces to subregions mapping
+# Provinces and states to subregions mapping
 subregions_dictionary:
-  'WS': [ 'BC', 'AB' ]
-  'MW': [ 'SAS', 'MAN' ]
-  'OT': [ 'ONT' ]
-  'QC': [ 'QC' ]
-  'AT': [ 'NB', 'NS', 'PEI', 'NL' ]
+  'CAN':
+    'WS': [ 'BC', 'AB' ]
+    'MW': [ 'SAS', 'MAN' ]
+    'OT': [ 'ONT' ]
+    'QC': [ 'QC' ]
+    'AT': [ 'NB', 'NS', 'PEI', 'NL' ]
+  'USA':
+    'NW': [ 'WA', 'OR' ]
+    'CA': [ 'CA' ]
+    'MN': [ 'MT', 'ID', 'WY', 'NV', 'UT', 'CO' ]
+    'SW': [ 'AZ', 'NM' ]
+    'CE': [ 'ND', 'SD', 'NE', 'KS', 'OK' ]
+    'TX': [ 'TX' ]
+    'MW': [ 'MN', 'WI', 'IA', 'IL', 'IN', 'MI', 'MO' ]
+    'AL': [ 'AR', 'LA' ]
+    'MA': [ 'OH', 'PA', 'WV', 'KY', 'VA', 'NJ', 'DE', 'MD' ]
+    'SE': [ 'TN', 'NC', 'SC', 'MS', 'AL', 'GA' ]
+    'FL': [ 'FL' ]
+    'NY': [ 'NY' ]
+    'NE': [ 'VT', 'NH', 'ME', 'MA', 'CT', 'RI' ]
 
 # Initial year used in model (inclusive)
 start_year: 2019

@@ -122,7 +122,6 @@ rule lpFile:
 
 rule MakeSets:
 	input:
-		inputDir + 'Regionalization.xlsx',
 		inputDir + 'Trade.csv',
 		inputDir + 'USA_Trade.csv',
 		inputDir + 'USA_Data.xlsx'
@@ -138,7 +137,6 @@ rule MakeSets:
 
 rule AvailabilityFactor:
 	input:
-		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/YEAR.csv',
 		outputDir + 'data/REGION.csv',
 		inputDir + 'USA_Data.xlsx'
@@ -149,7 +147,6 @@ rule AvailabilityFactor:
 
 rule CapacityFactor:
 	input:
-		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/YEAR.csv',
 		outputDir + 'data/REGION.csv',
 		inputDir + 'NREL_Costs.csv',
@@ -174,7 +171,6 @@ rule CapacityToActivity:
 
 rule Costs:
 	input:
-		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/YEAR.csv',
 		outputDir + 'data/REGION.csv',
 		inputDir + 'NREL_Costs.csv',
@@ -192,7 +188,6 @@ rule Costs:
 rule EmissionActivityRatio:
 	input:
 		inputDir + 'EmissionActivityRatioByTechnology.csv',
-		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/YEAR.csv',
 		outputDir + 'data/REGION.csv',
 		inputDir + 'USA_Data.xlsx'
@@ -205,7 +200,6 @@ rule InOutActivityRatio:
 	input:
 		inputDir + 'InputActivityRatioByTechnology.csv', 
 		inputDir + 'OutputActivityRatioByTechnology.csv',
-		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/YEAR.csv',
 		outputDir + 'data/REGION.csv',
 		inputDir + 'Trade.csv',
@@ -219,7 +213,6 @@ rule InOutActivityRatio:
 
 rule ReserveMargin:
 	input:
-		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/YEAR.csv',
 		outputDir + 'data/REGION.csv',
 		inputDir + 'ProvincialAnnualDemand.csv',
@@ -234,7 +227,6 @@ rule ReserveMargin:
 
 rule ResidualCapacity:
 	input:
-		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/YEAR.csv',
 		outputDir + 'data/REGION.csv',
 		inputDir + 'OperationalLifeTechnology.csv',
@@ -250,7 +242,6 @@ rule ResidualCapacity:
 
 rule SpecifiedAnnualDemand:
 	input:
-		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/YEAR.csv',
 		outputDir + 'data/REGION.csv',
 		inputDir + 'ProvincialAnnualDemand.csv',
@@ -262,7 +253,6 @@ rule SpecifiedAnnualDemand:
 
 rule SpecifiedDemandProfile:
 	input:
-		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/YEAR.csv',
 		outputDir + 'data/REGION.csv',
 		inputDir + 'ProvincialHourlyLoads.xlsx',
@@ -274,7 +264,6 @@ rule SpecifiedDemandProfile:
 
 rule StorageCosts:
 	input:
-		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/YEAR.csv',
 		outputDir + 'data/REGION.csv',
 		inputDir + 'USA_Data.xlsx'
@@ -285,7 +274,6 @@ rule StorageCosts:
 
 rule StorageLife:
 	input:
-		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/YEAR.csv',
 		outputDir + 'data/REGION.csv',
 		inputDir + 'USA_Data.xlsx'
@@ -307,7 +295,6 @@ rule EmissionPenalty:
 
 rule RETags:
 	input:
-		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/YEAR.csv',
 		outputDir + 'data/REGION.csv',
 		inputDir + 'USA_Data.xlsx'
@@ -318,7 +305,6 @@ rule RETags:
 
 rule TechToFromStorage:
 	input:
-		inputDir + 'Regionalization.xlsx',
 		outputDir + 'data/YEAR.csv',
 		outputDir + 'data/REGION.csv',
 		inputDir + 'USA_Data.xlsx'

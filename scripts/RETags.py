@@ -12,7 +12,7 @@ def main():
 
     # Parameters to print over
     regions = functions.openYaml().get('regions')
-    subregions = (functions.openYaml().get('subregions_dictionary')).keys()
+    subregions = functions.openYaml().get('subregions_dictionary')
     years = functions.getYears()
 
     #Fuels to tag
@@ -29,39 +29,15 @@ def main():
     #print all values 
     for region in regions:
         for year in years:
-            for subregion in subregions:
-                for fuel in fuels:
-                    techName = 'PWR' + fuel + 'CAN' + subregion + '01'
-                    dataOut.append([region, techName, year, 1])
+            for country in subregions.keys():
+                for subregion in subregions[country].keys():
+                    for fuel in fuels:
+                        techName = 'PWR' + fuel + country + subregion + '01'
+                        dataOut.append([region, techName, year, 1])
     
     #write to a csv
     dfOut = pd.DataFrame(dataOut,columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
-    dfUsa = getUsaRETagTechnology()
-    dfOut = dfOut.append(dfUsa)
     dfOut.to_csv('../src/data/RETagTechnology.csv', index=False)
-
-def getUsaRETagTechnology():
-    # PURPOSE: Creates RETagTechnology file from USA data
-    # INPUT:   none
-    # OUTPUT:  dfOut = dataframe to be written to a csv
-
-    subregions = functions.getRegionDictionary('USA')
-
-    fuels = functions.openYaml().get('rnw_fuels')
-    years = functions.getYears()
-
-    outData = []
-
-    for year in years:
-        for subregion in subregions['USA']:
-            for fuel in fuels:
-                region = 'NAmerica'
-                techName = 'PWR' + fuel + 'USA' + subregion + '01'
-                outData.append([region, techName, year, 1])
-
-    # create and return datafram
-    dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
-    return dfOut
 
 if __name__ == "__main__":
     main()

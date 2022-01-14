@@ -12,7 +12,7 @@ def main():
 
     # Parameters to print over
     regions = functions.openYaml().get('regions')
-    subregions = (functions.openYaml().get('subregions_dictionary')).keys()
+    subregions = ((functions.openYaml().get('subregions_dictionary'))['CAN']).keys() # Canadian subregions
     storages = functions.openYaml().get('sto_techs')
     
     if not storages:

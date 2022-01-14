@@ -16,7 +16,7 @@ def main():
     ###########################################
 
     regions = functions.openYaml().get('regions')
-    subregions = functions.openYaml().get('subregions_dictionary')
+    subregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
     seasons = functions.openYaml().get('seasons')
     years = functions.getYears()
     
@@ -258,21 +258,7 @@ def getUsaReserveMarginTagFuel():
     # Account for peak squishing 
     ##################################################
     # Region Dictionary
-    regions = {
-        'NW':['WA','OR'],
-        'CA':['CA'],
-        'MN':['MT','ID','WY','NV','UT','CO'],
-        'SW':['AZ','NM'],
-        'CE':['ND','SD','NE','KS','OK'],
-        'TX':['TX'],
-        'MW':['MN','WI','IA','IL','IN','MI','MO'],
-        'AL':['AR','LA'],
-        'MA':['OH','PA','WV','KY','VA','NJ','DE','MD'],
-        'SE':['TN','NC','SC','MS','AL','GA'],
-        'FL':['FL'],
-        'NY':['NY'],
-        'NE':['VT','NH','ME','MA','CT','RI'],
-        }
+    regions = (functions.openYaml().get('subregions_dictionary'))['USA'] # American subregions
 
     # Should update this for individual states
     # should be 10 percent for hydro dominated provinces or 

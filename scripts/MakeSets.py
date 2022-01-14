@@ -1,5 +1,6 @@
 import pandas as pd
 import functions
+from itertools import islice
 
 def main():
     # PURPOSE: Creates Tech and Fuel sets. Writes our files that are referenced by other scripts
@@ -17,8 +18,7 @@ def main():
     mineFuels = functions.openYaml().get('mine_fuels')
     stoTechs = functions.openYaml().get('sto_techs')
     years = functions.getYears()
-    canCountries = functions.getRegionDictionary('CAN')
-    usaCountries = functions.getRegionDictionary('USA')
+    subregionsDict = functions.openYaml().get('subregions_dictionary')
 
     ####################################
     ## CREATE STANDARD SETS
@@ -41,7 +41,7 @@ def main():
     ####################################
 
     #get storages for each region 
-    stoList = getSTO(canCountries, stoTechs)
+    stoList = getSTO(subregionsDict, stoTechs)
 
     dfOut = pd.DataFrame(stoList, columns=['VALUE'])
     dfOut.to_csv('../src/data/STORAGE.csv', index=False)
@@ -50,18 +50,14 @@ def main():
     ## CREATE TECHNOLOGY SET
     ####################################
 
-    canadaDfOut = functions.createTechDataframe(canCountries, techsMaster, mineFuels, rnwFuels, '../dataSources/Trade.csv', True)
-    usaDfOut = functions.createTechDataframe(usaCountries, techsMaster, mineFuels, rnwFuels, '../dataSources/USA_Trade.csv', False)
-    df = canadaDfOut.append(usaDfOut)
+    df = functions.createTechDataframe(subregionsDict, techsMaster, mineFuels, rnwFuels, ['../dataSources/Trade.csv', '../dataSources/USA_Trade.csv'])
     df.to_csv('../src/data/TECHNOLOGY.csv', index=False)
 
     ####################################
     ## CREATE FUEL SET
     ####################################
 
-    canadaDfOut = functions.createFuelDataframe(canCountries, rnwFuels, mineFuels, True)
-    usaDfOut = functions.createFuelDataframe(usaCountries, rnwFuels, mineFuels, False)
-    df = canadaDfOut.append(usaDfOut)
+    df = functions.createFuelDataframe(subregionsDict, rnwFuels, mineFuels)
     df.to_csv('../src/data/FUEL.csv', index=False)
 
 ####################################
@@ -70,7 +66,7 @@ def main():
 
 def getSTO(regions, storages):
     # PURPOSE: Creates storage names
-    # INPUT:   regions =  Dictionary holding region as the key and subregion as the values in a list
+    # INPUT:   regions =  subregions = Dictionary holding Country and regions ({CAN:{WS:[...], ...} USA:[NY:[...],...]})
     # OUTPUT:  outList =  List of all the STO names
 
     # list to hold technologies
@@ -81,7 +77,7 @@ def getSTO(regions, storages):
 
     # Loop to create all technology names
     for region, subregions in regions.items():
-        for subregion in subregions:
+        for subregion in subregions['CAN']:
             for storage in storages:
                 storageName = 'STO' + storage + region + subregion
                 outList.append(storageName)
