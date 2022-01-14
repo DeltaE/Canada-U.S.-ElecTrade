@@ -139,7 +139,7 @@ def daylightSavings(inData):
 
 def getPWRtechs(region, techs):
     # PURPOSE: Creates all the PWR naming technologies
-    # INPUT:   regions =  Tuple holding country as the key and subregion as the values in a dictionary
+    # INPUT:   region =  Tuple holding country as the key and subregion as the values in a dictionary
     #                     (CAN, {WS:[...], MW:[]...},)
     #          techs =    List of the technologies to print over 
     # OUTPUT:  outList =  List of all the PWR technologies
@@ -158,7 +158,7 @@ def getPWRtechs(region, techs):
 
 def getPWRTRNtechs(region):
     # PURPOSE: Creates all the PWRTRN naming technologies
-    # INPUT:   regions =  Tuple holding country as the key and subregion as the values in a dictionary
+    # INPUT:   region =  Tuple holding country as the key and subregion as the values in a dictionary
     #                     (CAN, {WS:[...], MW:[]...},)
     # OUTPUT:  outList =  List of all the PWR technologies
 
@@ -175,7 +175,7 @@ def getPWRTRNtechs(region):
 
 def getMINtechs(region, techs):
     # PURPOSE: Creates all the MIN naming technologies
-    # INPUT:   regions =  Tuple holding country as the key and subregion as the values in a dictionary
+    # INPUT:   region =  Tuple holding country as the key and subregion as the values in a dictionary
     #                     (CAN, {WS:[...], MW:[]...},)
     #          techs =    List of the technologies to print over 
     # OUTPUT:  outList =  List of all the MIN technologies
@@ -193,7 +193,7 @@ def getMINtechs(region, techs):
 
 def getRNWtechs(region, techs):
     # PURPOSE: Creates all the RNW naming technologies
-    # INPUT:   regions =  Tuple holding country as the key and subregion as the values in a dictionary
+    # INPUT:   region =  Tuple holding country as the key and subregion as the values in a dictionary
     #                     (CAN, {WS:[...], MW:[]...},)
     #          techs =    List of the technologies to print over 
     # OUTPUT:  outList =  List of all the RNW technologies
@@ -227,7 +227,7 @@ def getTRNtechs(csvPaths):
 
 def getRNWfuels(region, techs):
     # PURPOSE: Creates fuels names for Renewable technologies
-    # INPUT:   regions =  Tuple holding country as the key and subregion as the values in a dictionary
+    # INPUT:   region =  Tuple holding country as the key and subregion as the values in a dictionary
     #                     (CAN, {WS:[...], MW:[]...},)
     #          techs =    List of the technologies to print over 
     # OUTPUT:  outList =  List of all the RNW technologies
@@ -246,7 +246,7 @@ def getRNWfuels(region, techs):
 
 def getMINfuels(region, techs):
     # PURPOSE: Creates Fuel names for Mined Fuels
-    # INPUT:   regions =  Tuple holding country as the key and subregion as the values in a dictionary
+    # INPUT:   region =  Tuple holding country as the key and subregion as the values in a dictionary
     #                     (CAN, {WS:[...], MW:[]...},)
     #          techs =    List of the technologies to print over 
     # OUTPUT:  outList =  List of all the MIN Fuels 
@@ -264,7 +264,7 @@ def getMINfuels(region, techs):
 
 def getELCfuels(region):
     # PURPOSE: Creates Fuel electricity use fuel names
-    # INPUT:   regions =  Tuple holding country as the key and subregion as the values in a dictionary
+    # INPUT:   region =  Tuple holding country as the key and subregion as the values in a dictionary
     #                     (CAN, {WS:[...], MW:[]...},)
     # OUTPUT:  outList =  List of all the ELC Fuels 
 
@@ -341,7 +341,7 @@ def createTechDataframe(subregions, techsMaster, mineFuels, rnwFuels, trnTechsCs
         # get Renewables fuels list 
         rnwList = getRNWtechs(country, rnwFuels)
 
-        #Append lists together and write to a dataframe
+        #Append lists together
         outputTechs += pwrList
         outputTechs += pwrTrnList
         outputTechs += minList
