@@ -19,11 +19,6 @@ def main():
     stoTechs = functions.openYaml().get('sto_techs')
     years = functions.getYears()
     subregionsDict = functions.openYaml().get('subregions_dictionary')
-    for key, value in subregionsDict.items():
-        if key == 'CAN':
-            canCountries = {key:value} # Canadian subregions
-        else:
-            usaCountries = {key:value} # American subregions
 
     ####################################
     ## CREATE STANDARD SETS
@@ -46,7 +41,7 @@ def main():
     ####################################
 
     #get storages for each region 
-    stoList = getSTO(canCountries, stoTechs)
+    stoList = getSTO(subregionsDict, stoTechs)
 
     dfOut = pd.DataFrame(stoList, columns=['VALUE'])
     dfOut.to_csv('../src/data/STORAGE.csv', index=False)
@@ -55,15 +50,14 @@ def main():
     ## CREATE TECHNOLOGY SET
     ####################################
 
-    canadaAndUsaSubregions = [canCountries, usaCountries]
-    df = functions.createTechDataframe(canadaAndUsaSubregions, techsMaster, mineFuels, rnwFuels, ['../dataSources/Trade.csv', '../dataSources/USA_Trade.csv'])
+    df = functions.createTechDataframe(subregionsDict, techsMaster, mineFuels, rnwFuels, ['../dataSources/Trade.csv', '../dataSources/USA_Trade.csv'])
     df.to_csv('../src/data/TECHNOLOGY.csv', index=False)
 
     ####################################
     ## CREATE FUEL SET
     ####################################
 
-    df = functions.createFuelDataframe(canadaAndUsaSubregions, rnwFuels, mineFuels)
+    df = functions.createFuelDataframe(subregionsDict, rnwFuels, mineFuels)
     df.to_csv('../src/data/FUEL.csv', index=False)
 
 ####################################
@@ -72,7 +66,7 @@ def main():
 
 def getSTO(regions, storages):
     # PURPOSE: Creates storage names
-    # INPUT:   regions =  Dictionary holding region as the key and subregion as the values in a list
+    # INPUT:   regions =  subregions = Dictionary holding Country and regions ({CAN:{WS:[...], ...} USA:[NY:[...],...]})
     # OUTPUT:  outList =  List of all the STO names
 
     # list to hold technologies
@@ -83,7 +77,7 @@ def getSTO(regions, storages):
 
     # Loop to create all technology names
     for region, subregions in regions.items():
-        for subregion in subregions:
+        for subregion in subregions['CAN']:
             for storage in storages:
                 storageName = 'STO' + storage + region + subregion
                 outList.append(storageName)

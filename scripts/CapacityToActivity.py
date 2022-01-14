@@ -21,14 +21,9 @@ def main():
     rnwFuels = functions.openYaml().get('rnw_fuels')
     mineFuels = functions.openYaml().get('mine_fuels')
     subregionsDict = functions.openYaml().get('subregions_dictionary')
-    for key, value in subregionsDict.items():
-        if key == 'CAN':
-            canCountries = {key:value} # Canadian subregions
-        if key == 'USA':
-            usaCountries = {key:value} # American subregions
-
-    canadaAndUsaSubregions = [canCountries, usaCountries]
-    technologies = functions.createTechDataframe(canadaAndUsaSubregions, techsMaster, mineFuels, rnwFuels, ['../dataSources/Trade.csv', '../dataSources/USA_Trade.csv'])
+    technologies = functions.createTechDataframe(subregionsDict, techsMaster, mineFuels, rnwFuels, ['../dataSources/Trade.csv', '../dataSources/USA_Trade.csv'])
+    
+    #technologies = functions.createTechDataframe(subregionsDict, techsMaster, mineFuels, rnwFuels, ['../dataSources/Trade.csv', '../dataSources/USA_Trade.csv'])
     technologiesList = technologies['VALUE'].tolist()
 
     ###########################################
@@ -43,26 +38,10 @@ def main():
     # If 1 GW of capacity works constantly throughout the year, it produced 31.536 PJ
     capToAct = 31.536
 
-    '''
-    #populate list
-    for region in regions:
-        for subregion in subregions:
-            for tech in pwrTechs:
-                techName = 'PWR' + tech + 'CAN' + subregion + '01'
-                data.append([region, techName, capToAct])
-            for tech in rnwTechs:
-                techName = 'RNW' + tech + 'CAN' + subregion
-                data.append([region, techName, capToAct])
-            for tech in minTechs:
-                techName = 'MIN' + tech + 'CAN'
-                data.append([region, techName, capToAct])
-    '''
-
     #populate list
     for region in regions:
         for tech in technologiesList:
             outData.append([region, tech, capToAct])
-
 
     #write to csv
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','VALUE'])
