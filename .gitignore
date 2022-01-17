@@ -1,11 +1,9 @@
 src/results/
-dataSources/*_RAW.csv
-dataSources/*_RAW.xlsx
-scripts/.vscode/
-src/.snakemake/
-src/dag*
+*.vscode/
+*.snakemake/
+src/dag.*
 results/
-scripts/.ipynb_checkpoints/
+*.ipynb_checkpoints/
 dataSources/UpdateDemand/
 scripts/developer_tools/CanadaUsaTxtDiffCheck/Results.txt
-scripts/__pycache__/
+*__pycache__/
