@@ -358,17 +358,8 @@ def getUsaCapitalCost():
     #holds output data
     outData = []
 
-    #map data
-    for i in range(len(df)):
-        region = 'NAmerica'
-        techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
-        tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
-        year = df['YEAR'].iloc[i]
-        value = df['CAPITALCOST'].iloc[i]
-        value = round(value, 3)
-        #Convert from $/kW to M$/GW
-
-        outData.append([region,tech,year,value])
+    #Regions to print over
+    regions = functions.openYaml().get('regions')
 
     #Get trade costs
     dfCosts = pd.read_csv('../dataSources/USA_Trade.csv')
@@ -379,14 +370,22 @@ def getUsaCapitalCost():
     # get list of all the technologies
     techList = dfCosts['TECHNOLOGY'].tolist()
 
-    #Regions to print over
-    regions = ['NAmerica']
-
     #cost types to get data for
     costType = ['CAPEX']
 
     #populate data
     for region in regions:
+        #map data
+        for i in range(len(df)):
+            techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
+            tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
+            year = df['YEAR'].iloc[i]
+            value = df['CAPITALCOST'].iloc[i]
+            value = round(value, 3)
+            #Convert from $/kW to M$/GW
+
+            outData.append([region,tech,year,value])
+
         for tech in techList:
 
             #remove all rows except for our technology
@@ -437,16 +436,6 @@ def getUsaFixedCost():
     #holds output data
     outData = []
 
-    #map data
-    for i in range(len(df)):
-        region = 'NAmerica'
-        techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
-        tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
-        year = df['YEAR'].iloc[i]
-        value = df['FIXEDCOST'].iloc[i]
-        value = round(value, 3)
-        outData.append([region,tech,year,value])
-
     #Get trade costs
     dfCosts = pd.read_csv('../dataSources/USA_Trade.csv')
 
@@ -457,13 +446,22 @@ def getUsaFixedCost():
     techList = dfCosts['TECHNOLOGY'].tolist()
 
     #Regions to print over
-    regions = ['NAmerica']
+    regions = functions.openYaml().get('regions')
 
     #cost types to get data for
     costType = ['Fixed O&M']
 
     #populate data
     for region in regions:
+        #map data
+        for i in range(len(df)):
+            techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
+            tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
+            year = df['YEAR'].iloc[i]
+            value = df['FIXEDCOST'].iloc[i]
+            value = round(value, 3)
+            outData.append([region,tech,year,value])
+
         for tech in techList:
 
             #remove all rows except for our technology
@@ -518,21 +516,6 @@ def getUsaVariableCost():
     #holds output data
     outData = []
 
-    #map data
-    for i in range(len(df)):
-        region = 'NAmerica'
-        techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
-        tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
-        year = df['YEAR'].iloc[i]
-        mode = 1
-        value = df['VARIABLECOST'].iloc[i]
-        value = round(value, 3)
-        outData.append([region,tech,mode,year,value])
-        #checks if need to write value for mode 2
-        if inputFuelMap[techMapped] in intFuel:
-            mode = 2
-            outData.append([region,tech,mode,year,value])
-
     #Get trade costs
     dfCosts = pd.read_csv('../dataSources/USA_Trade.csv')
 
@@ -543,13 +526,27 @@ def getUsaVariableCost():
     techList = dfCosts['TECHNOLOGY'].tolist()
 
     #Regions to print over
-    regions = ['NAmerica']
+    regions = functions.openYaml().get('regions')
 
     #cost types to get data for
     costType = ['Variable O&M', 'Fuel']
 
     #populate data
     for region in regions:
+        #map data
+        for i in range(len(df)):
+            techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
+            tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
+            year = df['YEAR'].iloc[i]
+            mode = 1
+            value = df['VARIABLECOST'].iloc[i]
+            value = round(value, 3)
+            outData.append([region,tech,mode,year,value])
+            #checks if need to write value for mode 2
+            if inputFuelMap[techMapped] in intFuel:
+                mode = 2
+                outData.append([region,tech,mode,year,value])
+
         for tech in techList:
 
             #remove all rows except for our technology
