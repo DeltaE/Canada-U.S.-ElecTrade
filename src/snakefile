@@ -70,29 +70,6 @@ osemosysFiles = [
 	'YearSplit.csv'
 ]
 
-usaFiles = [
-	'AvailabilityFactor.csv',
-	'CapacityFactor.csv',
-	'CapacityToActivityUnit.csv',
-	'CapitalCost.csv',
-	'EmissionActivityRatio.csv',
-	'FixedCost.csv',
-	'FUEL.csv',
-	'InputActivityRatio.csv',
-	'OutputActivityRatio.csv',
-	'OperationalLife.csv',
-	'ReserveMargin.csv',
-	'ReserveMarginTagFuel.csv',
-	'ReserveMarginTagTechnology.csv',
-	'ResidualCapacity.csv',
-	'RETagTechnology.csv',
-	'SpecifiedAnnualDemand.csv',
-	'SpecifiedDemandProfile.csv',
-	'TECHNOLOGY.csv',
-	'TotalAnnualMaxCapacity.csv',
-	'VariableCost.csv',
-]
-
 provinces = ['BC','AB','SAS','MAN','ONT','QC','NB','NL','NS','PEI']
 
 #####################################
