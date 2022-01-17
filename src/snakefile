@@ -1,3 +1,5 @@
+import itertools
+
 #####################################
 ## REQUIRED FILES 
 #####################################
@@ -70,16 +72,17 @@ osemosysFiles = [
 	'YearSplit.csv'
 ]
 
-provinces = ['BC','AB','SAS','MAN','ONT','QC','NB','NL','NS','PEI']
-
 #####################################
 ## TARGETS
 #####################################
 
+configfile: '../scripts/config.yaml'
 fileName = 'CanadaUSA'
 inputDir = '../dataSources/'
 scriptsDir = '../scripts/'
 outputDir = '../src/'
+canadaProvinces = list(itertools.chain.from_iterable(
+	config['subregions_dictionary']['CAN'].values()))
 
 rule all:
 	input: 
@@ -128,8 +131,10 @@ rule CapacityFactor:
 		outputDir + 'data/REGION.csv',
 		inputDir + 'NREL_Costs.csv',
 		inputDir + 'USA_Data.xlsx',
-		expand(inputDir + 'CapacityFactor/SPV_{province}.csv', province = provinces),
-		expand(inputDir + 'CapacityFactor/WND_{province}.csv', province = provinces)
+		expand(inputDir + 'CapacityFactor/SPV_{province}.csv', 
+			province = canadaProvinces),
+		expand(inputDir + 'CapacityFactor/WND_{province}.csv', 
+			province = canadaProvinces)
 	output:
 		outputDir + 'data/CapacityFactor.csv'
 	shell:
@@ -302,7 +307,8 @@ rule TotalAnnualMaxCapacity:
 rule otooleConvert:
 	input:
 		datapackage = outputDir + 'datapackage.json',
-		csvFiles = expand(outputDir + 'data/{osemosysFile}', osemosysFile = osemosysFiles)
+		csvFiles = expand(outputDir + 'data/{osemosysFile}', 
+			osemosysFile = osemosysFiles)
 	output:
 		outputDir + fileName + '.txt'
 	shell:
