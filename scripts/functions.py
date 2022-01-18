@@ -395,6 +395,7 @@ def getUsaCapacityOrAvailabilityFactor(isCapacity):
     #df.reset_index()
 
     techMap = openYaml().get('usa_tech_map')
+    regions = openYaml().get('regions')
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'CapacityFactor(r,t,l,y)')
 
     #Initialize filtered dataframe 
@@ -416,18 +417,18 @@ def getUsaCapacityOrAvailabilityFactor(isCapacity):
     outDataAF = [] # Availability Factor
 
     #map data
-    for year in years:
-        for i in range(len(df)):
-            region = 'NAmerica'
-            techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
-            tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
-            ts = df['TIMESLICE'].iloc[i]
-            value = df['CAPACITYFACTOR'].iloc[i]
-            value = round(value, 3)
-            if techMapped == 'HYD':
-                outDataAF.append([region,tech,ts,year,value])
-            else:
-                outDataCF.append([region,tech,ts,year,value])
+    for region in regions:
+        for year in years:
+            for i in range(len(df)):
+                techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
+                tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
+                ts = df['TIMESLICE'].iloc[i]
+                value = df['CAPACITYFACTOR'].iloc[i]
+                value = round(value, 3)
+                if techMapped == 'HYD':
+                    outDataAF.append([region,tech,ts,year,value])
+                else:
+                    outDataCF.append([region,tech,ts,year,value])
 
     #create and return dataframe for CAPACITY FACTOR
     dfOutCF = pd.DataFrame(outDataCF, columns = ['REGION','TECHNOLOGY','TIMESLICE','YEAR','VALUE'])
@@ -446,7 +447,7 @@ def getUsaCapacityOrAvailabilityFactor(isCapacity):
                 dfYear = dfTemp.loc[dfTemp['YEAR'] == year]
                 af = dfYear['VALUE'].mean()
                 af = round(af, 3)
-                outDataAF.append(['NAmerica',tech,year,af])
+                outDataAF.append([openYaml().get('regions')[0],tech,year,af])
         
         # return dataframe for CAPACITY FACTOR
         dfOutAF = pd.DataFrame(outDataAF, columns = ['REGION','TECHNOLOGY','YEAR','VALUE'])

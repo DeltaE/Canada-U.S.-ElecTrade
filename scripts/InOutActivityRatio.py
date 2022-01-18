@@ -144,6 +144,7 @@ def getUsaOutputActivityRatio():
 
     techMap = functions.openYaml().get('usa_tech_map')
     subregions = (functions.openYaml().get('subregions_dictionary'))['USA'] # American subregions
+    region = functions.openYaml().get('regions')[0]
 
     #Fuels that have international trade options
     intFuel = functions.openYaml().get('mine_fuels')
@@ -159,7 +160,6 @@ def getUsaOutputActivityRatio():
     for year in years:
         for rawFuel in rnwFuel:
             for subregion in subregions:
-                region = 'NAmerica'
                 techName = 'RNW' + rawFuel + 'USA' + subregion
                 fuel = rawFuel + 'USA' + subregion 
                 outData.append([region, techName, fuel, 1, year, 1])
@@ -167,7 +167,6 @@ def getUsaOutputActivityRatio():
     #mining USA
     for year in years:
         for rawFuel in intFuel:
-            region = 'NAmerica'
             techName = 'MIN' + rawFuel + 'USA'
             fuel = rawFuel + 'USA'
             outData.append([region, techName, fuel, 1, year, 1])
@@ -175,7 +174,6 @@ def getUsaOutputActivityRatio():
     # OAR for PWRTRN technologies
     for subregion in subregions:
         for year in years:
-            region = 'NAmerica'
             techName = 'PWR' + 'TRN' + 'USA' + subregion
             fuel = 'ELC' + 'USA' + subregion + '02'
             outData.append([region, techName, fuel, 1, year, 1])
@@ -184,7 +182,6 @@ def getUsaOutputActivityRatio():
     for year in years:
         for subregion in subregions:
             for tech in techMap:
-                region = 'NAmerica'
                 techName = 'PWR' + techMap[tech] + 'USA' + subregion + '01'
                 fuel = 'ELC' + 'USA' + subregion + '01'
                 outData.append([region, techName, fuel, 1, year, 1])
@@ -193,14 +190,13 @@ def getUsaOutputActivityRatio():
 
     #OAR for transmission
     dfTrn = pd.read_csv('../dataSources/USA_Trade.csv')
-    for region in ['NAmerica']:
-        for year in functions.getYears():
-            for i in range(len(dfTrn)):
-                techName = dfTrn.iloc[i]['TECHNOLOGY']
-                outFuel = dfTrn.iloc[i]['OUTFUEL']
-                oar = dfTrn.iloc[i]['OAR']
-                mode = dfTrn.iloc[i]['MODE']
-                outData.append([region, techName, outFuel, mode, year, oar])
+    for year in functions.getYears():
+        for i in range(len(dfTrn)):
+            techName = dfTrn.iloc[i]['TECHNOLOGY']
+            outFuel = dfTrn.iloc[i]['OUTFUEL']
+            oar = dfTrn.iloc[i]['OAR']
+            mode = dfTrn.iloc[i]['MODE']
+            outData.append([region, techName, outFuel, mode, year, oar])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','FUEL','MODE_OF_OPERATION','YEAR','VALUE'])
@@ -238,9 +234,10 @@ def getUsaInputActivityRatio():
     #holds output data
     outData = []
 
+    region = functions.openYaml().get('regions')[0]
+
     #map data
     for i in range(len(df)):
-        region = 'NAmerica'
         techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
         tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
         year = df['YEAR'].iloc[i]
@@ -261,21 +258,19 @@ def getUsaInputActivityRatio():
     # IAR for PWRTRN technologies
     for subregion in subregions:
         for year in functions.getYears():
-            region = 'NAmerica'
             techName = 'PWR' + 'TRN' + 'USA' + subregion
             fuelIn = 'ELC' + 'USA' + subregion + '01'
             outData.append([region, techName, fuelIn, 1, year, 1])
     
     #IAR for transmission
     dfTrn = pd.read_csv('../dataSources/USA_Trade.csv')
-    for region in ['NAmerica']:
-        for year in functions.getYears():
-            for i in range(len(dfTrn)):
-                techName = dfTrn.iloc[i]['TECHNOLOGY']
-                inFuel = dfTrn.iloc[i]['INFUEL']
-                iar = dfTrn.iloc[i]['IAR']
-                mode = dfTrn.iloc[i]['MODE']
-                outData.append([region, techName, inFuel, mode, year, iar])
+    for year in functions.getYears():
+        for i in range(len(dfTrn)):
+            techName = dfTrn.iloc[i]['TECHNOLOGY']
+            inFuel = dfTrn.iloc[i]['INFUEL']
+            iar = dfTrn.iloc[i]['IAR']
+            mode = dfTrn.iloc[i]['MODE']
+            outData.append([region, techName, inFuel, mode, year, iar])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','FUEL','MODE_OF_OPERATION','YEAR','VALUE'])
