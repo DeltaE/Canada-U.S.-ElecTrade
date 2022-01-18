@@ -197,7 +197,7 @@ def getUsaOperationalLife():
     # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
-    top_level_region = functions.openYaml().get('regions')
+    top_level_region = functions.openYaml().get('regions')[0]
 
     techMap = functions.openYaml().get('usa_tech_map')
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'OperationalLife(r,t)')

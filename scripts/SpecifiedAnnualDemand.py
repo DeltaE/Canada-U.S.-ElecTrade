@@ -63,14 +63,15 @@ def getUsaSpecifiedAnnualDemand():
     #holds output data
     outData = []
 
+    top_level_region = functions.openYaml().get('regions')[0]
+
     #map data
     for i in range(len(df)):
-        region = 'NAmerica'
         fuel = 'ELC' + 'USA' + df['REGION'].iloc[i] + '02'
         year = df['YEAR'].iloc[i]
         value = df['DEMAND'].iloc[i]
         value = round(value,3)
-        outData.append([region,fuel,year,value])
+        outData.append([top_level_region,fuel,year,value])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns = ['REGION', 'FUEL', 'YEAR', 'VALUE'])
