@@ -152,6 +152,8 @@ def getUsaResidualCapacity():
     columns = list(df)
     dfFiltered = pd.DataFrame(columns=columns)
 
+    region = functions.openYaml().get('regions')[0]
+
     #get rid of all techs we are not using 
     for tech in techMap:
         dfTemp = df.loc[df['TECHNOLOGY'] == tech]
@@ -165,7 +167,6 @@ def getUsaResidualCapacity():
 
     #map data
     for i in range(len(df)):
-        region = 'NAmerica'
         techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
         tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
         year = df['YEAR'].iloc[i]
@@ -178,15 +179,14 @@ def getUsaResidualCapacity():
     techListTrade = dfTrade['TECHNOLOGY'].tolist()
     techListTrade = list(set(techListTrade)) #remove duplicates
 
-    for region in ['NAmerica']:
-      for tech in techListTrade:
-        dfResCapTrd = dfTrade.loc[(dfTrade['TECHNOLOGY'] == tech) & 
-                                  (dfTrade['MODE'] == 1)]
-        dfResCapTrd.reset_index()
-        resCapTrd = dfResCapTrd['CAPACITY (GW)'].iloc[0]
-        resCapTrd = round(float(resCapTrd),3)
-        for year in functions.getYears():
-          outData.append([region, tech, year, resCapTrd])
+    for tech in techListTrade:
+      dfResCapTrd = dfTrade.loc[(dfTrade['TECHNOLOGY'] == tech) & 
+                                (dfTrade['MODE'] == 1)]
+      dfResCapTrd.reset_index()
+      resCapTrd = dfResCapTrd['CAPACITY (GW)'].iloc[0]
+      resCapTrd = round(float(resCapTrd),3)
+      for year in functions.getYears():
+        outData.append([region, tech, year, resCapTrd])
 
     #create and return dataframe
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
@@ -196,6 +196,8 @@ def getUsaOperationalLife():
     # PURPOSE: Creates opertionalLife file from USA data
     # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
+
+    top_level_region = functions.openYaml().get('regions')
 
     techMap = functions.openYaml().get('usa_tech_map')
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'OperationalLife(r,t)')
@@ -217,18 +219,17 @@ def getUsaOperationalLife():
 
     #map data
     for i in range(len(df)):
-        region = 'NAmerica'
         techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
         tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
         value = df['OPERATIONALLIFE'].iloc[i]
-        outData.append([region,tech,value])
+        outData.append([top_level_region,tech,value])
 
     #Transmission operational life 
     dfTrade = pd.read_csv('../dataSources/USA_Trade.csv')
     techListTrade = dfTrade['TECHNOLOGY'].tolist()
     techListTrade = list(set(techListTrade)) #remove duplicates
     for tech in techListTrade:
-        outData.append(['NAmerica',tech,100])
+        outData.append([top_level_region,tech,100])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','VALUE'])
