@@ -50,7 +50,7 @@ def main():
     ## CREATE TECHNOLOGY SET
     ####################################
 
-    df = functions.createTechDataframe(subregionsDict, techsMaster, mineFuels, rnwFuels, ['../dataSources/Trade.csv', '../dataSources/USA_Trade.csv'])
+    df = functions.createTechDataframe(subregionsDict, techsMaster, mineFuels, rnwFuels, '../dataSources/Trade.csv')
     df.to_csv('../src/data/TECHNOLOGY.csv', index=False)
 
     ####################################
@@ -66,7 +66,8 @@ def main():
 
 def getSTO(regions, storages):
     # PURPOSE: Creates storage names
-    # INPUT:   regions =  subregions = Dictionary holding Country and regions ({CAN:{WS:[...], ...} USA:[NY:[...],...]})
+    # INPUT:   regions =  subregions = Dictionary holding Country and regions 
+    #          ({CAN:{WS:[...], ...} USA:[NY:[...],...]})
     # OUTPUT:  outList =  List of all the STO names
 
     # list to hold technologies
