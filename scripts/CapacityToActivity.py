@@ -21,9 +21,7 @@ def main():
     rnwFuels = functions.openYaml().get('rnw_fuels')
     mineFuels = functions.openYaml().get('mine_fuels')
     subregionsDict = functions.openYaml().get('subregions_dictionary')
-    technologies = functions.createTechDataframe(subregionsDict, techsMaster, mineFuels, rnwFuels, ['../dataSources/Trade.csv', '../dataSources/USA_Trade.csv'])
-    
-    #technologies = functions.createTechDataframe(subregionsDict, techsMaster, mineFuels, rnwFuels, ['../dataSources/Trade.csv', '../dataSources/USA_Trade.csv'])
+    technologies = functions.createTechDataframe(subregionsDict, techsMaster, mineFuels, rnwFuels,'../dataSources/Trade.csv')
     technologiesList = technologies['VALUE'].tolist()
 
     ###########################################
