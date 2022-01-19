@@ -212,7 +212,7 @@ def getRNWtechs(region, techs):
 
 def getTRNtechs(csvPath):
     # PURPOSE: Creates all the TRN naming technologies
-    # INPUT:   csvPath = Transmission csv information locations
+    # INPUT:   csvPath = Transmission csv path
     # OUTPUT:  outList =  List of all the TRN technologies
 
     df = pd.read_csv(csvPath)
@@ -320,7 +320,7 @@ def createTechDataframe(subregions, techsMaster, mineFuels, rnwFuels, trnTechsCs
     #          techsMaster = List of the technologies to print over for getPWRtechs
     #          mineFuels = List of the fuels to print over for getMINfuels
     #          rnwFuels = List of the fuels to print over for getRNWfuels
-    #          trnTechsCsvPaths = Transmission csv information locations
+    #          trnTechsCsvPath = Transmission csv information locations
     # OUTPUT:  dfOut = tech set dataframe
     # get power generator technology list 
     outputTechs = []
