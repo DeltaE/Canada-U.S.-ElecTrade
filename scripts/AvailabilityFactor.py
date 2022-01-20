@@ -12,7 +12,7 @@ def main():
 
     # Parameters to print over
     seasons = functions.openYaml().get('seasons')
-    regions = functions.openYaml().get('regions')
+    region = functions.openYaml().get('regions')[0]
     subregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
     years = functions.getYears()
 
@@ -72,11 +72,10 @@ def main():
     #Populate output lsit 
     for year in years:
         print(f'Hydro {year}')
-        for region in regions:
-            for subregion in subregions:
-                techName = 'PWR' + 'HYD' + 'CAN' + subregion + '01'
-                value = round(af[subregion],3)
-                outData.append([region, techName, year, value])
+        for subregion in subregions:
+            techName = 'PWR' + 'HYD' + 'CAN' + subregion + '01'
+            value = round(af[subregion],3)
+            outData.append([region, techName, year, value])
 
     ###########################################
     # Writing Availability Factor to File 

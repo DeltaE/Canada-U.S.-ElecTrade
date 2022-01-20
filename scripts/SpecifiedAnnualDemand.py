@@ -12,7 +12,7 @@ def main():
     ###########################################
 
     # Parameters to print over
-    regions = functions.openYaml().get('regions')
+    region = functions.openYaml().get('regions')[0]
     years = functions.getYears()
 
     #Dictionary for subregion to province mappings
@@ -30,15 +30,14 @@ def main():
     #Region, fuel, year, value
     demand = []
     
-    for region in regions:
-        for subregion, provinces in subregions.items(): 
-            dfRegion = df[subregions[subregion]]
-            sumDemand = dfRegion.loc[:,:].sum(axis=1)
-            for year in years:
-                fuelName = 'ELC' + 'CAN' + subregion + '02'
-                value = sumDemand[year]
-                value = round(value,3)
-                demand.append([region, fuelName, year, value])
+    for subregion, provinces in subregions.items(): 
+        dfRegion = df[subregions[subregion]]
+        sumDemand = dfRegion.loc[:,:].sum(axis=1)
+        for year in years:
+            fuelName = 'ELC' + 'CAN' + subregion + '02'
+            value = sumDemand[year]
+            value = round(value,3)
+            demand.append([region, fuelName, year, value])
 
     ###########################################
     # Writing Demand Files 
@@ -63,14 +62,15 @@ def getUsaSpecifiedAnnualDemand():
     #holds output data
     outData = []
 
+    top_level_region = functions.openYaml().get('regions')[0]
+
     #map data
     for i in range(len(df)):
-        region = 'NAmerica'
         fuel = 'ELC' + 'USA' + df['REGION'].iloc[i] + '02'
         year = df['YEAR'].iloc[i]
         value = df['DEMAND'].iloc[i]
         value = round(value,3)
-        outData.append([region,fuel,year,value])
+        outData.append([top_level_region,fuel,year,value])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns = ['REGION', 'FUEL', 'YEAR', 'VALUE'])

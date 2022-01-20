@@ -14,7 +14,7 @@ def main():
     ### EVERYTHING IS CO2 EMISSIONS
 
     # Parameters to print over
-    regions = functions.openYaml().get('regions')
+    region = functions.openYaml().get('regions')[0]
     subregions = ((functions.openYaml().get('subregions_dictionary'))['CAN']).keys() # Canadian subregions
     years = functions.getYears()
 
@@ -35,16 +35,15 @@ def main():
     modeTwoTechs = ['CCG','CCG','COA','COC','URN']
 
     #print all values 
-    for region in regions:
-        for year in years:
-            for subregion in subregions:
-                for tech in techList:
-                    activityRatio = dfRaw.loc[year,tech]
-                    activityRatio = round(activityRatio, 3)
-                    techName = 'PWR' + tech + 'CAN' + subregion + '01'
-                    dataOut.append([region, techName, 'CO2', 1, year, activityRatio])
-                    if tech in modeTwoTechs:
-                        dataOut.append([region, techName, 'CO2', 2, year, activityRatio])
+    for year in years:
+        for subregion in subregions:
+            for tech in techList:
+                activityRatio = dfRaw.loc[year,tech]
+                activityRatio = round(activityRatio, 3)
+                techName = 'PWR' + tech + 'CAN' + subregion + '01'
+                dataOut.append([region, techName, 'CO2', 1, year, activityRatio])
+                if tech in modeTwoTechs:
+                    dataOut.append([region, techName, 'CO2', 2, year, activityRatio])
     
     #write to a csv
     dfOut = pd.DataFrame(dataOut,columns=['REGION','TECHNOLOGY','EMISSION','MODE_OF_OPERATION','YEAR','VALUE'])
@@ -60,6 +59,7 @@ def getUsaEmissionActivityRatio():
     techMap = functions.openYaml().get('usa_tech_map')
     inputFuelMap = functions.openYaml().get('tech_to_fuel')
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'EmisionActivityRatio(r,t,e,m,y)')
+    region = functions.openYaml().get('regions')[0]
 
     #Only defined for year 2015
     years = functions.getYears()
@@ -85,7 +85,6 @@ def getUsaEmissionActivityRatio():
     #map data
     for year in years:
         for i in range(len(df)):
-            region = 'NAmerica'
             techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
             tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
             emission = df['EMISSION'].iloc[i]

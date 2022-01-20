@@ -15,7 +15,7 @@ def main():
     ## ASSUMES ALL CAPACITIES IN GW AND ALL ENNERGY IN PJ
 
     # Regions to print over
-    regions = functions.openYaml().get('regions')
+    region = functions.openYaml().get('regions')[0]
 
     techsMaster = functions.openYaml().get('techs_master')
     rnwFuels = functions.openYaml().get('rnw_fuels')
@@ -37,9 +37,8 @@ def main():
     capToAct = 31.536
 
     #populate list
-    for region in regions:
-        for tech in technologiesList:
-            outData.append([region, tech, capToAct])
+    for tech in technologiesList:
+        outData.append([region, tech, capToAct])
 
     #write to csv
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','VALUE'])

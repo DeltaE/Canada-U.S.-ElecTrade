@@ -15,7 +15,7 @@ def main():
     # Model Parameters
     ###########################################
 
-    regions = functions.openYaml().get('regions')
+    region = functions.openYaml().get('regions')[0]
     subregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
     seasons = functions.openYaml().get('seasons')
     years = functions.getYears()
@@ -136,28 +136,25 @@ def main():
 
     #Reserve Margin = Region, year, value
     reserveMargin = []
-    for region in regions:
-        for year in years:
-            reserveMargin.append([region, year, 1])
+    for year in years:
+        reserveMargin.append([region, year, 1])
 
     #reserve margin Tag Fuel = Region, Fuel, Year, Value
     reserveMarginTagFuel = []
-    for region in regions:
-        for i in range(len(reserveMarginRaw)):
-            fuelName = 'ELC' + 'CAN' + reserveMarginRaw[i][0] + '01'
-            year = reserveMarginRaw[i][1]
-            rm = reserveMarginRaw[i][2]
-            rm = round(rm,3)
-            reserveMarginTagFuel.append([region, fuelName, year, rm])
+    for i in range(len(reserveMarginRaw)):
+        fuelName = 'ELC' + 'CAN' + reserveMarginRaw[i][0] + '01'
+        year = reserveMarginRaw[i][1]
+        rm = reserveMarginRaw[i][2]
+        rm = round(rm,3)
+        reserveMarginTagFuel.append([region, fuelName, year, rm])
     
     #reserve margin Tag Technology = Region, Technology, Year, Value
     reserveMarginTagTech = []
-    for region in regions:
-        for subregion in subregions:
-            for year in years:
-                for tech in techTags:
-                    techName = 'PWR' + tech + 'CAN' +subregion + '01'
-                    reserveMarginTagTech.append([region, techName, year, 1])
+    for subregion in subregions:
+        for year in years:
+            for tech in techTags:
+                techName = 'PWR' + tech + 'CAN' +subregion + '01'
+                reserveMarginTagTech.append([region, techName, year, 1])
 
     #write out all files
     dfReserveMargin = pd.DataFrame(reserveMargin,columns=['REGION','YEAR','VALUE'])
@@ -175,40 +172,12 @@ def main():
     dfReserveMarginTech = dfReserveMarginTech.append(dfReserveMarginTechUsa)
     dfReserveMarginTech.to_csv('../src/data/ReserveMarginTagTechnology.csv', index=False)
 
-    # Reference code before switching over to osemosys gloabl naming 
-    '''
-    dfWeightedReserveMargin = pd.DataFrame(reserveMargin,columns=['REGION','YEAR','VALUE'])
-
-    #reserve margin Tag Fuel = Region, Fuel, Year, Value
-    reserveMarginTagFuel = []
-
-    #reserve margin Tag Technology = Region, Technology, Year, Value
-    reserveMarginTagTech = []
-
-    #populate lists 
-    for region, rm in regions.items():
-        for year in years:
-            for fuel in fuelTag:
-                reserveMarginTagFuel.append([region, fuel, year, 1])
-            for tech in techTag:
-                reserveMarginTagTech.append([region, tech, year, 1])
-
-    #write to csvs
-    dfReserveMargin = pd.DataFrame(reserveMargin,columns=['REGION','YEAR','VALUE'])
-    dfReserveMargin.to_csv('../src/data/ReserveMargin.csv', index=False)
-
-    dfReserveMarginFuel = pd.DataFrame(reserveMarginTagFuel,columns=['REGION','FUEL','YEAR','VALUE'])
-    dfReserveMarginFuel.to_csv('../src/data/ReserveMarginTagFuel.csv', index=False)
-
-    dfReserveMarginTech = pd.DataFrame(reserveMarginTagTech,columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
-    dfReserveMarginTech.to_csv('../src/data/ReserveMarginTagTechnology.csv', index=False)
-
-    '''
-
 def getUsaReserveMarginTagTechnology():
     # PURPOSE: Creates getReserveMarginTagTechnology file from USA data
     # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
+
+    region = functions.openYaml().get('regions')[0]
 
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'ReserveMarginInTagTech(r,t,y)')
 
@@ -230,7 +199,6 @@ def getUsaReserveMarginTagTechnology():
     for techOld in techMap:
         for year in functions.getYears():
             for subregion in subregions:
-                region = 'NAmerica'
                 techMapped = techMap[techOld]
                 tech = 'PWR' + techMapped + 'USA' + subregion + '01'
                 if techMapped in variableTechs:
@@ -259,6 +227,7 @@ def getUsaReserveMarginTagFuel():
     ##################################################
     # Region Dictionary
     regions = (functions.openYaml().get('subregions_dictionary'))['USA'] # American subregions
+    top_level_region = functions.openYaml().get('regions')[0]
 
     # Should update this for individual states
     # should be 10 percent for hydro dominated provinces or 
@@ -351,7 +320,7 @@ def getUsaReserveMarginTagFuel():
         for region in regions:
             fuel = 'ELC' + 'USA' + region + '01'
             value = reserveMargin[region]
-            outData.append(['NAmerica',fuel,year,value])
+            outData.append([top_level_region,fuel,year,value])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','FUEL','YEAR','VALUE'])
@@ -362,11 +331,13 @@ def getUsaReserveMargin():
     # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
+    top_level_region = functions.openYaml().get('regions')[0]
+
     #this one is easier to manually do...
     outData = []
 
     for year in functions.getYears():
-        outData.append(['NAmerica',year,1])
+        outData.append([top_level_region,year,1])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','YEAR','VALUE'])

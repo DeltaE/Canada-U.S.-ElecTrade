@@ -13,7 +13,7 @@ def main():
     # OUTPUT: none
 
     # Parameters to print over
-    regions = functions.openYaml().get('regions')
+    region = functions.openYaml().get('regions')[0]
     subregions = ((functions.openYaml().get('subregions_dictionary'))['CAN']).keys() # Canadian subregions
     years = functions.getYears()
 
@@ -33,13 +33,12 @@ def main():
     #columns = region, storage, year, value
     data = []
 
-    for region in regions:
-        for year in years:
-            for subregion in subregions:
-                for storage in storages:
-                    stoName = 'STO' + storage + 'CAN' + subregion
-                    cost = storageCosts[storage]
-                    data.append([region,stoName,year,cost])
+    for year in years:
+        for subregion in subregions:
+            for storage in storages:
+                stoName = 'STO' + storage + 'CAN' + subregion
+                cost = storageCosts[storage]
+                data.append([region,stoName,year,cost])
 
     df = pd.DataFrame(data, columns=['REGION','STORAGE','YEAR','VALUE'])
     df.to_csv('../src/data/CapitalCostStorage.csv', index=False)

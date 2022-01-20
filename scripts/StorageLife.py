@@ -11,7 +11,7 @@ def main():
     # OUTPUT: none
 
     # Parameters to print over
-    regions = functions.openYaml().get('regions')
+    region = functions.openYaml().get('regions')[0]
     subregions = ((functions.openYaml().get('subregions_dictionary'))['CAN']).keys() # Canadian subregions
     storages = functions.openYaml().get('sto_techs')
     
@@ -27,12 +27,11 @@ def main():
     #columns = region, storage, value
     data = []
 
-    for region in regions:
-        for subregion in subregions:
-            for storage in storages:
-                stoName = 'STO' + storage + 'CAN' + subregion
-                life = storageLife[storage]
-                data.append([region,stoName,life])
+    for subregion in subregions:
+        for storage in storages:
+            stoName = 'STO' + storage + 'CAN' + subregion
+            life = storageLife[storage]
+            data.append([region,stoName,life])
 
     df = pd.DataFrame(data, columns=['REGION','STORAGE','VALUE'])
     df.to_csv('../src/data/OperationalLifeStorage.csv', index=False)

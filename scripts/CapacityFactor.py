@@ -14,7 +14,6 @@ def main():
 
     # Parameters to print over
     seasons = functions.openYaml().get('seasons')
-    regions = functions.openYaml().get('regions')
     subregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
     years = functions.getYears()
 
@@ -23,10 +22,10 @@ def main():
     ###########################################
 
     #Get df for all capacity factors
-    dfWind = renewableNinjaData('WND', regions, subregions, seasons, years)
-    dfPV = renewableNinjaData('SPV', regions, subregions, seasons, years)
+    dfWind = renewableNinjaData('WND', subregions, seasons, years)
+    dfPV = renewableNinjaData('SPV', subregions, seasons, years)
     #dfHydro = capFactorHydro(subregions, seasons, years)
-    dfFossil = read_NREL(regions, subregions, seasons, years)
+    dfFossil = read_NREL(subregions, seasons, years)
 
     ###########################################
     # Writing Capacity Factor to File 
@@ -46,7 +45,7 @@ def main():
     df = df.append(dfUsa)
     df.to_csv('../src/data/CapacityFactor.csv', index=False)
     
-def renewableNinjaData(tech, regions, subregions, seasons, years):
+def renewableNinjaData(tech, subregions, seasons, years):
     # PURPOSE: Takes a folder of CSVs created by renewable Ninja and formats a dataframe to hold all capacity factor values 
     # INPUT:   Name of the tech ('WIND' or 'PV') - CSVs in folder named (<TECH>_<PROVINCE>.csv)
     #          Regions: List holding regions to print over
@@ -54,6 +53,8 @@ def renewableNinjaData(tech, regions, subregions, seasons, years):
     #          Seasons: Dictionary showing season to month mapping 
     #          Years: List of years to populate values for 
     # OUTPUT:  otoole formatted dataframe holding capacity factor values for input tech type 
+
+    region = functions.openYaml().get('regions')[0]
 
     #Dictionary to hold land area for averaging (thousand km2)
     PROVINCIAL_LAND_AREAS = {
@@ -75,48 +76,47 @@ def renewableNinjaData(tech, regions, subregions, seasons, years):
     data = []
 
     #get formatted data for each region and append to output dataframe
-    for region in regions:
-        for subregion in subregions: 
-            dfProvince = pd.DataFrame(columns = ['PROVINCE','SEASON','HOUR','VALUE'])
-            for province in subregions[subregion]: 
-                csvName = tech + '_' + province + '.csv'
-                dfTemp = readRenewableNinjaCSV(csvName, province)
-                dfTemp = monthlyAverageCF(dfTemp)
-                dfTemp = seasonalAverageCF(dfTemp, seasons)
-                dfProvince = dfProvince.append(dfTemp, ignore_index = True)
+    for subregion in subregions: 
+        dfProvince = pd.DataFrame(columns = ['PROVINCE','SEASON','HOUR','VALUE'])
+        for province in subregions[subregion]: 
+            csvName = tech + '_' + province + '.csv'
+            dfTemp = readRenewableNinjaCSV(csvName, province)
+            dfTemp = monthlyAverageCF(dfTemp)
+            dfTemp = seasonalAverageCF(dfTemp, seasons)
+            dfProvince = dfProvince.append(dfTemp, ignore_index = True)
 
-            #Find total land area of region for calcaulting weighted averages
-            regionLandArea = 0
-            for province in subregions[subregion]:
-                regionLandArea = regionLandArea + PROVINCIAL_LAND_AREAS[province]
+        #Find total land area of region for calcaulting weighted averages
+        regionLandArea = 0
+        for province in subregions[subregion]:
+            regionLandArea = regionLandArea + PROVINCIAL_LAND_AREAS[province]
 
-            #Filter dataframe for each season and timeslice 
-            for year in years:
-                print (f"{subregion} {tech} {year}")
-                for season in seasons:
-                    #for month in seasons[season]:
-                    for hour in hourList: 
-                        dfFilter = dfProvince.loc[(dfProvince['SEASON'] == season) & (dfProvince['HOUR'] == hour)]
-                        provinces = list(dfFilter['PROVINCE'])
-                        cfList = list(dfFilter['VALUE'])
+        #Filter dataframe for each season and timeslice 
+        for year in years:
+            print (f"{subregion} {tech} {year}")
+            for season in seasons:
+                #for month in seasons[season]:
+                for hour in hourList: 
+                    dfFilter = dfProvince.loc[(dfProvince['SEASON'] == season) & (dfProvince['HOUR'] == hour)]
+                    provinces = list(dfFilter['PROVINCE'])
+                    cfList = list(dfFilter['VALUE'])
 
-                        #Find average weighted average capacity factor
-                        cf = 0
-                        for i in range(len(provinces)):
-                            weightingFactor = PROVINCIAL_LAND_AREAS[provinces[i]]/regionLandArea
-                            cf = cf + cfList[i]*weightingFactor
-                        
-                        #round cf
-                        cf = round(cf,3)
+                    #Find average weighted average capacity factor
+                    cf = 0
+                    for i in range(len(provinces)):
+                        weightingFactor = PROVINCIAL_LAND_AREAS[provinces[i]]/regionLandArea
+                        cf = cf + cfList[i]*weightingFactor
+                    
+                    #round cf
+                    cf = round(cf,3)
 
-                        #create timeslice value 
-                        ts = season + str(hour)
+                    #create timeslice value 
+                    ts = season + str(hour)
 
-                        #create tech name
-                        techName = 'PWR' + tech + 'CAN' + subregion + '01'
+                    #create tech name
+                    techName = 'PWR' + tech + 'CAN' + subregion + '01'
 
-                        #Append data to output data list 
-                        data.append([region, techName, ts, year, cf])
+                    #Append data to output data list 
+                    data.append([region, techName, ts, year, cf])
         
     #output dataframe 
     df = pd.DataFrame(data, columns = ['REGION','TECHNOLOGY','TIMESLICE','YEAR','VALUE'])
@@ -216,7 +216,7 @@ def seasonalAverageCF(dfIn, seasons):
     dfOut = pd.DataFrame(data,columns = ['PROVINCE','SEASON','HOUR','VALUE'])
     return dfOut 
 
-def read_NREL(regions, subregions, seasons, years):
+def read_NREL(subregions, seasons, years):
     # PURPOSE: reads the NREL raw excel data sheet
     # INPUT:   regions: List holding what regions to print values over
     #          Seasons: Dictionary showing season to month mapping 
@@ -227,6 +227,7 @@ def read_NREL(regions, subregions, seasons, years):
     scenario = 'Moderate'
     crpYears = 20
     metric_case = 'Market'
+    region = functions.openYaml().get('regions')[0]
     
     # Dictionary key is technology abbreviation in our model
     # Dictionay value list holds how to filter input data frame 
@@ -270,46 +271,45 @@ def read_NREL(regions, subregions, seasons, years):
     colNames = list(dfCF) 
 
     #Loop over regions and years 
-    for region in regions:
-        for subregion in subregions:
-            for year in years:
+    for subregion in subregions:
+        for year in years:
 
-                #filter based on years
-                dfYear = dfCF.loc[dfCF['core_metric_variable'] == year]
+            #filter based on years
+            dfYear = dfCF.loc[dfCF['core_metric_variable'] == year]
 
-                #loop over technologies that contribute to total cost 
-                for tech, techFilter in technology.items():
+            #loop over technologies that contribute to total cost 
+            for tech, techFilter in technology.items():
 
-                    #Filter to get desired technology
-                    dfTech = dfYear
-                    for i in range(len(techFilter)): 
-                        dfTech = dfTech.loc[dfTech[colNames[i+3]] == techFilter[i]]
+                #Filter to get desired technology
+                dfTech = dfYear
+                for i in range(len(techFilter)): 
+                    dfTech = dfTech.loc[dfTech[colNames[i+3]] == techFilter[i]]
 
-                    #There should only be one line item left at this point
-                    if len(dfTech) > 1:
-                        print(f'There are {len(dfTech)} rows in the {year} {tech} dataframe')
-                        print('DATA NOT WRITTEN!')
-                        exit()
-                    elif len(dfTech) < 1:
-                        print(f'{tech} has a capacity factor of one in {year} for the {subregion} region')
-                        cf = 1
-                    else:
-                        #extract capaity factor
-                        cf = dfTech.iloc[0]['value']
-                        cf = round(cf,3)
+                #There should only be one line item left at this point
+                if len(dfTech) > 1:
+                    print(f'There are {len(dfTech)} rows in the {year} {tech} dataframe')
+                    print('DATA NOT WRITTEN!')
+                    exit()
+                elif len(dfTech) < 1:
+                    print(f'{tech} has a capacity factor of one in {year} for the {subregion} region')
+                    cf = 1
+                else:
+                    #extract capaity factor
+                    cf = dfTech.iloc[0]['value']
+                    cf = round(cf,3)
 
-                    #write data for all timeslices in the year
-                    for season in seasons:
-                        for hour in hourList:
+                #write data for all timeslices in the year
+                for season in seasons:
+                    for hour in hourList:
 
-                            #timeslice name 
-                            ts = season + str(hour)
+                        #timeslice name 
+                        ts = season + str(hour)
 
-                            #tech name
-                            techName = 'PWR' + tech + 'CAN' + subregion + '01'
+                        #tech name
+                        techName = 'PWR' + tech + 'CAN' + subregion + '01'
 
-                            #write data to output list
-                            data.append([region, techName, ts, year, cf])
+                        #write data to output list
+                        data.append([region, techName, ts, year, cf])
                 
     df = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','TIMESLICE','YEAR','VALUE'])
     return df

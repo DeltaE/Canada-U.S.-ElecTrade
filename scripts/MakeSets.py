@@ -64,7 +64,7 @@ def main():
 ## Extra Functions
 ####################################
 
-def getSTO(regions, storages):
+def getSTO(subregionsDict, storages):
     # PURPOSE: Creates storage names
     # INPUT:   regions =  subregions = Dictionary holding Country and regions 
     #          ({CAN:{WS:[...], ...} USA:[NY:[...],...]})
@@ -77,7 +77,7 @@ def getSTO(regions, storages):
         return storages
 
     # Loop to create all technology names
-    for region, subregions in regions.items():
+    for region, subregions in subregionsDict.items():
         for subregion in subregions['CAN']:
             for storage in storages:
                 storageName = 'STO' + storage + region + subregion
