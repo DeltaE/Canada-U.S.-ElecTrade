@@ -15,7 +15,7 @@ def main():
     # Model Parameters
     ###########################################
 
-    regions = functions.openYaml().get('regions')
+    region = functions.openYaml().get('regions')[0]
     subregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
     seasons = functions.openYaml().get('seasons')
     years = functions.getYears()
@@ -136,28 +136,25 @@ def main():
 
     #Reserve Margin = Region, year, value
     reserveMargin = []
-    for region in regions:
-        for year in years:
-            reserveMargin.append([region, year, 1])
+    for year in years:
+        reserveMargin.append([region, year, 1])
 
     #reserve margin Tag Fuel = Region, Fuel, Year, Value
     reserveMarginTagFuel = []
-    for region in regions:
-        for i in range(len(reserveMarginRaw)):
-            fuelName = 'ELC' + 'CAN' + reserveMarginRaw[i][0] + '01'
-            year = reserveMarginRaw[i][1]
-            rm = reserveMarginRaw[i][2]
-            rm = round(rm,3)
-            reserveMarginTagFuel.append([region, fuelName, year, rm])
+    for i in range(len(reserveMarginRaw)):
+        fuelName = 'ELC' + 'CAN' + reserveMarginRaw[i][0] + '01'
+        year = reserveMarginRaw[i][1]
+        rm = reserveMarginRaw[i][2]
+        rm = round(rm,3)
+        reserveMarginTagFuel.append([region, fuelName, year, rm])
     
     #reserve margin Tag Technology = Region, Technology, Year, Value
     reserveMarginTagTech = []
-    for region in regions:
-        for subregion in subregions:
-            for year in years:
-                for tech in techTags:
-                    techName = 'PWR' + tech + 'CAN' +subregion + '01'
-                    reserveMarginTagTech.append([region, techName, year, 1])
+    for subregion in subregions:
+        for year in years:
+            for tech in techTags:
+                techName = 'PWR' + tech + 'CAN' +subregion + '01'
+                reserveMarginTagTech.append([region, techName, year, 1])
 
     #write out all files
     dfReserveMargin = pd.DataFrame(reserveMargin,columns=['REGION','YEAR','VALUE'])

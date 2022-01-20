@@ -338,6 +338,7 @@ def getUsaCapitalCost():
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
     techMap = functions.openYaml().get('usa_tech_map')
+    region = functions.openYaml().get('regions')[0]
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'CapitalCost(r,t,y)')
 
     #remove anything from years 2015 - 2018
@@ -358,6 +359,17 @@ def getUsaCapitalCost():
 
     #holds output data
     outData = []
+
+    #map data
+    for i in range(len(df)):
+        techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
+        tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
+        year = df['YEAR'].iloc[i]
+        value = df['CAPITALCOST'].iloc[i]
+        value = round(value, 3)
+        #Convert from $/kW to M$/GW
+
+        outData.append([region,tech,year,value])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
