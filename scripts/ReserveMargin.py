@@ -172,36 +172,6 @@ def main():
     dfReserveMarginTech = dfReserveMarginTech.append(dfReserveMarginTechUsa)
     dfReserveMarginTech.to_csv('../src/data/ReserveMarginTagTechnology.csv', index=False)
 
-    # Reference code before switching over to osemosys gloabl naming 
-    '''
-    dfWeightedReserveMargin = pd.DataFrame(reserveMargin,columns=['REGION','YEAR','VALUE'])
-
-    #reserve margin Tag Fuel = Region, Fuel, Year, Value
-    reserveMarginTagFuel = []
-
-    #reserve margin Tag Technology = Region, Technology, Year, Value
-    reserveMarginTagTech = []
-
-    #populate lists 
-    for region, rm in regions.items():
-        for year in years:
-            for fuel in fuelTag:
-                reserveMarginTagFuel.append([region, fuel, year, 1])
-            for tech in techTag:
-                reserveMarginTagTech.append([region, tech, year, 1])
-
-    #write to csvs
-    dfReserveMargin = pd.DataFrame(reserveMargin,columns=['REGION','YEAR','VALUE'])
-    dfReserveMargin.to_csv('../src/data/ReserveMargin.csv', index=False)
-
-    dfReserveMarginFuel = pd.DataFrame(reserveMarginTagFuel,columns=['REGION','FUEL','YEAR','VALUE'])
-    dfReserveMarginFuel.to_csv('../src/data/ReserveMarginTagFuel.csv', index=False)
-
-    dfReserveMarginTech = pd.DataFrame(reserveMarginTagTech,columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
-    dfReserveMarginTech.to_csv('../src/data/ReserveMarginTagTechnology.csv', index=False)
-
-    '''
-
 def getUsaReserveMarginTagTechnology():
     # PURPOSE: Creates getReserveMarginTagTechnology file from USA data
     # INPUT:   N/A
