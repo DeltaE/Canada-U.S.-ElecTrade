@@ -7,3 +7,5 @@ results/
 dataSources/UpdateDemand/
 scripts/developer_tools/CanadaUsaTxtDiffCheck/Results.txt
 *__pycache__/
+src/CanadaUSA.txt
+src/data/*
