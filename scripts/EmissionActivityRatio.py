@@ -60,7 +60,7 @@ def getUsaEmissionActivityRatio():
     techMap = functions.openYaml().get('usa_tech_map')
     inputFuelMap = functions.openYaml().get('tech_to_fuel')
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'EmisionActivityRatio(r,t,e,m,y)')
-    regions = functions.openYaml().get('regions')
+    region = functions.openYaml().get('regions')[0]
 
     #Only defined for year 2015
     years = functions.getYears()
@@ -84,20 +84,19 @@ def getUsaEmissionActivityRatio():
     intFuel = functions.openYaml().get('mine_fuels')
 
     #map data
-    for region in regions:
-        for year in years:
-            for i in range(len(df)):
-                techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
-                tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
-                emission = df['EMISSION'].iloc[i]
-                mode = 1
-                value = df['EMISSIONACTIVITYRATIO'].iloc[i]
-                value = round(value, 3)
+    for year in years:
+        for i in range(len(df)):
+            techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
+            tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
+            emission = df['EMISSION'].iloc[i]
+            mode = 1
+            value = df['EMISSIONACTIVITYRATIO'].iloc[i]
+            value = round(value, 3)
+            outData.append([region,tech,emission,mode,year,value])
+            #checks if need to write value for mode 2
+            if inputFuelMap[techMapped] in intFuel:
+                mode = 2
                 outData.append([region,tech,emission,mode,year,value])
-                #checks if need to write value for mode 2
-                if inputFuelMap[techMapped] in intFuel:
-                    mode = 2
-                    outData.append([region,tech,emission,mode,year,value])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','EMISSION','MODE_OF_OPERATION','YEAR','VALUE'])

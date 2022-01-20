@@ -359,56 +359,6 @@ def getUsaCapitalCost():
     #holds output data
     outData = []
 
-    #Regions to print over
-    regions = functions.openYaml().get('regions')
-
-<<<<<<< HEAD
-    #Get trade costs
-    dfCosts = pd.read_csv('../dataSources/USA_Trade.csv')
-
-    #Cost data only populated on mode 1 data rows
-    dfCosts = dfCosts.loc[dfCosts['MODE'] == 1]
-
-    # get list of all the technologies
-    techList = dfCosts['TECHNOLOGY'].tolist()
-
-    #cost types to get data for
-    costType = ['CAPEX']
-
-    #populate data
-    for region in regions:
-        #map data
-        for i in range(len(df)):
-            techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
-            tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
-            year = df['YEAR'].iloc[i]
-            value = df['CAPITALCOST'].iloc[i]
-            value = round(value, 3)
-            #Convert from $/kW to M$/GW
-
-            outData.append([region,tech,year,value])
-
-        for tech in techList:
-
-            #remove all rows except for our technology
-            dfCostsFiltered = dfCosts.loc[dfCosts['TECHNOLOGY']==tech]
-            dfCostsFiltered.reset_index()
-
-            #reset costs
-            trnCost = 0
-
-            #get costs
-            for cost in costType:
-                trnCost = trnCost + float(dfCostsFiltered[cost].iloc[0])
-
-            trnCost = round(trnCost,3)
-
-            #save same value for all years 
-            for year in functions.getYears():
-                outData.append([region,tech,year,trnCost])
-
-=======
->>>>>>> main
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
     return dfOut
@@ -440,52 +390,6 @@ def getUsaFixedCost():
     #holds output data
     outData = []
 
-<<<<<<< HEAD
-    #Get trade costs
-    dfCosts = pd.read_csv('../dataSources/USA_Trade.csv')
-
-    #Cost data only populated on mode 1 data rows
-    dfCosts = dfCosts.loc[dfCosts['MODE'] == 1]
-
-    # get list of all the technologies
-    techList = dfCosts['TECHNOLOGY'].tolist()
-
-    #Regions to print over
-    regions = functions.openYaml().get('regions')
-
-    #cost types to get data for
-    costType = ['Fixed O&M']
-
-    #populate data
-    for region in regions:
-        #map data
-        for i in range(len(df)):
-            techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
-            tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
-            year = df['YEAR'].iloc[i]
-            value = df['FIXEDCOST'].iloc[i]
-            value = round(value, 3)
-            outData.append([region,tech,year,value])
-
-        for tech in techList:
-
-            #remove all rows except for our technology
-            dfCostsFiltered = dfCosts.loc[dfCosts['TECHNOLOGY']==tech]
-            dfCostsFiltered.reset_index()
-
-            #reset costs
-            trnCost = 0
-
-            #get costs
-            for cost in costType:
-                trnCost = trnCost + float(dfCostsFiltered[cost].iloc[0])
-
-            trnCost = round(trnCost, 3)
-            #save same value for all years 
-            for year in functions.getYears():
-                outData.append([region,tech,year,trnCost])
-
-=======
     #map data
     for i in range(len(df)):
         region = 'NAmerica'
@@ -495,7 +399,6 @@ def getUsaFixedCost():
         value = df['FIXEDCOST'].iloc[i]
         value = round(value, 3)
         outData.append([region,tech,year,value])
->>>>>>> main
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
@@ -532,57 +435,6 @@ def getUsaVariableCost():
     #holds output data
     outData = []
 
-<<<<<<< HEAD
-    #Get trade costs
-    dfCosts = pd.read_csv('../dataSources/USA_Trade.csv')
-
-    #Cost data only populated on mode 1 data rows
-    dfCosts = dfCosts.loc[dfCosts['MODE'] == 1]
-
-    # get list of all the technologies
-    techList = dfCosts['TECHNOLOGY'].tolist()
-
-    #Regions to print over
-    regions = functions.openYaml().get('regions')
-
-    #cost types to get data for
-    costType = ['Variable O&M', 'Fuel']
-
-    #populate data
-    for region in regions:
-        #map data
-        for i in range(len(df)):
-            techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
-            tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
-            year = df['YEAR'].iloc[i]
-            mode = 1
-            value = df['VARIABLECOST'].iloc[i]
-            value = round(value, 3)
-            outData.append([region,tech,mode,year,value])
-            #checks if need to write value for mode 2
-            if inputFuelMap[techMapped] in intFuel:
-                mode = 2
-                outData.append([region,tech,mode,year,value])
-
-        for tech in techList:
-
-            #remove all rows except for our technology
-            dfCostsFiltered = dfCosts.loc[dfCosts['TECHNOLOGY']==tech]
-            dfCostsFiltered.reset_index()
-
-            #reset costs
-            trnCost = 0
-
-            #get costs
-            for cost in costType:
-                trnCost = trnCost + float(dfCostsFiltered[cost].iloc[0])
-            trnCost = round(trnCost, 3)
-
-            #save same value for all years 
-            for year in functions.getYears():
-                outData.append([region,tech,1,year,trnCost])
-                outData.append([region,tech,2,year,trnCost])
-=======
     #map data
     for i in range(len(df)):
         region = 'NAmerica'
@@ -597,7 +449,6 @@ def getUsaVariableCost():
         if inputFuelMap[techMapped] in intFuel:
             mode = 2
             outData.append([region,tech,mode,year,value])
->>>>>>> main
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','MODE_OF_OPERATION','YEAR','VALUE'])

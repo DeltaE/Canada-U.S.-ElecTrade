@@ -174,23 +174,6 @@ def getUsaResidualCapacity():
         value = round(value,3)
         outData.append([region,tech,year,value])
 
-<<<<<<< HEAD
-    #Transmission Residual Capacity
-    dfTrade = pd.read_csv('../dataSources/USA_Trade.csv')
-    techListTrade = dfTrade['TECHNOLOGY'].tolist()
-    techListTrade = list(set(techListTrade)) #remove duplicates
-
-    for tech in techListTrade:
-      dfResCapTrd = dfTrade.loc[(dfTrade['TECHNOLOGY'] == tech) & 
-                                (dfTrade['MODE'] == 1)]
-      dfResCapTrd.reset_index()
-      resCapTrd = dfResCapTrd['CAPACITY (GW)'].iloc[0]
-      resCapTrd = round(float(resCapTrd),3)
-      for year in functions.getYears():
-        outData.append([region, tech, year, resCapTrd])
-
-=======
->>>>>>> main
     #create and return dataframe
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
     return dfOut
@@ -227,16 +210,6 @@ def getUsaOperationalLife():
         value = df['OPERATIONALLIFE'].iloc[i]
         outData.append([top_level_region,tech,value])
 
-<<<<<<< HEAD
-    #Transmission operational life 
-    dfTrade = pd.read_csv('../dataSources/USA_Trade.csv')
-    techListTrade = dfTrade['TECHNOLOGY'].tolist()
-    techListTrade = list(set(techListTrade)) #remove duplicates
-    for tech in techListTrade:
-        outData.append([top_level_region,tech,100])
-
-=======
->>>>>>> main
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','VALUE'])
     return dfOut
