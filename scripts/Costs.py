@@ -15,7 +15,6 @@ def main():
     ###########################################
 
     # Parameters to print over
-    regions = functions.openYaml().get('regions')
     subregions = ((functions.openYaml().get('subregions_dictionary'))['CAN']).keys() # Canadian subregions
     years = functions.getYears()
 
@@ -44,13 +43,13 @@ def main():
         ###########################################
 
         #reads the NREL raw datafile and extracts costs
-        dfNREL = read_NREL(costType, regions, subregions, years)
+        dfNREL = read_NREL(costType, subregions, years)
 
         #Populate P2G and FC costs
         #dfP2gSystem = p2gSystem(costType, regions, subregions, years)
 
         #Populate Trade costs
-        trade = tradeCosts(costType, regions, years)
+        trade = tradeCosts(costType, years)
 
         ###########################################
         # Writing Cost to file
@@ -80,13 +79,15 @@ def main():
         df.to_csv(outLocation, index=False)
 
 
-def read_NREL(costType, regions, subregions, years):
+def read_NREL(costType, subregions, years):
     # PURPOSE: reads the NREL raw excel data sheet
     # INPUT:   costType: List holding how to filter core_metric_parameter column
     #          regions: List holding what regions to print values over
     #          subregions: List holding what subregions to print values over
     #          years: list holding what years to print data over
     # OUTPUT:  otoole formatted dataframe holding cost values 
+
+    region = functions.openYaml().get('regions')[0]
 
     #global filtering options
     scenario = 'Moderate'
@@ -153,72 +154,71 @@ def read_NREL(costType, regions, subregions, years):
     modeTwoTechs = ['CCG','CTG','COA','COC','URN']
 
     #Loop over regions and years 
-    for region in regions:
-        for subregion in subregions:
-            for year in years:
+    for subregion in subregions:
+        for year in years:
 
-                #filter based on years
-                dfYear = dfCost.loc[dfCost['core_metric_variable'] == year]
+            #filter based on years
+            dfYear = dfCost.loc[dfCost['core_metric_variable'] == year]
 
-                #loop over technologies that contribute to total cost 
-                for tech, techFilter in technology.items():
+            #loop over technologies that contribute to total cost 
+            for tech, techFilter in technology.items():
 
-                    #Filter to get desired technology
-                    dfTech = dfYear
-                    for i in range(len(techFilter)): 
-                        dfTech = dfTech.loc[dfTech[colNames[i+3]] == techFilter[i]]
+                #Filter to get desired technology
+                dfTech = dfYear
+                for i in range(len(techFilter)): 
+                    dfTech = dfTech.loc[dfTech[colNames[i+3]] == techFilter[i]]
 
-                    #reset total cost 
-                    totalCost=0
+                #reset total cost 
+                totalCost=0
 
-                    # For variable costs, we need to add variable cost and fuel cost
-                    for cost in costType:
-                        dfEnd = dfTech.loc[dfTech['core_metric_parameter'] == cost]
+                # For variable costs, we need to add variable cost and fuel cost
+                for cost in costType:
+                    dfEnd = dfTech.loc[dfTech['core_metric_parameter'] == cost]
 
-                        #There should only be one (capital/fixed) or two (variable) line items left at this point 
-                        if len(dfEnd) > 1:
-                            print(f'There are {len(dfTech)} rows in the {year} {tech} dataframe for {costType[0]}')
-                            print('DATA NOT WRITTEN!')
-                            exit()
-                        elif len(dfEnd) < 1:
-                            #print(f'{tech} has a {cost} cost of zero in {year} for the {region} region')
-                            totalCost = totalCost
-                        else:
-                            #calculate total cost
-                            #handels edge case of nuclear fuel cost given in $/MWh
-                            #####################################################
-                            ###### HARD CODED IN ALL FULE UNITS TO BE MWh #######
-                            ###### UNIT CONSISTENCY ISSUE ON ATB          #######
-                            #####################################################
-                            if tech == 'URN' and cost == 'Fuel':
-                                totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion['Variable O&M']
-                            elif tech == 'COA' and cost == 'Fuel':
-                                totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion['Variable O&M']
-                            elif tech == 'COC' and cost == 'Fuel':
-                                totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion['Variable O&M']
-                            elif tech == 'CCG' and cost == 'Fuel':
-                                totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion['Variable O&M']
-                            elif tech == 'CTG' and cost == 'Fuel':
-                                totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion['Variable O&M']
-                            else:
-                                totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion[cost]
-                        
-                        totalCost = round(totalCost,3)
-
-                    #construct technology name
-                    techName = 'PWR' + tech + 'CAN' + subregion + '01'
-
-                    # write data to output list
-                    # need to include a mode column for variable cost
-                    if costType[0] == 'Variable O&M':
-                        if tech in modeTwoTechs:
-                            modes = [1,2]
-                        else:
-                            modes = [1]
-                        for mode in modes:
-                            data.append([region,techName,mode,year,totalCost])
+                    #There should only be one (capital/fixed) or two (variable) line items left at this point 
+                    if len(dfEnd) > 1:
+                        print(f'There are {len(dfTech)} rows in the {year} {tech} dataframe for {costType[0]}')
+                        print('DATA NOT WRITTEN!')
+                        exit()
+                    elif len(dfEnd) < 1:
+                        #print(f'{tech} has a {cost} cost of zero in {year} for the {region} region')
+                        totalCost = totalCost
                     else:
-                        data.append([region, techName, year, totalCost])
+                        #calculate total cost
+                        #handels edge case of nuclear fuel cost given in $/MWh
+                        #####################################################
+                        ###### HARD CODED IN ALL FULE UNITS TO BE MWh #######
+                        ###### UNIT CONSISTENCY ISSUE ON ATB          #######
+                        #####################################################
+                        if tech == 'URN' and cost == 'Fuel':
+                            totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion['Variable O&M']
+                        elif tech == 'COA' and cost == 'Fuel':
+                            totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion['Variable O&M']
+                        elif tech == 'COC' and cost == 'Fuel':
+                            totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion['Variable O&M']
+                        elif tech == 'CCG' and cost == 'Fuel':
+                            totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion['Variable O&M']
+                        elif tech == 'CTG' and cost == 'Fuel':
+                            totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion['Variable O&M']
+                        else:
+                            totalCost = totalCost + dfEnd.iloc[0]['value']*unitConversion[cost]
+                    
+                    totalCost = round(totalCost,3)
+
+                #construct technology name
+                techName = 'PWR' + tech + 'CAN' + subregion + '01'
+
+                # write data to output list
+                # need to include a mode column for variable cost
+                if costType[0] == 'Variable O&M':
+                    if tech in modeTwoTechs:
+                        modes = [1,2]
+                    else:
+                        modes = [1]
+                    for mode in modes:
+                        data.append([region,techName,mode,year,totalCost])
+                else:
+                    data.append([region, techName, year, totalCost])
                 
     if costType[0] == 'Variable O&M':
         df = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','MODE_OF_OPERATION','YEAR','VALUE'])
@@ -281,12 +281,14 @@ def p2gSystem(costType, regions, subregions, years):
         df = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
     return df
 
-def tradeCosts(costType, regions, years):
+def tradeCosts(costType, years):
     # PURPOSE: populates trade capital, fixed, OR variable costs 
     # INPUT:   costType: List holding what cost we are looking for (names sasme as NREL)
     #          regions: List holding what regions to print values over
     #          years: list holding what years to print data over
     # OUTPUT:  otoole formatted dataframe holding cost values for trade 
+
+    region = functions.openYaml().get('regions')[0]
 
     # Read in the trade csv file which contains costs
     df = pd.read_csv('../dataSources/Trade.csv')
@@ -303,28 +305,27 @@ def tradeCosts(costType, regions, years):
     data = []
 
     #populate data
-    for region in regions:
-        for tech in techList:
+    for tech in techList:
 
-            #remove all rows except for our technology
-            costdf = df.loc[df['TECHNOLOGY']==tech]
-            costdf.reset_index()
+        #remove all rows except for our technology
+        costdf = df.loc[df['TECHNOLOGY']==tech]
+        costdf.reset_index()
 
-            #reset costs
-            trnCost = 0
+        #reset costs
+        trnCost = 0
 
-            #get costs
-            for cost in costType:
-                trnCost = trnCost + float(costdf[cost].iloc[0])
+        #get costs
+        for cost in costType:
+            trnCost = trnCost + float(costdf[cost].iloc[0])
 
-            #save same value for all years 
-            if costType[0] == 'Variable O&M':
-                for year in years:
-                    data.append([region,tech,1,year,trnCost])
-                    data.append([region,tech,2,year,trnCost])
-            else:
-                for year in years:
-                    data.append([region,tech,year,trnCost])
+        #save same value for all years 
+        if costType[0] == 'Variable O&M':
+            for year in years:
+                data.append([region,tech,1,year,trnCost])
+                data.append([region,tech,2,year,trnCost])
+        else:
+            for year in years:
+                data.append([region,tech,year,trnCost])
 
     if costType[0] == 'Variable O&M':
         dfOut = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','MODE_OF_OPERATION','YEAR','VALUE'])
