@@ -210,19 +210,15 @@ def getRNWtechs(region, techs):
     # Return list of rnw Technologes
     return outList
 
-def getTRNtechs(csvPaths):
+def getTRNtechs(csvPath):
     # PURPOSE: Creates all the TRN naming technologies
-    # INPUT:   csvPath = List of datafile path
+    # INPUT:   csvPath = Transmission csv path
     # OUTPUT:  outList =  List of all the TRN technologies
 
-    #Read in the trade csv datafile 
-    outList = []
-    for csv in csvPaths:
-        df = pd.read_csv(csv)
-        outList += df['TECHNOLOGY'].tolist()
+    df = pd.read_csv(csvPath)
+    outList = df['TECHNOLOGY'].tolist()
     outList = list(set(outList)) # remove duplicates
-    
-    # Return list of rnw Technologes
+
     return outList
 
 def getRNWfuels(region, techs):
@@ -318,13 +314,13 @@ def createFuelDataframe(subregions, rnwFuels, mineFuels):
     
     return dfOut
 
-def createTechDataframe(subregions, techsMaster, mineFuels, rnwFuels, trnTechsCsvPaths):
+def createTechDataframe(subregions, techsMaster, mineFuels, rnwFuels, trnTechsCsvPath):
     # PURPOSE: Appends technology and fuel name lists together and returns them as a CSV dataframe
     # INPUT:   subregions = Dictionary holding Country and regions ({CAN:{WS:[...], ...} USA:[NY:[...],...]})
     #          techsMaster = List of the technologies to print over for getPWRtechs
     #          mineFuels = List of the fuels to print over for getMINfuels
     #          rnwFuels = List of the fuels to print over for getRNWfuels
-    #          trnTechsCsvPaths = List of trade csv dataframe locations (with indices matching with subregions)
+    #          trnTechsCsvPath = Transmission csv information locations
     # OUTPUT:  dfOut = tech set dataframe
     # get power generator technology list 
     outputTechs = []
@@ -348,7 +344,7 @@ def createTechDataframe(subregions, techsMaster, mineFuels, rnwFuels, trnTechsCs
         outputTechs += rnwList 
 
     # get trade technology list 
-    trnList = getTRNtechs(trnTechsCsvPaths)
+    trnList = getTRNtechs(trnTechsCsvPath)
     outputTechs += trnList
     
     #Generate international trade 

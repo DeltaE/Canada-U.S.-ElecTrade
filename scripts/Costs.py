@@ -321,6 +321,7 @@ def tradeCosts(costType, regions, years):
             if costType[0] == 'Variable O&M':
                 for year in years:
                     data.append([region,tech,1,year,trnCost])
+                    data.append([region,tech,2,year,trnCost])
             else:
                 for year in years:
                     data.append([region,tech,year,trnCost])
@@ -332,7 +333,7 @@ def tradeCosts(costType, regions, years):
     return dfOut
 
 def getUsaCapitalCost():
-    # PURPOSE: Creates capitalCost file from USA data
+    # PURPOSE: Creates capitalCosts from USA data (excluding transmission)
     # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
@@ -361,6 +362,7 @@ def getUsaCapitalCost():
     #Regions to print over
     regions = functions.openYaml().get('regions')
 
+<<<<<<< HEAD
     #Get trade costs
     dfCosts = pd.read_csv('../dataSources/USA_Trade.csv')
 
@@ -405,6 +407,8 @@ def getUsaCapitalCost():
             for year in functions.getYears():
                 outData.append([region,tech,year,trnCost])
 
+=======
+>>>>>>> main
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
     return dfOut
@@ -436,6 +440,7 @@ def getUsaFixedCost():
     #holds output data
     outData = []
 
+<<<<<<< HEAD
     #Get trade costs
     dfCosts = pd.read_csv('../dataSources/USA_Trade.csv')
 
@@ -480,6 +485,17 @@ def getUsaFixedCost():
             for year in functions.getYears():
                 outData.append([region,tech,year,trnCost])
 
+=======
+    #map data
+    for i in range(len(df)):
+        region = 'NAmerica'
+        techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
+        tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
+        year = df['YEAR'].iloc[i]
+        value = df['FIXEDCOST'].iloc[i]
+        value = round(value, 3)
+        outData.append([region,tech,year,value])
+>>>>>>> main
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
@@ -516,6 +532,7 @@ def getUsaVariableCost():
     #holds output data
     outData = []
 
+<<<<<<< HEAD
     #Get trade costs
     dfCosts = pd.read_csv('../dataSources/USA_Trade.csv')
 
@@ -565,6 +582,22 @@ def getUsaVariableCost():
             for year in functions.getYears():
                 outData.append([region,tech,1,year,trnCost])
                 outData.append([region,tech,2,year,trnCost])
+=======
+    #map data
+    for i in range(len(df)):
+        region = 'NAmerica'
+        techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
+        tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
+        year = df['YEAR'].iloc[i]
+        mode = 1
+        value = df['VARIABLECOST'].iloc[i]
+        value = round(value, 3)
+        outData.append([region,tech,mode,year,value])
+        #checks if need to write value for mode 2
+        if inputFuelMap[techMapped] in intFuel:
+            mode = 2
+            outData.append([region,tech,mode,year,value])
+>>>>>>> main
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','MODE_OF_OPERATION','YEAR','VALUE'])

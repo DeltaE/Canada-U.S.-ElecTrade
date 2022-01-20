@@ -103,7 +103,6 @@ rule lpFile:
 rule MakeSets:
 	input:
 		inputDir + 'Trade.csv',
-		inputDir + 'USA_Trade.csv',
 		inputDir + 'USA_Data.xlsx'
 	output:
 		outputDir + 'data/YEAR.csv',
@@ -144,7 +143,7 @@ rule CapacityToActivity:
 	input:
 		outputDir + 'data/REGION.csv',
 		outputDir + 'data/TECHNOLOGY.csv',
-		inputDir + 'USA_Trade.csv',
+		inputDir + 'Trade.csv',
 		inputDir + 'USA_Data.xlsx'
 	output:
 		outputDir + 'data/CapacityToActivityUnit.csv'
@@ -158,7 +157,6 @@ rule Costs:
 		inputDir + 'NREL_Costs.csv',
 		inputDir + 'P2G_FC_Costs.xlsx',
 		inputDir + 'Trade.csv',
-		inputDir + 'USA_Trade.csv',
 		inputDir + 'USA_Data.xlsx'
 	output:
 		outputDir + 'data/CapitalCost.csv',
@@ -185,7 +183,6 @@ rule InOutActivityRatio:
 		outputDir + 'data/YEAR.csv',
 		outputDir + 'data/REGION.csv',
 		inputDir + 'Trade.csv',
-		inputDir + 'USA_Trade.csv',
 		inputDir + 'USA_Data.xlsx'
 	output:
 		outputDir + 'data/InputActivityRatio.csv',
@@ -214,7 +211,6 @@ rule ResidualCapacity:
 		inputDir + 'OperationalLifeTechnology.csv',
 		inputDir + 'ResidualCapacitiesByProvince.csv',
 		inputDir + 'Trade.csv',
-		inputDir + 'USA_Trade.csv',
 		inputDir + 'USA_Data.xlsx'
 	output:
 		outputDir + 'data/ResidualCapacity.csv',

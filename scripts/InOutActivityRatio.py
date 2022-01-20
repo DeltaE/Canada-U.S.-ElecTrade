@@ -188,6 +188,7 @@ def getUsaOutputActivityRatio():
                 if techMap[tech] in intFuel:
                     outData.append([region, techName, fuel, 2, year, 1])
 
+<<<<<<< HEAD
     #OAR for transmission
     dfTrn = pd.read_csv('../dataSources/USA_Trade.csv')
     for year in functions.getYears():
@@ -198,6 +199,8 @@ def getUsaOutputActivityRatio():
             mode = dfTrn.iloc[i]['MODE']
             outData.append([region, techName, outFuel, mode, year, oar])
 
+=======
+>>>>>>> main
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','FUEL','MODE_OF_OPERATION','YEAR','VALUE'])
     return dfOut
@@ -261,6 +264,7 @@ def getUsaInputActivityRatio():
             techName = 'PWR' + 'TRN' + 'USA' + subregion
             fuelIn = 'ELC' + 'USA' + subregion + '01'
             outData.append([region, techName, fuelIn, 1, year, 1])
+<<<<<<< HEAD
     
     #IAR for transmission
     dfTrn = pd.read_csv('../dataSources/USA_Trade.csv')
@@ -271,6 +275,8 @@ def getUsaInputActivityRatio():
             iar = dfTrn.iloc[i]['IAR']
             mode = dfTrn.iloc[i]['MODE']
             outData.append([region, techName, inFuel, mode, year, iar])
+=======
+>>>>>>> main
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','FUEL','MODE_OF_OPERATION','YEAR','VALUE'])
