@@ -87,7 +87,7 @@ def read_NREL(costType, subregions, years):
     #          years: list holding what years to print data over
     # OUTPUT:  otoole formatted dataframe holding cost values 
 
-    region = functions.openYaml().get('regions')[0]
+    continent = functions.openYaml().get('continent')
 
     #global filtering options
     scenario = 'Moderate'
@@ -216,9 +216,9 @@ def read_NREL(costType, subregions, years):
                     else:
                         modes = [1]
                     for mode in modes:
-                        data.append([region,techName,mode,year,totalCost])
+                        data.append([continent,techName,mode,year,totalCost])
                 else:
-                    data.append([region, techName, year, totalCost])
+                    data.append([continent, techName, year, totalCost])
                 
     if costType[0] == 'Variable O&M':
         df = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','MODE_OF_OPERATION','YEAR','VALUE'])
@@ -288,7 +288,7 @@ def tradeCosts(costType, years):
     #          years: list holding what years to print data over
     # OUTPUT:  otoole formatted dataframe holding cost values for trade 
 
-    region = functions.openYaml().get('regions')[0]
+    continent = functions.openYaml().get('continent')
 
     # Read in the trade csv file which contains costs
     df = pd.read_csv('../dataSources/Trade.csv')
@@ -321,11 +321,11 @@ def tradeCosts(costType, years):
         #save same value for all years 
         if costType[0] == 'Variable O&M':
             for year in years:
-                data.append([region,tech,1,year,trnCost])
-                data.append([region,tech,2,year,trnCost])
+                data.append([continent,tech,1,year,trnCost])
+                data.append([continent,tech,2,year,trnCost])
         else:
             for year in years:
-                data.append([region,tech,year,trnCost])
+                data.append([continent,tech,year,trnCost])
 
     if costType[0] == 'Variable O&M':
         dfOut = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','MODE_OF_OPERATION','YEAR','VALUE'])
@@ -339,7 +339,7 @@ def getUsaCapitalCost():
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
     techMap = functions.openYaml().get('usa_tech_map')
-    region = functions.openYaml().get('regions')[0]
+    continent = functions.openYaml().get('continent')
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'CapitalCost(r,t,y)')
 
     #remove anything from years 2015 - 2018
@@ -370,7 +370,7 @@ def getUsaCapitalCost():
         value = round(value, 3)
         #Convert from $/kW to M$/GW
 
-        outData.append([region,tech,year,value])
+        outData.append([continent,tech,year,value])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
@@ -405,13 +405,13 @@ def getUsaFixedCost():
 
     #map data
     for i in range(len(df)):
-        region = 'NAmerica'
+        continent = functions.openYaml().get('continent')
         techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
         tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
         year = df['YEAR'].iloc[i]
         value = df['FIXEDCOST'].iloc[i]
         value = round(value, 3)
-        outData.append([region,tech,year,value])
+        outData.append([continent,tech,year,value])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
@@ -450,7 +450,7 @@ def getUsaVariableCost():
 
     #map data
     for i in range(len(df)):
-        region = 'NAmerica'
+        region = functions.openYaml().get('continent')
         techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
         tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
         year = df['YEAR'].iloc[i]

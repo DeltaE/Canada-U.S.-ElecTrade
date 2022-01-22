@@ -15,7 +15,7 @@ def main():
     ###EVERYTHING CURRENTLY MAPS TO MODE_OFOPERARION = 1
 
     # Parameters to print over
-    region = functions.openYaml().get('regions')[0]
+    continent = functions.openYaml().get('continent')
     subregions = ((functions.openYaml().get('subregions_dictionary'))['CAN']).keys() # Canadian subregions
     years = functions.getYears()
 
@@ -41,14 +41,14 @@ def main():
             for fuel in rnwFuels:
                 techName = 'RNW' + fuel + 'CAN' + subregion
                 fuelOut = fuel + 'CAN' + subregion
-                masterOARList.append([region, techName, fuelOut, 1, year, 1])
+                masterOARList.append([continent, techName, fuelOut, 1, year, 1])
     
     # OAR Domestic Mining
     for year in years:
         for fuel in minFuels:
             techName = 'MIN' + fuel + 'CAN'
             fuelOut = fuel + 'CAN'
-            masterOARList.append([region, techName, fuelOut, 1, year, 1])
+            masterOARList.append([continent, techName, fuelOut, 1, year, 1])
 
     # IAR and OAR International Mining
     for year in years:
@@ -56,8 +56,8 @@ def main():
             techName = 'MIN' + fuel + 'INT'
             fuelIn = fuel
             fuelOut = fuel + 'INT'
-            masterIARList.append([region, techName, fuelIn, 1, year, 1])
-            masterOARList.append([region, techName, fuelOut, 1, year, 1])
+            masterIARList.append([continent, techName, fuelIn, 1, year, 1])
+            masterOARList.append([continent, techName, fuelOut, 1, year, 1])
 
     # IAR and OAR for PWRTRN technologies
     for year in years:
@@ -65,8 +65,8 @@ def main():
             techName = 'PWR' + 'TRN' + 'CAN' + subregion
             fuelIn = 'ELC' + 'CAN' + subregion + '01'
             fuelOut = 'ELC' + 'CAN' + subregion + '02'
-            masterIARList.append([region, techName, fuelIn, 1, year, 1])
-            masterOARList.append([region, techName, fuelOut, 1, year, 1])
+            masterIARList.append([continent, techName, fuelIn, 1, year, 1])
+            masterOARList.append([continent, techName, fuelOut, 1, year, 1])
 
     # IAR and OAR for TRN technologies
     df = pd.read_csv('../dataSources/Trade.csv')
@@ -78,8 +78,8 @@ def main():
             iar = df.iloc[i]['IAR']
             oar = df.iloc[i]['OAR']
             mode = df.iloc[i]['MODE']
-            masterIARList.append([region, techName, inFuel, mode, year, iar])
-            masterOARList.append([region, techName, outFuel, mode, year, oar])
+            masterIARList.append([continent, techName, inFuel, mode, year, iar])
+            masterOARList.append([continent, techName, outFuel, mode, year, oar])
 
     # IAR and OAR for RNW PWR technologies
     dfIAR = pd.read_csv('../dataSources/InputActivityRatioByTechnology.csv', index_col=0)
@@ -96,30 +96,30 @@ def main():
                     inFuelModeOne = fuelName + 'CAN'
                     inFuelModeTwo = fuelName + 'INT'
                     outFuel = 'ELC' + 'CAN' + subregion + '01'
-                    masterIARList.append([region, techName, inFuelModeOne, 1, year, iar])
-                    masterIARList.append([region, techName, inFuelModeTwo, 2, year, iar])
-                    masterOARList.append([region, techName, outFuel, 1, year, oar])
-                    masterOARList.append([region, techName, outFuel, 2, year, oar])
+                    masterIARList.append([continent, techName, inFuelModeOne, 1, year, iar])
+                    masterIARList.append([continent, techName, inFuelModeTwo, 2, year, iar])
+                    masterOARList.append([continent, techName, outFuel, 1, year, oar])
+                    masterOARList.append([continent, techName, outFuel, 2, year, oar])
                 # edge case of storage. This is super hacked together... will need to update
                 elif fuel == 'P2G' or fuel == 'FCL':
                     # P2G will only have input activity ratio 
                     if fuel == 'P2G':
                         inFuel = 'ELC' + 'CAN' + subregion + '02'
                         outFuel = 'HY2' + 'CAN' + subregion + '01'
-                        masterIARList.append([region, techName, inFuel, 1, year, iar])
-                        masterOARList.append([region, techName, outFuel, 1, year, 0])
+                        masterIARList.append([continent, techName, inFuel, 1, year, iar])
+                        masterOARList.append([continent, techName, outFuel, 1, year, 0])
                     # P2G will only have output activity ratio 
                     elif fuel == 'FCL':
                         inFuel = 'HY2' + 'CAN' + subregion + '01'
                         outFuel = 'ELC' + 'CAN' + subregion + '02'
-                        masterIARList.append([region, techName, inFuel, 1, year, 0])
-                        masterOARList.append([region, techName, outFuel, 1, year, oar])
+                        masterIARList.append([continent, techName, inFuel, 1, year, 0])
+                        masterOARList.append([continent, techName, outFuel, 1, year, oar])
                 # Renewables
                 else:
                     inFuel = fuelName + 'CAN' + subregion
                     outFuel = 'ELC' + 'CAN' + subregion + '01'
-                    masterIARList.append([region, techName, inFuel, 1, year, iar])
-                    masterOARList.append([region, techName, outFuel, 1, year, oar])
+                    masterIARList.append([continent, techName, inFuel, 1, year, iar])
+                    masterOARList.append([continent, techName, outFuel, 1, year, oar])
 
     #write IAR and OAR to files 
     dfInputOut = pd.DataFrame(masterIARList,columns=['REGION','TECHNOLOGY','FUEL','MODE_OF_OPERATION','YEAR','VALUE'])
@@ -138,7 +138,7 @@ def getUsaOutputActivityRatio():
 
     techMap = functions.openYaml().get('usa_tech_map')
     subregions = (functions.openYaml().get('subregions_dictionary'))['USA'] # American subregions
-    region = functions.openYaml().get('regions')[0]
+    continent = functions.openYaml().get('continent')
 
     #Fuels that have international trade options
     intFuel = functions.openYaml().get('mine_fuels')
@@ -156,21 +156,21 @@ def getUsaOutputActivityRatio():
             for subregion in subregions:
                 techName = 'RNW' + rawFuel + 'USA' + subregion
                 fuel = rawFuel + 'USA' + subregion 
-                outData.append([region, techName, fuel, 1, year, 1])
+                outData.append([continent, techName, fuel, 1, year, 1])
 
     #mining USA
     for year in years:
         for rawFuel in intFuel:
             techName = 'MIN' + rawFuel + 'USA'
             fuel = rawFuel + 'USA'
-            outData.append([region, techName, fuel, 1, year, 1])
+            outData.append([continent, techName, fuel, 1, year, 1])
 
     # OAR for PWRTRN technologies
     for subregion in subregions:
         for year in years:
             techName = 'PWR' + 'TRN' + 'USA' + subregion
             fuel = 'ELC' + 'USA' + subregion + '02'
-            outData.append([region, techName, fuel, 1, year, 1])
+            outData.append([continent, techName, fuel, 1, year, 1])
 
     # OAR for PWR technologies
     for year in years:
@@ -178,9 +178,9 @@ def getUsaOutputActivityRatio():
             for tech in techMap:
                 techName = 'PWR' + techMap[tech] + 'USA' + subregion + '01'
                 fuel = 'ELC' + 'USA' + subregion + '01'
-                outData.append([region, techName, fuel, 1, year, 1])
+                outData.append([continent, techName, fuel, 1, year, 1])
                 if techMap[tech] in intFuel:
-                    outData.append([region, techName, fuel, 2, year, 1])
+                    outData.append([continent, techName, fuel, 2, year, 1])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','FUEL','MODE_OF_OPERATION','YEAR','VALUE'])
@@ -218,7 +218,7 @@ def getUsaInputActivityRatio():
     #holds output data
     outData = []
 
-    region = functions.openYaml().get('regions')[0]
+    continent = functions.openYaml().get('continent')
 
     #map data
     for i in range(len(df)):
@@ -232,19 +232,19 @@ def getUsaInputActivityRatio():
         #check if tech will operate on two modes of operation
         if fuelMapped in intFuel:
             fuel = fuelMapped + 'USA'
-            outData.append([region,tech,fuel,1,year,value])
+            outData.append([continent,tech,fuel,1,year,value])
             fuel = fuelMapped + 'INT'
-            outData.append([region,tech,fuel,2,year,value])
+            outData.append([continent,tech,fuel,2,year,value])
         else:
             fuel = fuelMapped + 'USA' + df['REGION'].iloc[i]
-            outData.append([region,tech,fuel,1,year,value])
+            outData.append([continent,tech,fuel,1,year,value])
 
     # IAR for PWRTRN technologies
     for subregion in subregions:
         for year in functions.getYears():
             techName = 'PWR' + 'TRN' + 'USA' + subregion
             fuelIn = 'ELC' + 'USA' + subregion + '01'
-            outData.append([region, techName, fuelIn, 1, year, 1])
+            outData.append([continent, techName, fuelIn, 1, year, 1])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','FUEL','MODE_OF_OPERATION','YEAR','VALUE'])

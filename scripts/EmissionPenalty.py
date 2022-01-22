@@ -13,7 +13,7 @@ def main():
     ###########################################
 
     # Parameters to print over
-    region = functions.openYaml().get('regions')[0]
+    continent = functions.openYaml().get('continent')
     years = functions.getYears()
 
     ###########################################
@@ -30,7 +30,7 @@ def main():
     #print all values 
     for year in years:
         penalty = dfRaw.loc[year,'PENALTY (M$/Mtonne)']
-        dataOut.append([region, 'CO2', year, penalty])
+        dataOut.append([continent, 'CO2', year, penalty])
     
     #write to a csv
     dfOut = pd.DataFrame(dataOut,columns=['REGION','EMISSION','YEAR','VALUE'])

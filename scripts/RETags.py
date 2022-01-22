@@ -11,7 +11,7 @@ def main():
     ###########################################
 
     # Parameters to print over
-    region = functions.openYaml().get('regions')[0]
+    continent = functions.openYaml().get('continent')
     subregions = functions.openYaml().get('subregions_dictionary')
     years = functions.getYears()
 
@@ -32,7 +32,7 @@ def main():
             for subregion in subregions[country].keys():
                 for fuel in fuels:
                     techName = 'PWR' + fuel + country + subregion + '01'
-                    dataOut.append([region, techName, year, 1])
+                    dataOut.append([continent, techName, year, 1])
     
     #write to a csv
     dfOut = pd.DataFrame(dataOut,columns=['REGION','TECHNOLOGY','YEAR','VALUE'])

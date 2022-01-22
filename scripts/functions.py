@@ -391,7 +391,7 @@ def getUsaCapacityOrAvailabilityFactor(isCapacity):
     #df.reset_index()
 
     techMap = openYaml().get('usa_tech_map')
-    region = openYaml().get('regions')[0]
+    continent = openYaml().get('continent')
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'CapacityFactor(r,t,l,y)')
 
     #Initialize filtered dataframe 
@@ -421,9 +421,9 @@ def getUsaCapacityOrAvailabilityFactor(isCapacity):
             value = df['CAPACITYFACTOR'].iloc[i]
             value = round(value, 3)
             if techMapped == 'HYD':
-                outDataAF.append([region,tech,ts,year,value])
+                outDataAF.append([continent,tech,ts,year,value])
             else:
-                outDataCF.append([region,tech,ts,year,value])
+                outDataCF.append([continent,tech,ts,year,value])
 
     #create and return dataframe for CAPACITY FACTOR
     dfOutCF = pd.DataFrame(outDataCF, columns = ['REGION','TECHNOLOGY','TIMESLICE','YEAR','VALUE'])
@@ -442,7 +442,7 @@ def getUsaCapacityOrAvailabilityFactor(isCapacity):
                 dfYear = dfTemp.loc[dfTemp['YEAR'] == year]
                 af = dfYear['VALUE'].mean()
                 af = round(af, 3)
-                outDataAF.append([region,tech,year,af])
+                outDataAF.append([continent,tech,year,af])
         
         # return dataframe for CAPACITY FACTOR
         dfOutAF = pd.DataFrame(outDataAF, columns = ['REGION','TECHNOLOGY','YEAR','VALUE'])

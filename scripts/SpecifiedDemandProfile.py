@@ -16,7 +16,7 @@ def main():
     seasons = functions.openYaml().get('seasons')
 
     # Parameters to print over
-    region = functions.openYaml().get('regions')[0]
+    continent = functions.openYaml().get('continent')
     subregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
     years = functions.getYears()
 
@@ -65,7 +65,7 @@ def main():
                     fuelName = 'ELC' + 'CAN' + subregion + '02'
 
                     #save profile value 
-                    load.append([region, fuelName, ts, year, profileValue])
+                    load.append([continent, fuelName, ts, year, profileValue])
 
     ###########################################
     # Writing Demand Files 
@@ -90,7 +90,7 @@ def getUsaSpecifiedDemandProfile():
     #holds output data
     outData = []
 
-    top_level_region = functions.openYaml().get('regions')[0]
+    continent = functions.openYaml().get('continent')
 
     #map data
     for i in range(len(df)):
@@ -99,7 +99,7 @@ def getUsaSpecifiedDemandProfile():
         year = df['YEAR'].iloc[i]
         value = df['DEMAND'].iloc[i]
         value = round(value,3)
-        outData.append([top_level_region,fuel,ts,year,value])
+        outData.append([continent,fuel,ts,year,value])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns = ['REGION', 'FUEL', 'TIMESLICE', 'YEAR', 'VALUE'])

@@ -54,7 +54,7 @@ def renewableNinjaData(tech, subregions, seasons, years):
     #          Years: List of years to populate values for 
     # OUTPUT:  otoole formatted dataframe holding capacity factor values for input tech type 
 
-    region = functions.openYaml().get('regions')[0]
+    continent = functions.openYaml().get('continent')
 
     #Dictionary to hold land area for averaging (thousand km2)
     PROVINCIAL_LAND_AREAS = {
@@ -116,7 +116,7 @@ def renewableNinjaData(tech, subregions, seasons, years):
                     techName = 'PWR' + tech + 'CAN' + subregion + '01'
 
                     #Append data to output data list 
-                    data.append([region, techName, ts, year, cf])
+                    data.append([continent, techName, ts, year, cf])
         
     #output dataframe 
     df = pd.DataFrame(data, columns = ['REGION','TECHNOLOGY','TIMESLICE','YEAR','VALUE'])
@@ -227,7 +227,7 @@ def read_NREL(subregions, seasons, years):
     scenario = 'Moderate'
     crpYears = 20
     metric_case = 'Market'
-    region = functions.openYaml().get('regions')[0]
+    continent = functions.openYaml().get('continent')
     
     # Dictionary key is technology abbreviation in our model
     # Dictionay value list holds how to filter input data frame 
@@ -309,7 +309,7 @@ def read_NREL(subregions, seasons, years):
                         techName = 'PWR' + tech + 'CAN' + subregion + '01'
 
                         #write data to output list
-                        data.append([region, techName, ts, year, cf])
+                        data.append([continent, techName, ts, year, cf])
                 
     df = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','TIMESLICE','YEAR','VALUE'])
     return df

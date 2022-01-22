@@ -14,7 +14,7 @@ def main():
     ### EVERYTHING IS CO2 EMISSIONS
 
     # Parameters to print over
-    region = functions.openYaml().get('regions')[0]
+    continent = functions.openYaml().get('continent')
     subregions = ((functions.openYaml().get('subregions_dictionary'))['CAN']).keys() # Canadian subregions
     years = functions.getYears()
 
@@ -41,9 +41,9 @@ def main():
                 activityRatio = dfRaw.loc[year,tech]
                 activityRatio = round(activityRatio, 3)
                 techName = 'PWR' + tech + 'CAN' + subregion + '01'
-                dataOut.append([region, techName, 'CO2', 1, year, activityRatio])
+                dataOut.append([continent, techName, 'CO2', 1, year, activityRatio])
                 if tech in modeTwoTechs:
-                    dataOut.append([region, techName, 'CO2', 2, year, activityRatio])
+                    dataOut.append([continent, techName, 'CO2', 2, year, activityRatio])
     
     #write to a csv
     dfOut = pd.DataFrame(dataOut,columns=['REGION','TECHNOLOGY','EMISSION','MODE_OF_OPERATION','YEAR','VALUE'])
@@ -59,7 +59,7 @@ def getUsaEmissionActivityRatio():
     techMap = functions.openYaml().get('usa_tech_map')
     inputFuelMap = functions.openYaml().get('tech_to_fuel')
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'EmisionActivityRatio(r,t,e,m,y)')
-    region = functions.openYaml().get('regions')[0]
+    continent = functions.openYaml().get('continent')
 
     #Only defined for year 2015
     years = functions.getYears()
@@ -91,11 +91,11 @@ def getUsaEmissionActivityRatio():
             mode = 1
             value = df['EMISSIONACTIVITYRATIO'].iloc[i]
             value = round(value, 3)
-            outData.append([region,tech,emission,mode,year,value])
+            outData.append([continent,tech,emission,mode,year,value])
             #checks if need to write value for mode 2
             if inputFuelMap[techMapped] in intFuel:
                 mode = 2
-                outData.append([region,tech,emission,mode,year,value])
+                outData.append([continent,tech,emission,mode,year,value])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','EMISSION','MODE_OF_OPERATION','YEAR','VALUE'])

@@ -11,8 +11,7 @@ def main():
     ###########################################
 
     # Parameters to print over
-    seasons = functions.openYaml().get('seasons')
-    region = functions.openYaml().get('regions')[0]
+    continent = functions.openYaml().get('continent')
     subregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
     years = functions.getYears()
 
@@ -75,7 +74,7 @@ def main():
         for subregion in subregions:
             techName = 'PWR' + 'HYD' + 'CAN' + subregion + '01'
             value = round(af[subregion],3)
-            outData.append([region, techName, year, value])
+            outData.append([continent, techName, year, value])
 
     ###########################################
     # Writing Availability Factor to File 

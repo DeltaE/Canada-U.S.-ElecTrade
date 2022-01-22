@@ -12,7 +12,7 @@ def main():
     ###########################################
 
     # Parameters to print over
-    region = functions.openYaml().get('regions')[0]
+    continent = functions.openYaml().get('continent')
     years = functions.getYears()
 
     #Dictionary for subregion to province mappings
@@ -37,7 +37,7 @@ def main():
             fuelName = 'ELC' + 'CAN' + subregion + '02'
             value = sumDemand[year]
             value = round(value,3)
-            demand.append([region, fuelName, year, value])
+            demand.append([continent, fuelName, year, value])
 
     ###########################################
     # Writing Demand Files 
@@ -62,7 +62,7 @@ def getUsaSpecifiedAnnualDemand():
     #holds output data
     outData = []
 
-    top_level_region = functions.openYaml().get('regions')[0]
+    continent = functions.openYaml().get('continent')
 
     #map data
     for i in range(len(df)):
@@ -70,7 +70,7 @@ def getUsaSpecifiedAnnualDemand():
         year = df['YEAR'].iloc[i]
         value = df['DEMAND'].iloc[i]
         value = round(value,3)
-        outData.append([top_level_region,fuel,year,value])
+        outData.append([continent,fuel,year,value])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns = ['REGION', 'FUEL', 'YEAR', 'VALUE'])

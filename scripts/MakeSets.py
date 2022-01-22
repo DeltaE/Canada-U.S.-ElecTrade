@@ -11,7 +11,7 @@ def main():
     ## MODEL PARAMETERS
     ####################################
 
-    regions = functions.openYaml().get('regions')
+    continent = functions.openYaml().get('continent')
     emissions = functions.openYaml().get('emissions')
     techsMaster = functions.openYaml().get('techs_master')
     rnwFuels = functions.openYaml().get('rnw_fuels')
@@ -29,7 +29,7 @@ def main():
     dfOut.to_csv('../src/data/YEAR.csv', index=False)
 
     #Regions set
-    dfOut = pd.DataFrame(regions, columns=['VALUE'])
+    dfOut = pd.DataFrame(continent, columns=['VALUE'])
     dfOut.to_csv('../src/data/REGION.csv', index=False)
 
     # Emissions set
