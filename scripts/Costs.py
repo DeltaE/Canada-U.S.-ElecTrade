@@ -216,7 +216,7 @@ def read_NREL(costType, subregions, years):
                     else:
                         modes = [1]
                     for mode in modes:
-                        data.append([continent,techName,mode,year,totalCost])
+                        data.append([continent, techName, mode, year, totalCost])
                 else:
                     data.append([continent, techName, year, totalCost])
                 
@@ -450,18 +450,18 @@ def getUsaVariableCost():
 
     #map data
     for i in range(len(df)):
-        region = functions.openYaml().get('continent')
+        continent = functions.openYaml().get('continent')
         techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
         tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
         year = df['YEAR'].iloc[i]
         mode = 1
         value = df['VARIABLECOST'].iloc[i]
         value = round(value, 3)
-        outData.append([region,tech,mode,year,value])
+        outData.append([continent,tech,mode,year,value])
         #checks if need to write value for mode 2
         if inputFuelMap[techMapped] in intFuel:
             mode = 2
-            outData.append([region,tech,mode,year,value])
+            outData.append([continent,tech,mode,year,value])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','MODE_OF_OPERATION','YEAR','VALUE'])
