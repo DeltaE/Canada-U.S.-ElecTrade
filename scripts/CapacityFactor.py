@@ -14,7 +14,7 @@ def main():
 
     # Parameters to print over
     seasons = functions.openYaml().get('seasons')
-    subregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
+    canSubregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
     years = functions.getYears()
 
     ###########################################
@@ -22,10 +22,10 @@ def main():
     ###########################################
 
     #Get df for all capacity factors
-    dfWind = renewableNinjaData('WND', subregions, seasons, years)
-    dfPV = renewableNinjaData('SPV', subregions, seasons, years)
+    dfWind = renewableNinjaData('WND', canSubregions, seasons, years)
+    dfPV = renewableNinjaData('SPV', canSubregions, seasons, years)
     #dfHydro = capFactorHydro(subregions, seasons, years)
-    dfFossil = read_NREL(subregions, seasons, years)
+    dfFossil = read_NREL(canSubregions, seasons, years)
 
     ###########################################
     # Writing Capacity Factor to File 
@@ -47,11 +47,10 @@ def main():
     
 def renewableNinjaData(tech, subregions, seasons, years):
     # PURPOSE: Takes a folder of CSVs created by renewable Ninja and formats a dataframe to hold all capacity factor values 
-    # INPUT:   Name of the tech ('WIND' or 'PV') - CSVs in folder named (<TECH>_<PROVINCE>.csv)
-    #          Regions: List holding regions to print over
-    #          Subregions: Dictionary showing region to province mapping
-    #          Seasons: Dictionary showing season to month mapping 
-    #          Years: List of years to populate values for 
+    # INPUT:   tech ('WIND' or 'PV') - CSVs in folder named (<TECH>_<PROVINCE>.csv)
+    #          subregions: Dictionary showing region to province mapping
+    #          seasons: Dictionary showing season to month mapping 
+    #          years: List of years to populate values for 
     # OUTPUT:  otoole formatted dataframe holding capacity factor values for input tech type 
 
     continent = functions.openYaml().get('continent')
@@ -125,7 +124,8 @@ def renewableNinjaData(tech, subregions, seasons, years):
 def readRenewableNinjaCSV(csvName, province):
     # PURPOSE: Reads in raw renewable ninja file, removes everything except local time and CF value, 
     # parses the date column to seperate month, day, and hour columns
-    # INPUT: Name of csv file to read in WITH csv extension (.csv)
+    # INPUT: csvName:  Name of csv file to read in WITH csv extension (.csv)
+    #        province: The relevant province for reading
     # OUTPUT: Dataframe with the columns: Province, Month, Day, Hour, CF Value 
 
     #Path to file to read
@@ -218,7 +218,7 @@ def seasonalAverageCF(dfIn, seasons):
 
 def read_NREL(subregions, seasons, years):
     # PURPOSE: reads the NREL raw excel data sheet
-    # INPUT:   regions: List holding what regions to print values over
+    # INPUT:   subregions: List holding what regions to print values over
     #          Seasons: Dictionary showing season to month mapping 
     #          years: list holding what years to print data over
     # OUTPUT:  otoole formatted dataframe holding capacity factor values 
