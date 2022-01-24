@@ -17,7 +17,7 @@ def main():
 
     # Parameters to print over
     continent = functions.openYaml().get('continent')
-    subregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
+    canSubregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
     years = functions.getYears()
 
     ###########################################
@@ -39,7 +39,7 @@ def main():
     #Create a dictionary from the tech, year values for use with residual capacity 
     techs = dfOperationalLife['TECHNOLOGY'].tolist()
     opLifeYears = dfOperationalLife['YEARS'].tolist()
-    opLife= {}
+    opLife = {}
     for i in range(len(techs)):
         opLife[techs[i]] = opLifeYears[i]
 
@@ -48,7 +48,7 @@ def main():
     opLifeData = []
 
     #save operational life to list
-    for subregion in subregions:
+    for subregion in canSubregions:
       for tech, value in opLife.items():
         techName = 'PWR' + tech + 'CAN' + subregion + '01'
         opLifeData.append([continent,techName,value])
@@ -98,7 +98,7 @@ def main():
     resCapData = []
 
     #populate data list 
-    for subregion, provinces in subregions.items():
+    for subregion, provinces in canSubregions.items():
       dfProvince = pd.DataFrame() #Reset dataframe
       for province in provinces:
         dfTemp = dfResCap.loc[dfResCap['PROVINCE'] == province]
