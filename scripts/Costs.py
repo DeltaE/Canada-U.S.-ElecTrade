@@ -15,7 +15,7 @@ def main():
     ###########################################
 
     # Parameters to print over
-    subregions = ((functions.openYaml().get('subregions_dictionary'))['CAN']).keys() # Canadian subregions
+    canSubregions = ((functions.openYaml().get('subregions_dictionary'))['CAN']).keys() # Canadian subregions
     years = functions.getYears()
 
     #Trigger used to print capital, fixed and variable costs one at a time
@@ -43,7 +43,7 @@ def main():
         ###########################################
 
         #reads the NREL raw datafile and extracts costs
-        dfNREL = read_NREL(costType, subregions, years)
+        dfNREL = read_NREL(costType, canSubregions, years)
 
         #Populate P2G and FC costs
         #dfP2gSystem = p2gSystem(costType, regions, subregions, years)
