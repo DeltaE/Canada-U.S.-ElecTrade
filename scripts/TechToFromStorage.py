@@ -12,7 +12,7 @@ def main():
 
     # Parameters to print over
     continent = functions.openYaml().get('continent')
-    subregions = ((functions.openYaml().get('subregions_dictionary')['CAN'])).keys() # Canadian subregions
+    canSubregions = ((functions.openYaml().get('subregions_dictionary')['CAN'])).keys() # Canadian subregions
     storages = functions.openYaml().get('sto_techs')
     
     if not storages:
@@ -36,12 +36,12 @@ def main():
     ###########################################
 
     #list to hold all output values
-    #columns = region, technology, storage, mode, value
+    #columns = continent, technology, storage, mode, value
     toStorageData = []
     fromStorageData = []
 
     #print all values 
-    for subregion in subregions:
+    for subregion in canSubregions:
         for storage in storages:
             #Tech to storage
             techName = 'PWR' + techToStorage[storage] + 'CAN' + subregion + '01'
