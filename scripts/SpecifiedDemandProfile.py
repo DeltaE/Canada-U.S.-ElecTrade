@@ -17,7 +17,7 @@ def main():
 
     # Parameters to print over
     continent = functions.openYaml().get('continent')
-    subregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
+    canSubregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
     years = functions.getYears()
 
     ###########################################
@@ -36,7 +36,7 @@ def main():
     for year in years:
 
         #filter dataframe by subregion
-        for subregion, provinces in subregions.items(): 
+        for subregion, provinces in canSubregions.items(): 
             dfsubregion = pd.DataFrame() #reset df
             for province in provinces:
                 dfProvince = dfLoad.loc[dfLoad['PROVINCE'] == province]
