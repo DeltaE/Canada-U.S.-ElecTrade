@@ -16,7 +16,7 @@ def main():
     years = functions.getYears()
 
     #Dictionary for subregion to province mappings
-    subregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
+    canSubregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
 
     ###########################################
     # Calculate demand  
@@ -30,9 +30,9 @@ def main():
     #Region, fuel, year, value
     demand = []
     
-    for subregion, provinces in subregions.items(): 
-        dfRegion = df[subregions[subregion]]
-        sumDemand = dfRegion.loc[:,:].sum(axis=1)
+    for subregion, provinces in canSubregions.items(): 
+        dfProvinces = df[canSubregions[subregion]]
+        sumDemand = dfProvinces.loc[:,:].sum(axis=1)
         for year in years:
             fuelName = 'ELC' + 'CAN' + subregion + '02'
             value = sumDemand[year]
