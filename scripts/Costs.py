@@ -144,7 +144,7 @@ def read_NREL(costType, subregions, years):
         dfCost = dfCost.append(dfTemp)
     
     #List to hold all output data
-    #columns = region, technology, year, value
+    #columns = continent, technology, year, value
     data = []
 
     #used for numerical indexing over columns shown in cost type for loop
@@ -301,7 +301,7 @@ def tradeCosts(costType, years):
     #techList = list(set(techList)) #remove duplicates
 
     #List to hold all output data 
-    # columns = region, technology, year, value
+    # columns = continent, technology, year, value
     data = []
 
     #populate data
