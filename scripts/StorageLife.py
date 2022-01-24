@@ -24,7 +24,7 @@ def main():
     storageLife = {'TNK':30}
 
     #List to hold all output data
-    #columns = region, storage, value
+    #columns = continent, storage, value
     data = []
 
     for subregion in subregions:
