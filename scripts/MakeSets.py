@@ -18,7 +18,7 @@ def main():
     mineFuels = functions.openYaml().get('mine_fuels')
     stoTechs = functions.openYaml().get('sto_techs')
     years = functions.getYears()
-    subregionsDict = functions.openYaml().get('subregions_dictionary')
+    subregions = functions.openYaml().get('subregions_dictionary')
 
     ####################################
     ## CREATE STANDARD SETS
@@ -41,7 +41,7 @@ def main():
     ####################################
 
     #get storages for each region 
-    stoList = getSTO(subregionsDict, stoTechs)
+    stoList = getSTO(subregions, stoTechs)
 
     dfOut = pd.DataFrame(stoList, columns=['VALUE'])
     dfOut.to_csv('../src/data/STORAGE.csv', index=False)
@@ -50,23 +50,23 @@ def main():
     ## CREATE TECHNOLOGY SET
     ####################################
 
-    df = functions.createTechDataframe(subregionsDict, techsMaster, mineFuels, rnwFuels, '../dataSources/Trade.csv')
+    df = functions.createTechDataframe(subregions, techsMaster, mineFuels, rnwFuels, '../dataSources/Trade.csv')
     df.to_csv('../src/data/TECHNOLOGY.csv', index=False)
 
     ####################################
     ## CREATE FUEL SET
     ####################################
 
-    df = functions.createFuelDataframe(subregionsDict, rnwFuels, mineFuels)
+    df = functions.createFuelDataframe(subregions, rnwFuels, mineFuels)
     df.to_csv('../src/data/FUEL.csv', index=False)
 
 ####################################
 ## Extra Functions
 ####################################
 
-def getSTO(subregionsDict, storages):
+def getSTO(subregions, storages):
     # PURPOSE: Creates storage names
-    # INPUT:   regions =  subregions = Dictionary holding Country and regions 
+    # INPUT:   subregions = Dictionary holding Country and regions 
     #          ({CAN:{WS:[...], ...} USA:[NY:[...],...]})
     # OUTPUT:  outList =  List of all the STO names
 
@@ -77,7 +77,7 @@ def getSTO(subregionsDict, storages):
         return storages
 
     # Loop to create all technology names
-    for region, subregions in subregionsDict.items():
+    for region, subregions in subregions.items():
         for subregion in subregions['CAN']:
             for storage in storages:
                 storageName = 'STO' + storage + region + subregion

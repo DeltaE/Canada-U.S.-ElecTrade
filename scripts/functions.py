@@ -278,21 +278,21 @@ def getELCfuels(region):
 
 def createFuelDataframe(subregions, rnwFuels, mineFuels):
     # PURPOSE: Appends all fuel name lists together and writes them to a CSV
-    # INPUT:   subregions = Dictionary holding Country and regions ({CAN:{WS:[...], ...} USA:[NY:[...],...]})
+    # INPUT:   subregions = Dictionary holding Country and regions ({CAN:{WS:[...], ...}, USA:[NY:[...],...]})
     #          rnwFuels = List of the fuels to print over for getRNWfuels
     #          mineFuels = List of the fuels to print over for getMINfuels
     # OUTPUT:  dfOut = fuel set dataframe
 
     outputFuels = []
-    for country in subregions.items():
+    for region in subregions.items():
         # Renewable fuels
-        rnwFuelList = getRNWfuels(country, rnwFuels)
+        rnwFuelList = getRNWfuels(region, rnwFuels)
 
         # Mining fuels
-        minFuelList = getMINfuels(country, mineFuels)
+        minFuelList = getMINfuels(region, mineFuels)
 
         #ELC fuels
-        elcFuelList = getELCfuels(country)
+        elcFuelList = getELCfuels(region)
 
         #Hydrogen Fuels
         #hy2FuelList = getHY2fuels(countries)
@@ -324,18 +324,18 @@ def createTechDataframe(subregions, techsMaster, mineFuels, rnwFuels, trnTechsCs
     # OUTPUT:  dfOut = tech set dataframe
     # get power generator technology list 
     outputTechs = []
-    for country in subregions.items():
+    for region in subregions.items():
 
-        pwrList = getPWRtechs(country, techsMaster)
+        pwrList = getPWRtechs(region, techsMaster)
 
         # get grid distribution technology list (PWRTRN<Reg><SubReg>)
-        pwrTrnList = getPWRTRNtechs(country)
+        pwrTrnList = getPWRTRNtechs(region)
 
         # get Mining techs list
-        minList = getMINtechs(country, mineFuels)
+        minList = getMINtechs(region, mineFuels)
 
         # get Renewables fuels list 
-        rnwList = getRNWtechs(country, rnwFuels)
+        rnwList = getRNWtechs(region, rnwFuels)
 
         #Append lists together
         outputTechs += pwrList
