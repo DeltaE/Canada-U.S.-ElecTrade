@@ -12,7 +12,7 @@ def main():
 
     # Parameters to print over
     continent = functions.openYaml().get('continent')
-    subregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
+    canSubregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
     years = functions.getYears()
 
     #####################################
@@ -53,11 +53,11 @@ def main():
 
     #calculate capacity factor for each province 
     af = {}
-    for subregion in subregions:
+    for subregion in canSubregions:
         generation = 0 #TWh
         capacity = 0 #TW
         #calcualte totals for subregion 
-        for province in subregions[subregion]:
+        for province in canSubregions[subregion]:
             capacity = capacity + RESIDUAL_HYDRO_CAPACITY[province]
             generation = generation + HYDRO_GENERATION[province]
         
@@ -71,7 +71,7 @@ def main():
     #Populate output lsit 
     for year in years:
         print(f'Hydro {year}')
-        for subregion in subregions:
+        for subregion in canSubregions:
             techName = 'PWR' + 'HYD' + 'CAN' + subregion + '01'
             value = round(af[subregion],3)
             outData.append([continent, techName, year, value])
