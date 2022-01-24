@@ -16,7 +16,7 @@ def main():
     ###########################################
 
     continent = functions.openYaml().get('continent')
-    subregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
+    canSubregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
     seasons = functions.openYaml().get('seasons')
     years = functions.getYears()
     
@@ -58,7 +58,7 @@ def main():
     peakSquishFactor = {} 
 
     #Filter demand dataframe for provinces in each region 
-    for subregion, provinces in subregions.items():
+    for subregion, provinces in canSubregions.items():
         dfRegion = pd.DataFrame(columns = ['PROVINCE','MONTH','DAY','HOUR','VALUE'])
 
         #Lists to hold regional actual and max loads
@@ -110,7 +110,7 @@ def main():
     #Region, year, value
     reserveMarginRaw = []
 
-    for subregion, provinces in subregions.items():
+    for subregion, provinces in canSubregions.items():
         for year in years: 
             totalDemand = 0
             regionReserveMargin = 0
@@ -150,10 +150,10 @@ def main():
     
     #reserve margin Tag Technology = Region, Technology, Year, Value
     reserveMarginTagTech = []
-    for subregion in subregions:
+    for subregion in canSubregions:
         for year in years:
             for tech in techTags:
-                techName = 'PWR' + tech + 'CAN' +subregion + '01'
+                techName = 'PWR' + tech + 'CAN' + subregion + '01'
                 reserveMarginTagTech.append([continent, techName, year, 1])
 
     #write out all files
@@ -191,14 +191,14 @@ def getUsaReserveMarginTagTechnology():
     #list to hold output data
     outData=[]
 
-    #get list of regions
-    subregions = df['REGION']
-    subregions = list(set(subregions))
+    #get list of american subregions
+    usaSubregions = df['REGION']
+    usaSubregions = list(set(usaSubregions))
 
     #populate data 
     for techOld in techMap:
         for year in functions.getYears():
-            for subregion in subregions:
+            for subregion in usaSubregions:
                 techMapped = techMap[techOld]
                 tech = 'PWR' + techMapped + 'USA' + subregion + '01'
                 if techMapped in variableTechs:
@@ -226,7 +226,7 @@ def getUsaReserveMarginTagFuel():
     # Account for peak squishing 
     ##################################################
     # Region Dictionary
-    regions = (functions.openYaml().get('subregions_dictionary'))['USA'] # American subregions
+    usaSubregions = (functions.openYaml().get('subregions_dictionary'))['USA'] # American subregions
     continent = functions.openYaml().get('continent')
 
     # Should update this for individual states
@@ -273,25 +273,25 @@ def getUsaReserveMarginTagFuel():
 
     #Get total annual demand 
     annualDemand = dict()
-    for region, states in regions.items():
+    for subregion, states in usaSubregions.items():
         regionalDemand = 0
         for state in states:
             regionalDemand = regionalDemand + dfDemand.loc[dfDemand['Abr.']==state]['PJ'].sum()
-        if state == 'NY': #DC not by default included in demand 
+        if state == 'MD': #DC not by default included in demand 
             regionalDemand = regionalDemand + dfDemand.loc[dfDemand['Abr.']=='DC']['PJ'].sum()
-        annualDemand[region] = regionalDemand
+        annualDemand[subregion] = regionalDemand
 
     #Normalize the load profiles 
     maxDemandDict = dict()
-    for region in regions:
-        maxDemand = dfProfile[region].max()
-        totalDemand = dfProfile[region].sum()
-        maxDemandDict[region] = maxDemand / totalDemand
+    for subregion in usaSubregions:
+        maxDemand = dfProfile[subregion].max()
+        totalDemand = dfProfile[subregion].sum()
+        maxDemandDict[subregion] = maxDemand / totalDemand
 
     # Actual Peak Demand
     actualPeak = dict()
-    for region in regions:
-        actualPeak[region] = maxDemandDict[region] * annualDemand[region]
+    for subregion in usaSubregions:
+        actualPeak[subregion] = maxDemandDict[subregion] * annualDemand[subregion]
 
     #Modeled peak Demand
     dfModeledProfile = pd.read_excel('../dataSources/USA_Data.xlsx','SpecifiedDemandProfile(r,f,l,y)')
@@ -303,23 +303,23 @@ def getUsaReserveMarginTagFuel():
 
     #get max modelled peak 
     modelledPeak = dict()
-    for region in regions:
-        maxProfile = dfModeledProfile.loc[(dfModeledProfile['REGION'] == region)]['DEMAND'].max()
-        modelledPeak[region]=maxProfile * annualDemand[region] * (96/8960)
+    for subregion in usaSubregions:
+        maxProfile = dfModeledProfile.loc[(dfModeledProfile['REGION'] == subregion)]['DEMAND'].max()
+        modelledPeak[subregion]=maxProfile * annualDemand[subregion] * (96/8960)
 
     #calculate adjusted reserve margin 
     reserveMargin = dict()
-    for region in regions:
-        reserveMargin[region] = baseRM[region] + (actualPeak[region] - modelledPeak[region]) / actualPeak[region]
+    for subregion in usaSubregions:
+        reserveMargin[subregion] = baseRM[subregion] + (actualPeak[subregion] - modelledPeak[subregion]) / actualPeak[subregion]
 
     #list to hold output data
     outData=[]
 
     #populate data 
     for year in functions.getYears():
-        for region in regions:
-            fuel = 'ELC' + 'USA' + region + '01'
-            value = reserveMargin[region]
+        for subregion in usaSubregions:
+            fuel = 'ELC' + 'USA' + subregion + '01'
+            value = reserveMargin[subregion]
             outData.append([continent,fuel,year,value])
 
     #create and return datafram
