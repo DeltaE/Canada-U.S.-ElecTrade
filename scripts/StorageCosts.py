@@ -14,7 +14,7 @@ def main():
 
     # Parameters to print over
     continent = functions.openYaml().get('continent')
-    subregions = ((functions.openYaml().get('subregions_dictionary'))['CAN']).keys() # Canadian subregions
+    canSubregions = ((functions.openYaml().get('subregions_dictionary'))['CAN']).keys() # Canadian subregions
     years = functions.getYears()
 
     storages = functions.openYaml().get('sto_techs')
@@ -30,11 +30,11 @@ def main():
     ## Populate data
     ##############################
 
-    #columns = region, storage, year, value
+    #columns = continent, storage, year, value
     data = []
 
     for year in years:
-        for subregion in subregions:
+        for subregion in canSubregions:
             for storage in storages:
                 stoName = 'STO' + storage + 'CAN' + subregion
                 cost = storageCosts[storage]
