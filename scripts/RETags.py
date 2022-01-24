@@ -28,10 +28,10 @@ def main():
 
     #print all values 
     for year in years:
-        for country in subregions.keys():
-            for subregion in subregions[country].keys():
+        for region in subregions.keys():
+            for subregion in subregions[region].keys():
                 for fuel in fuels:
-                    techName = 'PWR' + fuel + country + subregion + '01'
+                    techName = 'PWR' + fuel + region + subregion + '01'
                     dataOut.append([continent, techName, year, 1])
     
     #write to a csv
