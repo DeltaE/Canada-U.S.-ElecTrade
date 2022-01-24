@@ -15,7 +15,7 @@ def main():
 
     # Parameters to print over
     continent = functions.openYaml().get('continent')
-    subregions = ((functions.openYaml().get('subregions_dictionary'))['CAN']).keys() # Canadian subregions
+    canSubregions = ((functions.openYaml().get('subregions_dictionary'))['CAN']).keys() # Canadian subregions
     years = functions.getYears()
 
     ###########################################
@@ -36,7 +36,7 @@ def main():
 
     #print all values 
     for year in years:
-        for subregion in subregions:
+        for subregion in canSubregions:
             for tech in techList:
                 activityRatio = dfRaw.loc[year,tech]
                 activityRatio = round(activityRatio, 3)
