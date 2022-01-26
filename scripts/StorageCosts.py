@@ -30,7 +30,7 @@ def main():
     ## Populate data
     ##############################
 
-    #columns = continent, storage, year, value
+    #columns = region, storage, year, value
     data = []
 
     for year in years:

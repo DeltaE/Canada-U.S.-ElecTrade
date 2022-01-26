@@ -36,7 +36,7 @@ def main():
     ###########################################
 
     #list to hold all output values
-    #columns = continent, technology, storage, mode, value
+    #columns = region, technology, storage, mode, value
     toStorageData = []
     fromStorageData = []
 

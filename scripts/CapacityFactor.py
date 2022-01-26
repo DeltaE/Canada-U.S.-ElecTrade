@@ -262,7 +262,7 @@ def read_NREL(subregions, seasons, years):
     dfCF = dfFiltered.loc[dfFiltered['core_metric_parameter'] == 'CF']
     
     #List to hold all output data
-    #columns = ['CONTINENT','TECHNOLOGY','TIMESLICE','YEAR','VALUE']
+    #columns = ['REGION','TECHNOLOGY','TIMESLICE','YEAR','VALUE']
     data = []
 
     #TimeSlices to print over
