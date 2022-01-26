@@ -14,7 +14,7 @@ def main():
 
     seasons = functions.getFromYaml('seasons') # Dictionary holds month to season Mapping 
     continent = functions.getFromYaml('continent')
-    canSubregions = functions.getFromYaml('regions_dictionary')['CAN'] # Canadian subregions
+    canSubregions = functions.getFromYaml('regions_dict')['CAN'] # Canadian subregions
     years = functions.getYears()
 
     ###########################################

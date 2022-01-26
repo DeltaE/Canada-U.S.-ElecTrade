@@ -14,7 +14,7 @@ def main():
 
     # Parameters to print over
     seasons = functions.getFromYaml('seasons')
-    canSubregions = functions.getFromYaml('regions_dictionary')['CAN'] # Canadian subregions
+    canSubregions = functions.getFromYaml('regions_dict')['CAN'] # Canadian subregions
     years = functions.getYears()
 
     ###########################################
@@ -24,7 +24,6 @@ def main():
     #Get df for all capacity factors
     dfWind = renewableNinjaData('WND', canSubregions, seasons, years)
     dfPV = renewableNinjaData('SPV', canSubregions, seasons, years)
-    #dfHydro = capFactorHydro(subregions, seasons, years)
     dfFossil = read_NREL(canSubregions, seasons, years)
 
     ###########################################

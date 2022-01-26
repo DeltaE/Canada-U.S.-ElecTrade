@@ -12,7 +12,7 @@ def main():
 
     # Parameters to print over
     continent = functions.getFromYaml('continent')
-    subregions = functions.getFromYaml('regions_dictionary')
+    subregions = functions.getFromYaml('regions_dict')
     fuels = functions.getFromYaml('rnw_fuels') #Fuels to tag
     years = functions.getYears()
 

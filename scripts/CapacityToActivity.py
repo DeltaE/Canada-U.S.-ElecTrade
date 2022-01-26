@@ -19,7 +19,7 @@ def main():
     techsMaster = functions.getFromYaml('techs_master')
     rnwFuels = functions.getFromYaml('rnw_fuels')
     mineFuels = functions.getFromYaml('mine_fuels')
-    subregions = functions.getFromYaml('regions_dictionary')
+    subregions = functions.getFromYaml('regions_dict')
 
     technologies = functions.createTechDataframe(subregions, techsMaster, mineFuels, rnwFuels,'../dataSources/Trade.csv')
     technologiesList = technologies['VALUE'].tolist()

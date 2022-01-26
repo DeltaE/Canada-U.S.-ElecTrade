@@ -16,7 +16,7 @@ def main():
     ###########################################
 
     continent = functions.getFromYaml('continent')
-    canSubregions = functions.getFromYaml('regions_dictionary')['CAN'] # Canadian subregions
+    canSubregions = functions.getFromYaml('regions_dict')['CAN'] # Canadian subregions
     seasons = functions.getFromYaml('seasons')
     techTags = functions.getFromYaml('techs_master')
     variableTechs = functions.getFromYaml('variable_techs')
@@ -223,11 +223,11 @@ def getUsaReserveMarginTagFuel():
     ##################################################
 
     # Region Dictionary
-    usaSubregions = functions.getFromYaml('regions_dictionary')['USA'] # American subregions
+    usaSubregions = functions.getFromYaml('regions_dict')['USA'] # American subregions
     continent = functions.getFromYaml('continent')
     years = functions.getYears()
 
-    # Should update this for individual states
+    # Should update this for individual provinces
     # should be 10 percent for hydro dominated provinces or 
     # 15 percent for thermal dominated regions 
     baseRM = {
@@ -271,11 +271,11 @@ def getUsaReserveMarginTagFuel():
 
     #Get total annual demand 
     annualDemand = dict()
-    for subregion, states in usaSubregions.items():
+    for subregion, provinces in usaSubregions.items():
         regionalDemand = 0
-        for state in states:
-            regionalDemand = regionalDemand + dfDemand.loc[dfDemand['Abr.']==state]['PJ'].sum()
-        if state == 'MD': #DC not by default included in demand 
+        for province in provinces:
+            regionalDemand = regionalDemand + dfDemand.loc[dfDemand['Abr.']==province]['PJ'].sum()
+        if province == 'MD': #DC not by default included in demand 
             regionalDemand = regionalDemand + dfDemand.loc[dfDemand['Abr.']=='DC']['PJ'].sum()
         annualDemand[subregion] = regionalDemand
 

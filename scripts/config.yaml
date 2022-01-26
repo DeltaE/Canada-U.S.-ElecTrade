@@ -8,8 +8,8 @@ seasons:
 # only one continent ('r' in osemosys, for 'region') in this model
 continent: 'NAmerica'
 
-# Provinces and states to subregions mapping
-regions_dictionary:
+# Provinces to subregions mapping
+regions_dict:
   'CAN':
     'WS': [ 'BC', 'AB' ]
     'MW': [ 'SAS', 'MAN' ]
