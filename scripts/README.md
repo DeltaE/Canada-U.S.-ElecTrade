@@ -6,7 +6,7 @@ Included in this folder are the scripts used to pre-process, and a folder for po
 ### Note on naming convention
 In these scripts, these words are used to indicated different regional scales:
 
-- Continent: The smallest scale. In this model there is only one; NAmerica. Note that this level is called REGION by OSeMOSYS, and so CSV files are populated with this in mind
+- Continent: The largest unit in the model, containing all of the other smaller ones. In this model there is only one; NAmerica. Note that this level is called REGION by OSeMOSYS, and so CSV files are populated with this in mind
 - Region: Currently equivalent to 'country', this model has a US region and a Canada region
-- Subregion: This model is broken up into many subregions (such as Mountain West, Mid-Atlantic, Midwest...) each of which contain one or more provinces
-- Province: The smallest units in the model are provinces and states, which are all described as 'provinces' for consistency
+- Subregion: Each region is broken up into many subregions (such as Mountain West, Mid-Atlantic, Midwest...) each of which contain one or more provinces
+- Province: The smallest units in the model are provinces and states, which are all described as 'provinces' for consistency's sake
