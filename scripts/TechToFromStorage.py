@@ -11,9 +11,9 @@ def main():
     ###########################################
 
     # Parameters to print over
-    continent = functions.openYaml().get('continent')
-    canSubregions = ((functions.openYaml().get('subregions_dictionary')['CAN'])).keys() # Canadian subregions
-    storages = functions.openYaml().get('sto_techs')
+    continent = functions.getFromYaml('continent')
+    canSubregions = functions.getFromYaml('subregions_dictionary')['CAN'].keys() # Canadian subregions
+    storages = functions.getFromYaml('sto_techs')
     
     if not storages:
         dfOut = pd.DataFrame(columns=['REGION','TECHNOLOGY','STORAGE', 'MODE_OF_OPERATION','VALUE'])

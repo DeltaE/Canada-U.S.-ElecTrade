@@ -15,12 +15,12 @@ def main():
     ## ASSUMES ALL CAPACITIES IN GW AND ALL ENNERGY IN PJ
 
     # Regions to print over
-    continent = functions.openYaml().get('continent')
+    continent = functions.getFromYaml('continent')
 
-    techsMaster = functions.openYaml().get('techs_master')
-    rnwFuels = functions.openYaml().get('rnw_fuels')
-    mineFuels = functions.openYaml().get('mine_fuels')
-    subregions = functions.openYaml().get('subregions_dictionary')
+    techsMaster = functions.getFromYaml('techs_master')
+    rnwFuels = functions.getFromYaml('rnw_fuels')
+    mineFuels = functions.getFromYaml('mine_fuels')
+    subregions = functions.getFromYaml('subregions_dictionary')
     technologies = functions.createTechDataframe(subregions, techsMaster, mineFuels, rnwFuels,'../dataSources/Trade.csv')
     technologiesList = technologies['VALUE'].tolist()
 

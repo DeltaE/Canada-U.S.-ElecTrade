@@ -11,8 +11,8 @@ def main():
     ###########################################
 
     # Parameters to print over
-    continent = functions.openYaml().get('continent')
-    canSubregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
+    continent = functions.getFromYaml('continent')
+    canSubregions = functions.getFromYaml('subregions_dictionary')['CAN'] # Canadian subregions
     years = functions.getYears()
 
     #####################################

@@ -11,14 +11,14 @@ def main():
     ## MODEL PARAMETERS
     ####################################
 
-    continent = [functions.openYaml().get('continent')]
-    emissions = functions.openYaml().get('emissions')
-    techsMaster = functions.openYaml().get('techs_master')
-    rnwFuels = functions.openYaml().get('rnw_fuels')
-    mineFuels = functions.openYaml().get('mine_fuels')
-    stoTechs = functions.openYaml().get('sto_techs')
+    continentList = [functions.getFromYaml('continent')]
+    emissions = functions.getFromYaml('emissions')
+    techsMaster = functions.getFromYaml('techs_master')
+    rnwFuels = functions.getFromYaml('rnw_fuels')
+    mineFuels = functions.getFromYaml('mine_fuels')
+    stoTechs = functions.getFromYaml('sto_techs')
     years = functions.getYears()
-    subregions = functions.openYaml().get('subregions_dictionary')
+    subregions = functions.getFromYaml('subregions_dictionary')
 
     ####################################
     ## CREATE STANDARD SETS
@@ -29,7 +29,7 @@ def main():
     dfOut.to_csv('../src/data/YEAR.csv', index=False)
 
     #Regions set
-    dfOut = pd.DataFrame(continent, columns=['VALUE'])
+    dfOut = pd.DataFrame(continentList, columns=['VALUE'])
     dfOut.to_csv('../src/data/REGION.csv', index=False)
 
     # Emissions set

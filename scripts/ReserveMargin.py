@@ -15,9 +15,9 @@ def main():
     # Model Parameters
     ###########################################
 
-    continent = functions.openYaml().get('continent')
-    canSubregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
-    seasons = functions.openYaml().get('seasons')
+    continent = functions.getFromYaml('continent')
+    canSubregions = functions.getFromYaml('subregions_dictionary')['CAN'] # Canadian subregions
+    seasons = functions.getFromYaml('seasons')
     years = functions.getYears()
     
     # holds baseline reserve margin for each province based on NERC
@@ -39,8 +39,8 @@ def main():
     # fuelTag = ['ELC']
 
     # List of technologies to tag
-    techTags = functions.openYaml().get('techs_master')
-    variableTechs = functions.openYaml().get('variable_techs')
+    techTags = functions.getFromYaml('techs_master')
+    variableTechs = functions.getFromYaml('variable_techs')
     # Remove the non-dispachable techs from techTags
     techTags = [x for x in techTags if x not in variableTechs]
 
@@ -177,12 +177,12 @@ def getUsaReserveMarginTagTechnology():
     # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
-    continent = functions.openYaml().get('continent')
+    continent = functions.getFromYaml('continent')
 
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'ReserveMarginInTagTech(r,t,y)')
 
-    techMap = functions.openYaml().get('usa_tech_map')
-    variableTechs = functions.openYaml().get('variable_techs')
+    techMap = functions.getFromYaml('usa_tech_map')
+    variableTechs = functions.getFromYaml('variable_techs')
 
     #remove anything from years 2015 - 2018
     df = df.loc[df['YEAR'] > 2018]
@@ -226,8 +226,8 @@ def getUsaReserveMarginTagFuel():
     # Account for peak squishing 
     ##################################################
     # Region Dictionary
-    usaSubregions = (functions.openYaml().get('subregions_dictionary'))['USA'] # American subregions
-    continent = functions.openYaml().get('continent')
+    usaSubregions = functions.getFromYaml('subregions_dictionary')['USA'] # American subregions
+    continent = functions.getFromYaml('continent')
 
     # Should update this for individual states
     # should be 10 percent for hydro dominated provinces or 
@@ -331,7 +331,7 @@ def getUsaReserveMargin():
     # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
-    continent = functions.openYaml().get('continent')
+    continent = functions.getFromYaml('continent')
 
     #this one is easier to manually do...
     outData = []

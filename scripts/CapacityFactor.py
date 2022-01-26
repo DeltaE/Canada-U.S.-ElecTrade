@@ -13,8 +13,8 @@ def main():
     ###########################################
 
     # Parameters to print over
-    seasons = functions.openYaml().get('seasons')
-    canSubregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
+    seasons = functions.getFromYaml('seasons')
+    canSubregions = functions.getFromYaml('subregions_dictionary')['CAN'] # Canadian subregions
     years = functions.getYears()
 
     ###########################################
@@ -53,7 +53,7 @@ def renewableNinjaData(tech, subregions, seasons, years):
     #          years: List of years to populate values for 
     # OUTPUT:  otoole formatted dataframe holding capacity factor values for input tech type 
 
-    continent = functions.openYaml().get('continent')
+    continent = functions.getFromYaml('continent')
 
     #Dictionary to hold land area for averaging (thousand km2)
     PROVINCIAL_LAND_AREAS = {
@@ -227,7 +227,7 @@ def read_NREL(subregions, seasons, years):
     scenario = 'Moderate'
     crpYears = 20
     metric_case = 'Market'
-    continent = functions.openYaml().get('continent')
+    continent = functions.getFromYaml('continent')
     
     # Dictionary key is technology abbreviation in our model
     # Dictionay value list holds how to filter input data frame 

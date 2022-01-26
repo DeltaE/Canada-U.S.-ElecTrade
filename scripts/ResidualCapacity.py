@@ -16,8 +16,8 @@ def main():
     ###########################################
 
     # Parameters to print over
-    continent = functions.openYaml().get('continent')
-    canSubregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
+    continent = functions.getFromYaml('continent')
+    canSubregions = functions.getFromYaml('subregions_dictionary')['CAN'] # Canadian subregions
     years = functions.getYears()
 
     ###########################################
@@ -137,7 +137,7 @@ def getUsaResidualCapacity():
     # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
-    techMap = functions.openYaml().get('usa_tech_map')
+    techMap = functions.getFromYaml('usa_tech_map')
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'ResidualCapacity(r,t,y)')
 
     #remove anything from years 2015 - 2018
@@ -148,7 +148,7 @@ def getUsaResidualCapacity():
     columns = list(df)
     dfFiltered = pd.DataFrame(columns=columns)
 
-    continent = functions.openYaml().get('continent')
+    continent = functions.getFromYaml('continent')
 
     #get rid of all techs we are not using 
     for tech in techMap:
@@ -179,9 +179,9 @@ def getUsaOperationalLife():
     # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
-    continent = functions.openYaml().get('continent')
+    continent = functions.getFromYaml('continent')
 
-    techMap = functions.openYaml().get('usa_tech_map')
+    techMap = functions.getFromYaml('usa_tech_map')
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'OperationalLife(r,t)')
 
     #Initialize filtered dataframe 

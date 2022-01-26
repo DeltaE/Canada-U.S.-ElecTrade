@@ -14,8 +14,8 @@ def main():
     ### EVERYTHING IS CO2 EMISSIONS
 
     # Parameters to print over
-    continent = functions.openYaml().get('continent')
-    canSubregions = ((functions.openYaml().get('subregions_dictionary'))['CAN']).keys() # Canadian subregions
+    continent = functions.getFromYaml('continent')
+    canSubregions = functions.getFromYaml('subregions_dictionary')['CAN'].keys() # Canadian subregions
     years = functions.getYears()
 
     ###########################################
@@ -56,10 +56,10 @@ def getUsaEmissionActivityRatio():
     # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
-    techMap = functions.openYaml().get('usa_tech_map')
-    inputFuelMap = functions.openYaml().get('tech_to_fuel')
+    techMap = functions.getFromYaml('usa_tech_map')
+    inputFuelMap = functions.getFromYaml('tech_to_fuel')
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'EmisionActivityRatio(r,t,e,m,y)')
-    continent = functions.openYaml().get('continent')
+    continent = functions.getFromYaml('continent')
 
     #Only defined for year 2015
     years = functions.getYears()
@@ -80,7 +80,7 @@ def getUsaEmissionActivityRatio():
     outData = []
 
     #Fuels that have international trade options
-    intFuel = functions.openYaml().get('mine_fuels')
+    intFuel = functions.getFromYaml('mine_fuels')
 
     #map data
     for year in years:

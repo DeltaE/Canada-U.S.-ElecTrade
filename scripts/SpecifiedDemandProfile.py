@@ -13,11 +13,11 @@ def main():
     ###########################################
 
     #Dictionary holds month to season Mapping 
-    seasons = functions.openYaml().get('seasons')
+    seasons = functions.getFromYaml('seasons')
 
     # Parameters to print over
-    continent = functions.openYaml().get('continent')
-    canSubregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
+    continent = functions.getFromYaml('continent')
+    canSubregions = functions.getFromYaml('subregions_dictionary')['CAN'] # Canadian subregions
     years = functions.getYears()
 
     ###########################################
@@ -90,7 +90,7 @@ def getUsaSpecifiedDemandProfile():
     #holds output data
     outData = []
 
-    continent = functions.openYaml().get('continent')
+    continent = functions.getFromYaml('continent')
 
     #map data
     for i in range(len(df)):

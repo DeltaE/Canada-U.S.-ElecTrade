@@ -13,7 +13,7 @@ def main():
     ###########################################
 
     # Parameters to print over
-    continent = functions.openYaml().get('continent')
+    continent = functions.getFromYaml('continent')
     years = functions.getYears()
 
     ###########################################

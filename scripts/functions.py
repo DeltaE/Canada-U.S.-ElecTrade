@@ -27,13 +27,14 @@ PROVINCIAL_TIME_ZONES = {
 #####################################
 # COMMON FUNCTIONS
 #####################################
-def openYaml():
-    # PURPOSE: Returns the configured config.yaml file, which is a modifiable settings file that contains constants
-    # INPUT: None
+def getFromYaml(name):
+    # PURPOSE: Returns a value from the configured config.yaml file,
+    # which is a modifiable settings file that contains constants
+    # INPUT: name = the name of the value being retrieved
     # OUTPUT: parsedYaml = the ready-to-use yaml file
 
     originalYaml = open("../scripts/config.yaml")
-    parsedYaml = yaml.load(originalYaml, Loader=yaml.FullLoader)
+    parsedYaml = yaml.load(originalYaml, Loader=yaml.FullLoader).get(name)
     return parsedYaml
 
 def getYears():
@@ -41,8 +42,8 @@ def getYears():
     # in the model from the config.yaml file
     # INPUT:   None
     # OUTPUT:  years = list of applicable years in the model
-    startYear = openYaml().get('start_year')
-    endYear = openYaml().get('end_year')
+    startYear = getFromYaml('start_year')
+    endYear = getFromYaml('end_year')
     return range(startYear, endYear + 1)
 
 def getLoadValues():
@@ -390,8 +391,8 @@ def getUsaCapacityOrAvailabilityFactor(isCapacity):
     #df = df.loc[df['YEAR'] == 2016]
     #df.reset_index()
 
-    techMap = openYaml().get('usa_tech_map')
-    continent = openYaml().get('continent')
+    techMap = getFromYaml('usa_tech_map')
+    continent = getFromYaml('continent')
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'CapacityFactor(r,t,l,y)')
 
     #Initialize filtered dataframe 

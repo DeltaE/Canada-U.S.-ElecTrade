@@ -11,12 +11,12 @@ def main():
     ###########################################
 
     # Parameters to print over
-    continent = functions.openYaml().get('continent')
-    subregions = functions.openYaml().get('subregions_dictionary')
+    continent = functions.getFromYaml('continent')
+    subregions = functions.getFromYaml('subregions_dictionary')
     years = functions.getYears()
 
     #Fuels to tag
-    fuels = functions.openYaml().get('rnw_fuels')
+    fuels = functions.getFromYaml('rnw_fuels')
 
     ###########################################
     # Compile RE Tags

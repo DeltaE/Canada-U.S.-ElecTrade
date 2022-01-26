@@ -12,11 +12,11 @@ def main():
     ###########################################
 
     # Parameters to print over
-    continent = functions.openYaml().get('continent')
+    continent = functions.getFromYaml('continent')
     years = functions.getYears()
 
     #Dictionary for subregion to province mappings
-    canSubregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
+    canSubregions = functions.getFromYaml('subregions_dictionary')['CAN'] # Canadian subregions
 
     ###########################################
     # Calculate demand  
@@ -62,7 +62,7 @@ def getUsaSpecifiedAnnualDemand():
     #holds output data
     outData = []
 
-    continent = functions.openYaml().get('continent')
+    continent = functions.getFromYaml('continent')
 
     #map data
     for i in range(len(df)):
