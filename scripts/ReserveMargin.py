@@ -28,14 +28,14 @@ def main():
     PROVINCIAL_RESERVE_MARGIN = {
         'BC':1.10,
         'AB':1.15,
-        'SAS':1.15,
-        'MAN':1.10,
-        'ONT':1.15,
+        'SK':1.15,
+        'MB':1.10,
+        'ON':1.15,
         'QC':1.10,
         'NB':1.15,
         'NL':1.10,
         'NS':1.15,
-        'PEI':1.15}
+        'PE':1.15}
 
     # List of fuels to tag
     # fuelTag = ['ELC']

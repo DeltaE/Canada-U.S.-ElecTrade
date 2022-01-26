@@ -29,7 +29,7 @@ def main():
     dfOut.to_csv('../src/data/YEAR.csv', index=False)
 
     #Regions set
-    dfOut = pd.DataFrame(continent, columns=['VALUE'])
+    dfOut = pd.DataFrame([continent], columns=['VALUE'])
     dfOut.to_csv('../src/data/REGION.csv', index=False)
 
     # Emissions set
