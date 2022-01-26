@@ -17,7 +17,7 @@ def main():
 
     # Parameters to print over
     continent = functions.getFromYaml('continent')
-    canSubregions = functions.getFromYaml('subregions_dictionary')['CAN'] # Canadian subregions
+    canSubregions = functions.getFromYaml('regions_dictionary')['CAN'] # Canadian subregions
     years = functions.getYears()
 
     ###########################################
@@ -139,7 +139,7 @@ def getUsaResidualCapacity():
 
     techMap = functions.getFromYaml('usa_tech_map')
     continent = functions.getFromYaml('continent')
-    
+
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'ResidualCapacity(r,t,y)')
 
     #remove anything from years 2015 - 2018

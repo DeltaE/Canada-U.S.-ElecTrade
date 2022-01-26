@@ -16,7 +16,7 @@ def main():
     ###########################################
 
     continent = functions.getFromYaml('continent')
-    canSubregions = functions.getFromYaml('subregions_dictionary')['CAN'] # Canadian subregions
+    canSubregions = functions.getFromYaml('regions_dictionary')['CAN'] # Canadian subregions
     seasons = functions.getFromYaml('seasons')
     techTags = functions.getFromYaml('techs_master')
     variableTechs = functions.getFromYaml('variable_techs')
@@ -223,7 +223,7 @@ def getUsaReserveMarginTagFuel():
     ##################################################
 
     # Region Dictionary
-    usaSubregions = functions.getFromYaml('subregions_dictionary')['USA'] # American subregions
+    usaSubregions = functions.getFromYaml('regions_dictionary')['USA'] # American subregions
     continent = functions.getFromYaml('continent')
     years = functions.getYears()
 

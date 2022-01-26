@@ -16,7 +16,7 @@ def main():
 
     # Parameters to print over
     continent = functions.getFromYaml('continent')
-    canSubregions = functions.getFromYaml('subregions_dictionary')['CAN'].keys() # Canadian subregions
+    canSubregions = functions.getFromYaml('regions_dictionary')['CAN'].keys() # Canadian subregions
     techToFuel = functions.getFromYaml('tech_to_fuel') # Tech to Fuel Mapping
     rnwFuels = functions.getFromYaml('rnw_fuels') # Renewable techs
     minFuels = functions.getFromYaml('mine_fuels') # Mining fuels
@@ -133,7 +133,7 @@ def getUsaOutputActivityRatio():
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
     techMap = functions.getFromYaml('usa_tech_map')
-    usaSubregions = functions.getFromYaml('subregions_dictionary')['USA'] # American subregions
+    usaSubregions = functions.getFromYaml('regions_dictionary')['USA'] # American subregions
     continent = functions.getFromYaml('continent')
     intFuel = functions.getFromYaml('mine_fuels') # Mining fuels that have international trade options
     rnwFuel = functions.getFromYaml('rnw_fuels') # Renewable fuels that have international trade options
@@ -184,7 +184,7 @@ def getUsaInputActivityRatio():
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
     techMap = functions.getFromYaml('usa_tech_map')
-    usaSubregions = functions.getFromYaml('subregions_dictionary')['USA'] # American subregions
+    usaSubregions = functions.getFromYaml('regions_dictionary')['USA'] # American subregions
     inputFuelMap = functions.getFromYaml('tech_to_fuel')
     continent = functions.getFromYaml('continent')
     intFuel = functions.getFromYaml('mine_fuels') # Fuels that have international trade options
