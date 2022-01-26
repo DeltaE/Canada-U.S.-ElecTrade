@@ -11,12 +11,10 @@ def main():
     ###########################################
 
     # Parameters to print over
-    region = functions.openYaml().get('regions')[0]
-    subregions = functions.openYaml().get('subregions_dictionary')
+    continent = functions.getFromYaml('continent')
+    subregions = functions.getFromYaml('regions_dict')
+    fuels = functions.getFromYaml('rnw_fuels') #Fuels to tag
     years = functions.getYears()
-
-    #Fuels to tag
-    fuels = functions.openYaml().get('rnw_fuels')
 
     ###########################################
     # Compile RE Tags
@@ -28,11 +26,11 @@ def main():
 
     #print all values 
     for year in years:
-        for country in subregions.keys():
-            for subregion in subregions[country].keys():
+        for region in subregions.keys():
+            for subregion in subregions[region].keys():
                 for fuel in fuels:
-                    techName = 'PWR' + fuel + country + subregion + '01'
-                    dataOut.append([region, techName, year, 1])
+                    techName = 'PWR' + fuel + region + subregion + '01'
+                    dataOut.append([continent, techName, year, 1])
     
     #write to a csv
     dfOut = pd.DataFrame(dataOut,columns=['REGION','TECHNOLOGY','YEAR','VALUE'])

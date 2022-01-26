@@ -5,12 +5,11 @@ seasons:
   'S': [ 6, 7, 8 ]
   'F': [ 9, 10, 11 ]
 
-# only one region in this model
-regions: 
-  - 'NAmerica'
+# only one continent ('r' in osemosys, for 'region') in this model
+continent: 'NAmerica'
 
-# Provinces and states to subregions mapping
-subregions_dictionary:
+# Provinces to subregions mapping
+regions_dict:
   'CAN':
     'WS': [ 'BC', 'AB' ]
     'MW': [ 'SAS', 'MAN' ]

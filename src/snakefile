@@ -82,7 +82,7 @@ inputDir = '../dataSources/'
 scriptsDir = '../scripts/'
 outputDir = '../src/'
 canadaProvinces = list(itertools.chain.from_iterable(
-	config['subregions_dictionary']['CAN'].values()))
+	config['regions_dict']['CAN'].values()))
 
 rule all:
 	input: 

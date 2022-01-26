@@ -12,11 +12,9 @@ def main():
     ###########################################
 
     # Parameters to print over
-    region = functions.openYaml().get('regions')[0]
+    continent = functions.getFromYaml('continent')
+    canSubregions = functions.getFromYaml('regions_dict')['CAN'] # Canadian subregions
     years = functions.getYears()
-
-    #Dictionary for subregion to province mappings
-    subregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
 
     ###########################################
     # Calculate demand  
@@ -30,14 +28,14 @@ def main():
     #Region, fuel, year, value
     demand = []
     
-    for subregion, provinces in subregions.items(): 
-        dfRegion = df[subregions[subregion]]
-        sumDemand = dfRegion.loc[:,:].sum(axis=1)
+    for subregion, provinces in canSubregions.items(): 
+        dfProvinces = df[canSubregions[subregion]]
+        sumDemand = dfProvinces.loc[:,:].sum(axis=1)
         for year in years:
             fuelName = 'ELC' + 'CAN' + subregion + '02'
             value = sumDemand[year]
             value = round(value,3)
-            demand.append([region, fuelName, year, value])
+            demand.append([continent, fuelName, year, value])
 
     ###########################################
     # Writing Demand Files 
@@ -53,6 +51,8 @@ def getUsaSpecifiedAnnualDemand():
     # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
+    continent = functions.getFromYaml('continent')
+
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'SpecifiedAnnualDemand(r,f,y)')
 
     #remove anything from years 2015 - 2018
@@ -62,15 +62,13 @@ def getUsaSpecifiedAnnualDemand():
     #holds output data
     outData = []
 
-    top_level_region = functions.openYaml().get('regions')[0]
-
     #map data
     for i in range(len(df)):
         fuel = 'ELC' + 'USA' + df['REGION'].iloc[i] + '02'
         year = df['YEAR'].iloc[i]
         value = df['DEMAND'].iloc[i]
         value = round(value,3)
-        outData.append([top_level_region,fuel,year,value])
+        outData.append([continent,fuel,year,value])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns = ['REGION', 'FUEL', 'YEAR', 'VALUE'])

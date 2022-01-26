@@ -11,9 +11,8 @@ def main():
     ###########################################
 
     # Parameters to print over
-    seasons = functions.openYaml().get('seasons')
-    region = functions.openYaml().get('regions')[0]
-    subregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
+    continent = functions.getFromYaml('continent')
+    canSubregions = functions.getFromYaml('regions_dict')['CAN'] # Canadian subregions
     years = functions.getYears()
 
     #####################################
@@ -54,11 +53,11 @@ def main():
 
     #calculate capacity factor for each province 
     af = {}
-    for subregion in subregions:
+    for subregion in canSubregions:
         generation = 0 #TWh
         capacity = 0 #TW
         #calcualte totals for subregion 
-        for province in subregions[subregion]:
+        for province in canSubregions[subregion]:
             capacity = capacity + RESIDUAL_HYDRO_CAPACITY[province]
             generation = generation + HYDRO_GENERATION[province]
         
@@ -72,10 +71,10 @@ def main():
     #Populate output lsit 
     for year in years:
         print(f'Hydro {year}')
-        for subregion in subregions:
+        for subregion in canSubregions:
             techName = 'PWR' + 'HYD' + 'CAN' + subregion + '01'
             value = round(af[subregion],3)
-            outData.append([region, techName, year, value])
+            outData.append([continent, techName, year, value])
 
     ###########################################
     # Writing Availability Factor to File 
