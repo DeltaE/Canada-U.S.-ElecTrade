@@ -13,7 +13,7 @@ regions_dict:
   'CAN':
     'WS': [ 'BC', 'AB' ]
     'MW': [ 'SK', 'MB' ]
-    'OT': [ 'ON' ]
+    'ON': [ 'ON' ]
     'QC': [ 'QC' ]
     'AT': [ 'NB', 'NS', 'PE', 'NL' ]
   'USA':

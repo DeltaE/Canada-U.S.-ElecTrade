@@ -152,6 +152,9 @@ def getPWRtechs(region, techs):
 
     # Loop to create all technology names
     for subregion in region[1].keys():
+
+        print(region, subregion)
+
         for tech in techs:
             techName = 'PWR' + tech + region[0] + subregion + '01'
             outList.append(techName)
