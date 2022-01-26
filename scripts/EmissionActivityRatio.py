@@ -58,11 +58,11 @@ def getUsaEmissionActivityRatio():
 
     techMap = functions.getFromYaml('usa_tech_map')
     inputFuelMap = functions.getFromYaml('tech_to_fuel')
-    df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'EmisionActivityRatio(r,t,e,m,y)')
     continent = functions.getFromYaml('continent')
+    intFuel = functions.getFromYaml('mine_fuels') # Fuels that have international trade options
+    years = functions.getYears() # Only defined for year 2015
 
-    #Only defined for year 2015
-    years = functions.getYears()
+    df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'EmisionActivityRatio(r,t,e,m,y)')
 
     #Initialize filtered dataframe 
     columns = list(df)
@@ -78,9 +78,6 @@ def getUsaEmissionActivityRatio():
 
     #holds output data
     outData = []
-
-    #Fuels that have international trade options
-    intFuel = functions.getFromYaml('mine_fuels')
 
     #map data
     for year in years:

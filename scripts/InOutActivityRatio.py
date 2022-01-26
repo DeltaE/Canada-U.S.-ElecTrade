@@ -17,15 +17,11 @@ def main():
     # Parameters to print over
     continent = functions.getFromYaml('continent')
     canSubregions = functions.getFromYaml('subregions_dictionary')['CAN'].keys() # Canadian subregions
+    techToFuel = functions.getFromYaml('tech_to_fuel') # Tech to Fuel Mapping
+    rnwFuels = functions.getFromYaml('rnw_fuels') # Renewable techs
+    minFuels = functions.getFromYaml('mine_fuels') # Mining fuels
+    pwrTechs = functions.getFromYaml('techs_master') # Power techs
     years = functions.getYears()
-
-    # Tech to Fuel Mapping
-    techToFuel = functions.getFromYaml('tech_to_fuel')
-
-    # Renewable, Mining Fuels, Power Techs
-    rnwFuels = functions.getFromYaml('rnw_fuels')
-    minFuels = functions.getFromYaml('mine_fuels')
-    pwrTechs = functions.getFromYaml('techs_master')
 
     ###########################################
     # IAR and OAR of One
@@ -139,16 +135,12 @@ def getUsaOutputActivityRatio():
     techMap = functions.getFromYaml('usa_tech_map')
     usaSubregions = functions.getFromYaml('subregions_dictionary')['USA'] # American subregions
     continent = functions.getFromYaml('continent')
-
-    #Fuels that have international trade options
-    intFuel = functions.getFromYaml('mine_fuels')
-    rnwFuel = functions.getFromYaml('rnw_fuels')
+    intFuel = functions.getFromYaml('mine_fuels') # Mining fuels that have international trade options
+    rnwFuel = functions.getFromYaml('rnw_fuels') # Renewable fuels that have international trade options
+    years = functions.getYears() # year to print over
 
     #holds output data
     outData = []
-
-    #year to print over
-    years = functions.getYears()
 
     #renewables
     for year in years:
@@ -191,10 +183,14 @@ def getUsaInputActivityRatio():
     # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
-    df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'InputActivityRatio(r,t,f,m,y)')
     techMap = functions.getFromYaml('usa_tech_map')
     usaSubregions = functions.getFromYaml('subregions_dictionary')['USA'] # American subregions
     inputFuelMap = functions.getFromYaml('tech_to_fuel')
+    continent = functions.getFromYaml('continent')
+    intFuel = functions.getFromYaml('mine_fuels') # Fuels that have international trade options
+    years = functions.getYears()
+
+    df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'InputActivityRatio(r,t,f,m,y)')
 
     #remove anything from years 2015 - 2018
     df = df.loc[df['YEAR'] > 2018]
@@ -212,13 +208,8 @@ def getUsaInputActivityRatio():
     df = dfFiltered
     df.reset_index()    
 
-    #Fuels that have international trade options
-    intFuel = functions.getFromYaml('mine_fuels')
-
     #holds output data
     outData = []
-
-    continent = functions.getFromYaml('continent')
 
     #map data
     for i in range(len(df)):
@@ -241,7 +232,7 @@ def getUsaInputActivityRatio():
 
     # IAR for PWRTRN technologies
     for subregion in usaSubregions:
-        for year in functions.getYears():
+        for year in years:
             techName = 'PWR' + 'TRN' + 'USA' + subregion
             fuelIn = 'ELC' + 'USA' + subregion + '01'
             outData.append([continent, techName, fuelIn, 1, year, 1])

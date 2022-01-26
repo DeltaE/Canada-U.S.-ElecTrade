@@ -13,10 +13,8 @@ def main():
 
     # Parameters to print over
     continent = functions.getFromYaml('continent')
+    canSubregions = functions.getFromYaml('subregions_dictionary')['CAN'] # Dictionary for subregion to province mappings
     years = functions.getYears()
-
-    #Dictionary for subregion to province mappings
-    canSubregions = functions.getFromYaml('subregions_dictionary')['CAN'] # Canadian subregions
 
     ###########################################
     # Calculate demand  
@@ -53,6 +51,8 @@ def getUsaSpecifiedAnnualDemand():
     # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
+    continent = functions.getFromYaml('continent')
+
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'SpecifiedAnnualDemand(r,f,y)')
 
     #remove anything from years 2015 - 2018
@@ -61,8 +61,6 @@ def getUsaSpecifiedAnnualDemand():
 
     #holds output data
     outData = []
-
-    continent = functions.getFromYaml('continent')
 
     #map data
     for i in range(len(df)):

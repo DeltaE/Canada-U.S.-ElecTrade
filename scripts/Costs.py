@@ -340,6 +340,7 @@ def getUsaCapitalCost():
 
     techMap = functions.getFromYaml('usa_tech_map')
     continent = functions.getFromYaml('continent')
+
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'CapitalCost(r,t,y)')
 
     #remove anything from years 2015 - 2018
@@ -382,6 +383,8 @@ def getUsaFixedCost():
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
     techMap = functions.getFromYaml('usa_tech_map')
+    continent = functions.getFromYaml('continent')
+
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'FixedCost(r,t,y)')
 
     #remove anything from years 2015 - 2018
@@ -405,7 +408,6 @@ def getUsaFixedCost():
 
     #map data
     for i in range(len(df)):
-        continent = functions.getFromYaml('continent')
         techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
         tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
         year = df['YEAR'].iloc[i]
@@ -424,6 +426,9 @@ def getUsaVariableCost():
 
     techMap = functions.getFromYaml('usa_tech_map')
     inputFuelMap = functions.getFromYaml('tech_to_fuel')
+    intFuel = functions.getFromYaml('mine_fuels') #Fuels that have international trade options
+    continent = functions.getFromYaml('continent')
+
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'VariableCost(r,t,m,y)')
 
     #remove anything from years 2015 - 2018
@@ -442,15 +447,11 @@ def getUsaVariableCost():
     df = dfFiltered
     df.reset_index()
 
-    #Fuels that have international trade options
-    intFuel = functions.getFromYaml('mine_fuels')
-
     #holds output data
     outData = []
 
     #map data
     for i in range(len(df)):
-        continent = functions.getFromYaml('continent')
         techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
         tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
         year = df['YEAR'].iloc[i]

@@ -18,6 +18,8 @@ def main():
     continent = functions.getFromYaml('continent')
     canSubregions = functions.getFromYaml('subregions_dictionary')['CAN'] # Canadian subregions
     seasons = functions.getFromYaml('seasons')
+    techTags = functions.getFromYaml('techs_master')
+    variableTechs = functions.getFromYaml('variable_techs')
     years = functions.getYears()
     
     # holds baseline reserve margin for each province based on NERC
@@ -38,10 +40,7 @@ def main():
     # List of fuels to tag
     # fuelTag = ['ELC']
 
-    # List of technologies to tag
-    techTags = functions.getFromYaml('techs_master')
-    variableTechs = functions.getFromYaml('variable_techs')
-    # Remove the non-dispachable techs from techTags
+    # Make list of techs to tag by removing the non-dispachable techs from techTags
     techTags = [x for x in techTags if x not in variableTechs]
 
     #For timeslicing 
@@ -178,11 +177,11 @@ def getUsaReserveMarginTagTechnology():
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
     continent = functions.getFromYaml('continent')
-
-    df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'ReserveMarginInTagTech(r,t,y)')
-
     techMap = functions.getFromYaml('usa_tech_map')
     variableTechs = functions.getFromYaml('variable_techs')
+    years = functions.getYears()
+
+    df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'ReserveMarginInTagTech(r,t,y)')
 
     #remove anything from years 2015 - 2018
     df = df.loc[df['YEAR'] > 2018]
@@ -197,7 +196,7 @@ def getUsaReserveMarginTagTechnology():
 
     #populate data 
     for techOld in techMap:
-        for year in functions.getYears():
+        for year in years:
             for subregion in usaSubregions:
                 techMapped = techMap[techOld]
                 tech = 'PWR' + techMapped + 'USA' + subregion + '01'
@@ -219,15 +218,14 @@ def getUsaReserveMarginTagFuel():
     # Due to our naming convention, we actually want to assign reserve margin value
     # to reservemargintagfuel
 
-    # List of technologies to tag
-    techTags = ['HYD','BIO','CCG','CTG','URN','COA','COC']
-
     ##################################################
     # Account for peak squishing 
     ##################################################
+
     # Region Dictionary
     usaSubregions = functions.getFromYaml('subregions_dictionary')['USA'] # American subregions
     continent = functions.getFromYaml('continent')
+    years = functions.getYears()
 
     # Should update this for individual states
     # should be 10 percent for hydro dominated provinces or 
@@ -316,7 +314,7 @@ def getUsaReserveMarginTagFuel():
     outData=[]
 
     #populate data 
-    for year in functions.getYears():
+    for year in years:
         for subregion in usaSubregions:
             fuel = 'ELC' + 'USA' + subregion + '01'
             value = reserveMargin[subregion]
@@ -332,11 +330,12 @@ def getUsaReserveMargin():
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
     continent = functions.getFromYaml('continent')
+    years = functions.getYears()
 
     #this one is easier to manually do...
     outData = []
 
-    for year in functions.getYears():
+    for year in years:
         outData.append([continent,year,1])
 
     #create and return datafram

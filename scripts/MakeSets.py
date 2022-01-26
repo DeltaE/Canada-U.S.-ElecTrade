@@ -17,9 +17,9 @@ def main():
     rnwFuels = functions.getFromYaml('rnw_fuels')
     mineFuels = functions.getFromYaml('mine_fuels')
     stoTechs = functions.getFromYaml('sto_techs')
-    years = functions.getYears()
     subregions = functions.getFromYaml('subregions_dictionary')
-
+    years = functions.getYears()
+    
     ####################################
     ## CREATE STANDARD SETS
     ####################################

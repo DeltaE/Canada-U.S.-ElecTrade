@@ -13,10 +13,8 @@ def main():
     # Parameters to print over
     continent = functions.getFromYaml('continent')
     subregions = functions.getFromYaml('subregions_dictionary')
+    fuels = functions.getFromYaml('rnw_fuels') #Fuels to tag
     years = functions.getYears()
-
-    #Fuels to tag
-    fuels = functions.getFromYaml('rnw_fuels')
 
     ###########################################
     # Compile RE Tags

@@ -15,9 +15,9 @@ def main():
     # Parameters to print over
     continent = functions.getFromYaml('continent')
     canSubregions = functions.getFromYaml('subregions_dictionary')['CAN'].keys() # Canadian subregions
-    years = functions.getYears()
-
     storages = functions.getFromYaml('sto_techs')
+    years = functions.getYears()
+    
     if not storages: # sto_techs is an empty list, so the program always steps in here
         df = pd.DataFrame(columns=['REGION','STORAGE','YEAR','VALUE'])
         df.to_csv('../src/data/CapitalCostStorage.csv', index=False)

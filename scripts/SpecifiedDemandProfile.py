@@ -12,10 +12,7 @@ def main():
     # Model Parameters
     ###########################################
 
-    #Dictionary holds month to season Mapping 
-    seasons = functions.getFromYaml('seasons')
-
-    # Parameters to print over
+    seasons = functions.getFromYaml('seasons') # Dictionary holds month to season Mapping 
     continent = functions.getFromYaml('continent')
     canSubregions = functions.getFromYaml('subregions_dictionary')['CAN'] # Canadian subregions
     years = functions.getYears()
@@ -81,6 +78,8 @@ def getUsaSpecifiedDemandProfile():
     # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
+    continent = functions.getFromYaml('continent')
+
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'SpecifiedDemandProfile(r,f,l,y)')
 
     #remove anything from years 2015 - 2018
@@ -89,8 +88,6 @@ def getUsaSpecifiedDemandProfile():
 
     #holds output data
     outData = []
-
-    continent = functions.getFromYaml('continent')
 
     #map data
     for i in range(len(df)):

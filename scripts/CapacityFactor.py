@@ -223,11 +223,12 @@ def read_NREL(subregions, seasons, years):
     #          years: list holding what years to print data over
     # OUTPUT:  otoole formatted dataframe holding capacity factor values 
 
+    continent = functions.getFromYaml('continent')
+
     #global filtering options
     scenario = 'Moderate'
     crpYears = 20
     metric_case = 'Market'
-    continent = functions.getFromYaml('continent')
     
     # Dictionary key is technology abbreviation in our model
     # Dictionay value list holds how to filter input data frame 

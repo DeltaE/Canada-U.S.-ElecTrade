@@ -138,6 +138,8 @@ def getUsaResidualCapacity():
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
     techMap = functions.getFromYaml('usa_tech_map')
+    continent = functions.getFromYaml('continent')
+    
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'ResidualCapacity(r,t,y)')
 
     #remove anything from years 2015 - 2018
@@ -147,8 +149,6 @@ def getUsaResidualCapacity():
     #Initialize filtered dataframe 
     columns = list(df)
     dfFiltered = pd.DataFrame(columns=columns)
-
-    continent = functions.getFromYaml('continent')
 
     #get rid of all techs we are not using 
     for tech in techMap:
@@ -180,8 +180,8 @@ def getUsaOperationalLife():
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
     continent = functions.getFromYaml('continent')
-
     techMap = functions.getFromYaml('usa_tech_map')
+    
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'OperationalLife(r,t)')
 
     #Initialize filtered dataframe 

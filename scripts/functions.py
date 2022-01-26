@@ -42,8 +42,10 @@ def getYears():
     # in the model from the config.yaml file
     # INPUT:   None
     # OUTPUT:  years = list of applicable years in the model
+
     startYear = getFromYaml('start_year')
     endYear = getFromYaml('end_year')
+
     return range(startYear, endYear + 1)
 
 def getLoadValues():
@@ -393,6 +395,8 @@ def getUsaCapacityOrAvailabilityFactor(isCapacity):
 
     techMap = getFromYaml('usa_tech_map')
     continent = getFromYaml('continent')
+    years = getYears() # years to print capacity factor over
+
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'CapacityFactor(r,t,l,y)')
 
     #Initialize filtered dataframe 
@@ -405,9 +409,6 @@ def getUsaCapacityOrAvailabilityFactor(isCapacity):
         dfFiltered = dfFiltered.append(dfTemp)
     df = dfFiltered
     df.reset_index()
-
-    #years to print capacity factor over
-    years = getYears()
 
     #holds output data
     outDataCF = [] # Capacity Factor
