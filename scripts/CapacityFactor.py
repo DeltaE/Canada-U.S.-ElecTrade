@@ -58,14 +58,14 @@ def renewableNinjaData(tech, subregions, seasons, years):
     PROVINCIAL_LAND_AREAS = {
         'BC':945,
         'AB':661,
-        'SAS':651,
-        'MAN':647,
-        'ONT':1076,
+        'SK':651,
+        'MB':647,
+        'ON':1076,
         'QC':1542,
         'NB':73,
         'NL':405,
         'NS':55,
-        'PEI':6}
+        'PE':6}
 
     #TimeSlices to print over
     hourList = range(1,25)

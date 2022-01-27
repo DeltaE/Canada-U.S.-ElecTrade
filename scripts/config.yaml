@@ -12,10 +12,10 @@ continent: 'NAmerica'
 regions_dict:
   'CAN':
     'WS': [ 'BC', 'AB' ]
-    'MW': [ 'SAS', 'MAN' ]
-    'OT': [ 'ONT' ]
+    'MW': [ 'SK', 'MB' ]
+    'ON': [ 'ON' ]
     'QC': [ 'QC' ]
-    'AT': [ 'NB', 'NS', 'PEI', 'NL' ]
+    'AT': [ 'NB', 'NS', 'PE', 'NL' ]
   'USA':
     'NW': [ 'WA', 'OR' ]
     'CA': [ 'CA' ]

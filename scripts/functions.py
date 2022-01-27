@@ -15,14 +15,14 @@ import yaml
 PROVINCIAL_TIME_ZONES = {
     'BC':0,
     'AB':1,
-    'SAS':2,
-    'MAN':2,
-    'ONT':3,
+    'SK':2,
+    'MB':2,
+    'ON':3,
     'QC':3,
     'NB':4,
     'NL':4,
     'NS':4,
-    'PEI':4}
+    'PE':4}
 
 #####################################
 # COMMON FUNCTIONS
