@@ -2,7 +2,7 @@ import pandas as pd
 import functions
 
 def main():
-    # PURPOSE: Creates otoole formatted RETagTechnology CSVs 
+    # PURPOSE: Creates otoole formatted RETagTechnology (renewable energy tag technology) CSVs 
     # INPUT: none
     # OUTPUT: none
 
