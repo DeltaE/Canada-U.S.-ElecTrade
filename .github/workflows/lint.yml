@@ -19,7 +19,8 @@ jobs:
         VALIDATE_ALL_CODEBASE: false
         DEFAULT_BRANCH: main
         PYTHON_PYLINT_CONFIG_FILE: .pylintrc
-        VALIDATE_PYTHON: true
+        VALIDATE_PYTHON_PYLINT: true
+        VALIDATE_YAML: true
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
