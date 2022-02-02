@@ -16,13 +16,13 @@ def main():
 
     """
 
-    # Parameters
+    # PARAMETERS
 
     region = functions.openYaml().get('regions')
     subregions = (functions.openYaml().get('subregions_dictionary'))['CAN']
     years = functions.getYears()
 
-    # Calculations
+    # CALCULATIONS
 
     # Availability factor for each Canadian province
     af = {}
@@ -36,7 +36,6 @@ def main():
         #save total availability factor
         af[subregion] = (generation * (1000 / 8760)) / capacity
 
-    #list to save data to
     #columns = region, technology, year, value
     out_df = []
 
