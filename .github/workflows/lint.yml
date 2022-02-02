@@ -14,12 +14,12 @@ jobs:
       with:
         full-depth: 0
     - name: Lint code
-      uses: github/super-linter@v4
+      uses: github/super-linter/slim@v4
       env:
         VALIDATE_ALL_CODEBASE: false
         DEFAULT_BRANCH: main
         PYTHON_PYLINT_CONFIG_FILE: .pylintrc
-        VALIDATE_SNAKEMAKE_LINT: false
+        VALIDATE_PYTHON: true
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
