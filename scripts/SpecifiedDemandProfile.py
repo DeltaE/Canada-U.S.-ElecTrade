@@ -24,10 +24,6 @@ def getCanSpecifiedDemandProfile():
     # INPUT:   N/A
     # OUTPUT:  load = master list to be appended to dataframe
 
-    ###########################################
-    # Model Parameters
-    ###########################################
-
     seasons = functions.getFromYaml('seasons') # Dictionary holds month to season Mapping 
     continent = functions.getFromYaml('continent')
     canSubregions = functions.getFromYaml('regions_dict')['CAN'] # Canadian subregions
