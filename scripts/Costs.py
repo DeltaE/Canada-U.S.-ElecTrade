@@ -15,7 +15,7 @@ def main():
     ###########################################
 
     # Parameters to print over
-    subregions = ((functions.openYaml().get('subregions_dictionary'))['CAN']).keys() # Canadian subregions
+    canSubregions = functions.getFromYaml('regions_dict')['CAN'].keys() # Canadian subregions
     years = functions.getYears()
 
     #Trigger used to print capital, fixed and variable costs one at a time
@@ -43,7 +43,7 @@ def main():
         ###########################################
 
         #reads the NREL raw datafile and extracts costs
-        dfNREL = read_NREL(costType, subregions, years)
+        dfNREL = read_NREL(costType, canSubregions, years)
 
         #Populate P2G and FC costs
         #dfP2gSystem = p2gSystem(costType, regions, subregions, years)
@@ -87,7 +87,7 @@ def read_NREL(costType, subregions, years):
     #          years: list holding what years to print data over
     # OUTPUT:  otoole formatted dataframe holding cost values 
 
-    region = functions.openYaml().get('regions')[0]
+    continent = functions.getFromYaml('continent')
 
     #global filtering options
     scenario = 'Moderate'
@@ -216,9 +216,9 @@ def read_NREL(costType, subregions, years):
                     else:
                         modes = [1]
                     for mode in modes:
-                        data.append([region,techName,mode,year,totalCost])
+                        data.append([continent, techName, mode, year, totalCost])
                 else:
-                    data.append([region, techName, year, totalCost])
+                    data.append([continent, techName, year, totalCost])
                 
     if costType[0] == 'Variable O&M':
         df = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','MODE_OF_OPERATION','YEAR','VALUE'])
@@ -288,7 +288,7 @@ def tradeCosts(costType, years):
     #          years: list holding what years to print data over
     # OUTPUT:  otoole formatted dataframe holding cost values for trade 
 
-    region = functions.openYaml().get('regions')[0]
+    continent = functions.getFromYaml('continent')
 
     # Read in the trade csv file which contains costs
     df = pd.read_csv('../dataSources/Trade.csv')
@@ -321,11 +321,11 @@ def tradeCosts(costType, years):
         #save same value for all years 
         if costType[0] == 'Variable O&M':
             for year in years:
-                data.append([region,tech,1,year,trnCost])
-                data.append([region,tech,2,year,trnCost])
+                data.append([continent,tech,1,year,trnCost])
+                data.append([continent,tech,2,year,trnCost])
         else:
             for year in years:
-                data.append([region,tech,year,trnCost])
+                data.append([continent,tech,year,trnCost])
 
     if costType[0] == 'Variable O&M':
         dfOut = pd.DataFrame(data, columns=['REGION','TECHNOLOGY','MODE_OF_OPERATION','YEAR','VALUE'])
@@ -338,8 +338,9 @@ def getUsaCapitalCost():
     # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
-    techMap = functions.openYaml().get('usa_tech_map')
-    region = functions.openYaml().get('regions')[0]
+    techMap = functions.getFromYaml('usa_tech_map')
+    continent = functions.getFromYaml('continent')
+
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'CapitalCost(r,t,y)')
 
     #remove anything from years 2015 - 2018
@@ -370,7 +371,7 @@ def getUsaCapitalCost():
         value = round(value, 3)
         #Convert from $/kW to M$/GW
 
-        outData.append([region,tech,year,value])
+        outData.append([continent,tech,year,value])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
@@ -381,7 +382,9 @@ def getUsaFixedCost():
     # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
-    techMap = functions.openYaml().get('usa_tech_map')
+    techMap = functions.getFromYaml('usa_tech_map')
+    continent = functions.getFromYaml('continent')
+
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'FixedCost(r,t,y)')
 
     #remove anything from years 2015 - 2018
@@ -405,13 +408,12 @@ def getUsaFixedCost():
 
     #map data
     for i in range(len(df)):
-        region = 'NAmerica'
         techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
         tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
         year = df['YEAR'].iloc[i]
         value = df['FIXEDCOST'].iloc[i]
         value = round(value, 3)
-        outData.append([region,tech,year,value])
+        outData.append([continent,tech,year,value])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
@@ -422,8 +424,11 @@ def getUsaVariableCost():
     # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
-    techMap = functions.openYaml().get('usa_tech_map')
-    inputFuelMap = functions.openYaml().get('tech_to_fuel')
+    techMap = functions.getFromYaml('usa_tech_map')
+    inputFuelMap = functions.getFromYaml('tech_to_fuel')
+    intFuel = functions.getFromYaml('mine_fuels') #Fuels that have international trade options
+    continent = functions.getFromYaml('continent')
+
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'VariableCost(r,t,m,y)')
 
     #remove anything from years 2015 - 2018
@@ -442,26 +447,22 @@ def getUsaVariableCost():
     df = dfFiltered
     df.reset_index()
 
-    #Fuels that have international trade options
-    intFuel = functions.openYaml().get('mine_fuels')
-
     #holds output data
     outData = []
 
     #map data
     for i in range(len(df)):
-        region = 'NAmerica'
         techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
         tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
         year = df['YEAR'].iloc[i]
         mode = 1
         value = df['VARIABLECOST'].iloc[i]
         value = round(value, 3)
-        outData.append([region,tech,mode,year,value])
+        outData.append([continent,tech,mode,year,value])
         #checks if need to write value for mode 2
         if inputFuelMap[techMapped] in intFuel:
             mode = 2
-            outData.append([region,tech,mode,year,value])
+            outData.append([continent,tech,mode,year,value])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','MODE_OF_OPERATION','YEAR','VALUE'])

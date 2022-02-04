@@ -11,9 +11,9 @@ def main():
     ###########################################
 
     # Parameters to print over
-    region = functions.openYaml().get('regions')[0]
-    subregions = ((functions.openYaml().get('subregions_dictionary')['CAN'])).keys() # Canadian subregions
-    storages = functions.openYaml().get('sto_techs')
+    continent = functions.getFromYaml('continent')
+    canSubregions = functions.getFromYaml('regions_dict')['CAN'].keys() # Canadian subregions
+    storages = functions.getFromYaml('sto_techs')
     
     if not storages:
         dfOut = pd.DataFrame(columns=['REGION','TECHNOLOGY','STORAGE', 'MODE_OF_OPERATION','VALUE'])
@@ -41,16 +41,16 @@ def main():
     fromStorageData = []
 
     #print all values 
-    for subregion in subregions:
+    for subregion in canSubregions:
         for storage in storages:
             #Tech to storage
             techName = 'PWR' + techToStorage[storage] + 'CAN' + subregion + '01'
             storageName = 'STO' + storage + 'CAN' + subregion
-            toStorageData.append([region, techName, storageName, 1.0, 1])
+            toStorageData.append([continent, techName, storageName, 1.0, 1])
             #Tech from storage
             techName = 'PWR' + techFromStorage[storage] + 'CAN' + subregion + '01'
             storageName = 'STO' + storage + 'CAN' + subregion
-            fromStorageData.append([region, techName, storageName, 1.0, 1])
+            fromStorageData.append([continent, techName, storageName, 1.0, 1])
     
     #write tech to storage
     dfOut = pd.DataFrame(toStorageData,columns=['REGION','TECHNOLOGY','STORAGE', 'MODE_OF_OPERATION','VALUE'])
