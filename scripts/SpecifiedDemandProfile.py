@@ -9,8 +9,20 @@ def main():
     # OUTPUT: none
 
     ###########################################
-    # Model Parameters
+    # Writing Demand Files 
     ###########################################
+
+    dfCan = getCanSpecifiedDemandProfile()
+    dfUsa = getUsaSpecifiedDemandProfile()
+
+    df = pd.DataFrame(dfCan, columns = ['REGION', 'FUEL', 'TIMESLICE', 'YEAR', 'VALUE'])
+    df = df.append(dfUsa)
+    df.to_csv('../src/data/SpecifiedDemandProfile.csv', index=False)
+
+def getCanSpecifiedDemandProfile():
+    # PURPOSE: Creates specifiedDemaandProfile file from CAN data
+    # INPUT:   N/A
+    # OUTPUT:  load = master list to be appended to dataframe
 
     seasons = functions.getFromYaml('seasons') # Dictionary holds month to season Mapping 
     continent = functions.getFromYaml('continent')
@@ -63,18 +75,11 @@ def main():
 
                     #save profile value 
                     load.append([continent, fuelName, ts, year, profileValue])
-
-    ###########################################
-    # Writing Demand Files 
-    ###########################################
-
-    df = pd.DataFrame(load, columns = ['REGION', 'FUEL', 'TIMESLICE', 'YEAR', 'VALUE'])
-    dfUsa = getUsaSpecifiedDemandProfile()
-    df = df.append(dfUsa)
-    df.to_csv('../src/data/SpecifiedDemandProfile.csv', index=False)
+    
+    return load
 
 def getUsaSpecifiedDemandProfile():
-    # PURPOSE: Creates specifiedDeamandProfile file from USA data
+    # PURPOSE: Creates specifiedDemaandProfile file from USA data
     # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
 

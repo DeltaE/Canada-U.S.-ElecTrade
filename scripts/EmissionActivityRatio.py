@@ -12,15 +12,23 @@ def main():
 
     ### EVERYTHING CURRENTLY MAPS TO MODE_OFOPERARION = 1
     ### EVERYTHING IS CO2 EMISSIONS
+    
+    #write to a csv
+    dataOut = getCanEmissionActivityRatio()
+    dfUsa = getUsaEmissionActivityRatio()
 
-    # Parameters to print over
+    dfOut = pd.DataFrame(dataOut,columns=['REGION','TECHNOLOGY','EMISSION','MODE_OF_OPERATION','YEAR','VALUE'])
+    dfOut = dfOut.append(dfUsa)
+    dfOut.to_csv('../src/data/EmissionActivityRatio.csv', index=False)
+
+def getCanEmissionActivityRatio():
+    # PURPOSE: Creates EmissionActivityRatio file from Canadian data
+    # INPUT:   N/A
+    # OUTPUT:  dataOut = Canadian Emission Activity Ratio data
+
     continent = functions.getFromYaml('continent')
     canSubregions = functions.getFromYaml('regions_dict')['CAN'].keys() # Canadian subregions
     years = functions.getYears()
-
-    ###########################################
-    # Compile Emission Activity Ratio
-    ###########################################
 
     #read in raw emission activity values
     dfRaw = pd.read_csv('../dataSources/EmissionActivityRatioByTechnology.csv', index_col=0)
@@ -45,11 +53,7 @@ def main():
                 if tech in modeTwoTechs:
                     dataOut.append([continent, techName, 'CO2', 2, year, activityRatio])
     
-    #write to a csv
-    dfOut = pd.DataFrame(dataOut,columns=['REGION','TECHNOLOGY','EMISSION','MODE_OF_OPERATION','YEAR','VALUE'])
-    dfUsa = getUsaEmissionActivityRatio()
-    dfOut = dfOut.append(dfUsa)
-    dfOut.to_csv('../src/data/EmissionActivityRatio.csv', index=False)
+    return dataOut
 
 def getUsaEmissionActivityRatio():
     # PURPOSE: Creates EmissionActivityRatio file from USA data

@@ -8,8 +8,20 @@ def main():
     # OUTPUT: none
 
     ###########################################
-    # Model Parameters
+    # Writing Demand Files 
     ###########################################
+
+    dfUsa = getUsaSpecifiedAnnualDemand()
+    dfCan = getCanSpecifiedAnnualDemand()
+
+    df = pd.DataFrame(dfCan, columns = ['REGION', 'FUEL', 'YEAR', 'VALUE'])
+    df = df.append(dfUsa)
+    df.to_csv('../src/data/SpecifiedAnnualDemand.csv', index=False)
+
+def getCanSpecifiedAnnualDemand():
+    # PURPOSE: Creates specifiedAnnualDemand file from Canadian data
+    # INPUT:   N/A
+    # OUTPUT:  demand = master list to be appended to dataframe
 
     # Parameters to print over
     continent = functions.getFromYaml('continent')
@@ -36,15 +48,8 @@ def main():
             value = sumDemand[year]
             value = round(value,3)
             demand.append([continent, fuelName, year, value])
-
-    ###########################################
-    # Writing Demand Files 
-    ###########################################
-
-    df = pd.DataFrame(demand, columns = ['REGION', 'FUEL', 'YEAR', 'VALUE'])
-    dfUsa = getUsaSpecifiedAnnualDemand()
-    df = df.append(dfUsa)
-    df.to_csv('../src/data/SpecifiedAnnualDemand.csv', index=False)
+    
+    return demand
 
 def getUsaSpecifiedAnnualDemand():
     # PURPOSE: Creates specifiedAnnualDemand file from USA data
