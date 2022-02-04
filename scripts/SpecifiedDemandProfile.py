@@ -1,7 +1,5 @@
 import pandas as pd
-import datetime
 import functions
-from collections import defaultdict
 
 def main():
     # PURPOSE: Creates an otoole formatted CSV holding the specified demand profile for the model. Accounts for time zones and daylight saving time   
@@ -9,15 +7,24 @@ def main():
     # OUTPUT: none
 
     ###########################################
-    # Model Parameters
+    # Writing Demand Files 
     ###########################################
 
-    #Dictionary holds month to season Mapping 
-    seasons = functions.openYaml().get('seasons')
+    dfCan = getCanSpecifiedDemandProfile()
+    dfUsa = getUsaSpecifiedDemandProfile()
 
-    # Parameters to print over
-    region = functions.openYaml().get('regions')[0]
-    subregions = (functions.openYaml().get('subregions_dictionary'))['CAN'] # Canadian subregions
+    df = pd.DataFrame(dfCan, columns = ['REGION', 'FUEL', 'TIMESLICE', 'YEAR', 'VALUE'])
+    df = df.append(dfUsa)
+    df.to_csv('../src/data/SpecifiedDemandProfile.csv', index=False)
+
+def getCanSpecifiedDemandProfile():
+    # PURPOSE: Creates specifiedDemaandProfile file from CAN data
+    # INPUT:   N/A
+    # OUTPUT:  load = master list to be appended to dataframe
+
+    seasons = functions.getFromYaml('seasons') # Dictionary holds month to season Mapping 
+    continent = functions.getFromYaml('continent')
+    canSubregions = functions.getFromYaml('regions_dict')['CAN'] # Canadian subregions
     years = functions.getYears()
 
     ###########################################
@@ -36,7 +43,7 @@ def main():
     for year in years:
 
         #filter dataframe by subregion
-        for subregion, provinces in subregions.items(): 
+        for subregion, provinces in canSubregions.items(): 
             dfsubregion = pd.DataFrame() #reset df
             for province in provinces:
                 dfProvince = dfLoad.loc[dfLoad['PROVINCE'] == province]
@@ -65,21 +72,16 @@ def main():
                     fuelName = 'ELC' + 'CAN' + subregion + '02'
 
                     #save profile value 
-                    load.append([region, fuelName, ts, year, profileValue])
-
-    ###########################################
-    # Writing Demand Files 
-    ###########################################
-
-    df = pd.DataFrame(load, columns = ['REGION', 'FUEL', 'TIMESLICE', 'YEAR', 'VALUE'])
-    dfUsa = getUsaSpecifiedDemandProfile()
-    df = df.append(dfUsa)
-    df.to_csv('../src/data/SpecifiedDemandProfile.csv', index=False)
+                    load.append([continent, fuelName, ts, year, profileValue])
+    
+    return load
 
 def getUsaSpecifiedDemandProfile():
-    # PURPOSE: Creates specifiedDeamandProfile file from USA data
+    # PURPOSE: Creates specifiedDemaandProfile file from USA data
     # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
+
+    continent = functions.getFromYaml('continent')
 
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'SpecifiedDemandProfile(r,f,l,y)')
 
@@ -90,8 +92,6 @@ def getUsaSpecifiedDemandProfile():
     #holds output data
     outData = []
 
-    top_level_region = functions.openYaml().get('regions')[0]
-
     #map data
     for i in range(len(df)):
         fuel = 'ELC' + 'USA' + df['REGION'].iloc[i] + '02'
@@ -99,7 +99,7 @@ def getUsaSpecifiedDemandProfile():
         year = df['YEAR'].iloc[i]
         value = df['DEMAND'].iloc[i]
         value = round(value,3)
-        outData.append([top_level_region,fuel,ts,year,value])
+        outData.append([continent,fuel,ts,year,value])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns = ['REGION', 'FUEL', 'TIMESLICE', 'YEAR', 'VALUE'])

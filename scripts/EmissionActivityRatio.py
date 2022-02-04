@@ -12,15 +12,23 @@ def main():
 
     ### EVERYTHING CURRENTLY MAPS TO MODE_OFOPERARION = 1
     ### EVERYTHING IS CO2 EMISSIONS
+    
+    #write to a csv
+    dataOut = getCanEmissionActivityRatio()
+    dfUsa = getUsaEmissionActivityRatio()
 
-    # Parameters to print over
-    region = functions.openYaml().get('regions')[0]
-    subregions = ((functions.openYaml().get('subregions_dictionary'))['CAN']).keys() # Canadian subregions
+    dfOut = pd.DataFrame(dataOut,columns=['REGION','TECHNOLOGY','EMISSION','MODE_OF_OPERATION','YEAR','VALUE'])
+    dfOut = dfOut.append(dfUsa)
+    dfOut.to_csv('../src/data/EmissionActivityRatio.csv', index=False)
+
+def getCanEmissionActivityRatio():
+    # PURPOSE: Creates EmissionActivityRatio file from Canadian data
+    # INPUT:   N/A
+    # OUTPUT:  dataOut = Canadian Emission Activity Ratio data
+
+    continent = functions.getFromYaml('continent')
+    canSubregions = functions.getFromYaml('regions_dict')['CAN'].keys() # Canadian subregions
     years = functions.getYears()
-
-    ###########################################
-    # Compile Emission Activity Ratio
-    ###########################################
 
     #read in raw emission activity values
     dfRaw = pd.read_csv('../dataSources/EmissionActivityRatioByTechnology.csv', index_col=0)
@@ -36,33 +44,29 @@ def main():
 
     #print all values 
     for year in years:
-        for subregion in subregions:
+        for subregion in canSubregions:
             for tech in techList:
                 activityRatio = dfRaw.loc[year,tech]
                 activityRatio = round(activityRatio, 3)
                 techName = 'PWR' + tech + 'CAN' + subregion + '01'
-                dataOut.append([region, techName, 'CO2', 1, year, activityRatio])
+                dataOut.append([continent, techName, 'CO2', 1, year, activityRatio])
                 if tech in modeTwoTechs:
-                    dataOut.append([region, techName, 'CO2', 2, year, activityRatio])
+                    dataOut.append([continent, techName, 'CO2', 2, year, activityRatio])
     
-    #write to a csv
-    dfOut = pd.DataFrame(dataOut,columns=['REGION','TECHNOLOGY','EMISSION','MODE_OF_OPERATION','YEAR','VALUE'])
-    dfUsa = getUsaEmissionActivityRatio()
-    dfOut = dfOut.append(dfUsa)
-    dfOut.to_csv('../src/data/EmissionActivityRatio.csv', index=False)
+    return dataOut
 
 def getUsaEmissionActivityRatio():
     # PURPOSE: Creates EmissionActivityRatio file from USA data
     # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
-    techMap = functions.openYaml().get('usa_tech_map')
-    inputFuelMap = functions.openYaml().get('tech_to_fuel')
-    df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'EmisionActivityRatio(r,t,e,m,y)')
-    region = functions.openYaml().get('regions')[0]
+    techMap = functions.getFromYaml('usa_tech_map')
+    inputFuelMap = functions.getFromYaml('tech_to_fuel')
+    continent = functions.getFromYaml('continent')
+    intFuel = functions.getFromYaml('mine_fuels') # Fuels that have international trade options
+    years = functions.getYears() # Only defined for year 2015
 
-    #Only defined for year 2015
-    years = functions.getYears()
+    df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'EmisionActivityRatio(r,t,e,m,y)')
 
     #Initialize filtered dataframe 
     columns = list(df)
@@ -79,9 +83,6 @@ def getUsaEmissionActivityRatio():
     #holds output data
     outData = []
 
-    #Fuels that have international trade options
-    intFuel = functions.openYaml().get('mine_fuels')
-
     #map data
     for year in years:
         for i in range(len(df)):
@@ -91,11 +92,11 @@ def getUsaEmissionActivityRatio():
             mode = 1
             value = df['EMISSIONACTIVITYRATIO'].iloc[i]
             value = round(value, 3)
-            outData.append([region,tech,emission,mode,year,value])
+            outData.append([continent,tech,emission,mode,year,value])
             #checks if need to write value for mode 2
             if inputFuelMap[techMapped] in intFuel:
                 mode = 2
-                outData.append([region,tech,emission,mode,year,value])
+                outData.append([continent,tech,emission,mode,year,value])
 
     #create and return datafram
     dfOut = pd.DataFrame(outData, columns=['REGION','TECHNOLOGY','EMISSION','MODE_OF_OPERATION','YEAR','VALUE'])

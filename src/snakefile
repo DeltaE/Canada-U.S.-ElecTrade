@@ -1,4 +1,5 @@
 import itertools
+from pathlib import Path
 
 #####################################
 ## REQUIRED FILES 
@@ -76,251 +77,322 @@ osemosysFiles = [
 ## TARGETS
 #####################################
 
-configfile: '../scripts/config.yaml'
+configfile: Path('..', 'scripts', 'config.yaml')
 fileName = 'CanadaUSA'
-inputDir = '../dataSources/'
-scriptsDir = '../scripts/'
-outputDir = '../src/'
+inputDir = Path('..','dataSources')
+scriptsDir = Path('..','scripts')
+outputDir = Path('..', 'src')
 canadaProvinces = list(itertools.chain.from_iterable(
-	config['subregions_dictionary']['CAN'].values()))
+	config['regions_dict']['CAN'].values()))
 
 rule all:
 	input: 
-		outputDir + fileName + '.txt'
+		f'{fileName}.txt'
 
-rule dataFile:
+rule data_file:
 	input:
-		outputDir + fileName + '.txt'
+		f'{fileName}.txt'
 
-rule lpFile:
-	input: 
-		outputDir + fileName + '.lp'
+#rule lp_file:
+#	input: 
+#		Path(outputDir, fileName, '.lp')
 
 #####################################
 ## INTERMEDIATE RULES
 #####################################
 
-rule MakeSets:
+rule make_sets:
 	input:
-		inputDir + 'Trade.csv',
-		inputDir + 'USA_Data.xlsx'
+		Path(inputDir, 'Trade.csv'),
+		Path(inputDir, 'USA_Data.xlsx'),
 	output:
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
-		outputDir + 'data/EMISSION.csv',
-		outputDir + 'data/STORAGE.csv',
-		outputDir + 'data/TECHNOLOGY.csv',
-		outputDir + 'data/FUEL.csv'
-	shell:
-		'python ' + scriptsDir + 'MakeSets.py'
+		Path(outputDir, 'data', 'YEAR.csv'),
+		Path(outputDir, 'data', 'REGION.csv'),
+		Path(outputDir, 'data', 'EMISSION.csv'),
+		Path(outputDir, 'data', 'STORAGE.csv'),
+		Path(outputDir, 'data', 'TECHNOLOGY.csv'),
+		Path(outputDir, 'data', 'FUEL.csv')
+	log:
+		'logs/make_sets.log'
+	conda:
+		'envs/preprocess.yaml'
+	script:
+		f'{scriptsDir}/MakeSets.py'
 
-rule AvailabilityFactor:
+rule availability_factor:
 	input:
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
-		inputDir + 'USA_Data.xlsx'
+		Path(outputDir, 'data', 'YEAR.csv'),
+		Path(outputDir, 'data', 'REGION.csv'),
+		Path(inputDir, 'USA_Data.xlsx')
 	output:
-		outputDir + 'data/AvailabilityFactor.csv'
-	shell:
-		'python ' + scriptsDir + 'AvailabilityFactor.py'
+		Path(outputDir, 'data', 'AvailabilityFactor.csv')
+	log:
+		'logs/availability_factor.log'
+	conda:
+		'envs/preprocess.yaml'
+	script:
+		f'{scriptsDir}/AvailabilityFactor.py'
 
-rule CapacityFactor:
+rule capacity_factor:
 	input:
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
-		inputDir + 'NREL_Costs.csv',
-		inputDir + 'USA_Data.xlsx',
-		expand(inputDir + 'CapacityFactor/SPV_{province}.csv', 
+		Path(outputDir, 'data', 'YEAR.csv'),
+		Path(outputDir, 'data', 'REGION.csv'),
+		Path(inputDir, 'NREL_Costs.csv'),
+		Path(inputDir, 'USA_Data.xlsx'),
+		expand(Path(inputDir,'CapacityFactor/SPV_{province}.csv'), 
 			province = canadaProvinces),
-		expand(inputDir + 'CapacityFactor/WND_{province}.csv', 
+		expand(Path(inputDir, 'CapacityFactor/WND_{province}.csv'), 
 			province = canadaProvinces)
 	output:
-		outputDir + 'data/CapacityFactor.csv'
-	shell:
-		'python ' + scriptsDir + 'CapacityFactor.py'
+		Path(outputDir,'data', 'CapacityFactor.csv')
+	log:
+		'logs/capacity_factor.log'
+	conda:
+		'envs/preprocess.yaml'
+	script:
+		f'{scriptsDir}/CapacityFactor.py'
 
-rule CapacityToActivity:
+rule capacity_activity_unit:
 	input:
-		outputDir + 'data/REGION.csv',
-		outputDir + 'data/TECHNOLOGY.csv',
-		inputDir + 'Trade.csv',
-		inputDir + 'USA_Data.xlsx'
+		Path(outputDir, 'data', 'REGION.csv'),
+		Path(outputDir, 'data', 'TECHNOLOGY.csv'),
+		Path(inputDir, 'Trade.csv'),
+		Path(inputDir, 'USA_Data.xlsx')
 	output:
-		outputDir + 'data/CapacityToActivityUnit.csv'
-	shell:
-		'python ' + scriptsDir + 'CapacityToActivity.py'
+		Path(outputDir, 'data', 'CapacityToActivityUnit.csv')
+	log:
+		'logs/capacity_activity_unit.log'
+	conda:
+		'envs/preprocess.yaml'
+	script:
+		f'{scriptsDir}/CapacityToActivity.py'
 
-rule Costs:
+rule costs:
 	input:
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
-		inputDir + 'NREL_Costs.csv',
-		inputDir + 'P2G_FC_Costs.xlsx',
-		inputDir + 'Trade.csv',
-		inputDir + 'USA_Data.xlsx'
+		Path(outputDir, 'data', 'YEAR.csv'),
+		Path(outputDir, 'data', 'REGION.csv'),
+		Path(inputDir, 'NREL_Costs.csv'),
+		Path(inputDir, 'P2G_FC_Costs.xlsx'),
+		Path(inputDir, 'Trade.csv'),
+		Path(inputDir, 'USA_Data.xlsx')
 	output:
-		outputDir + 'data/CapitalCost.csv',
-		outputDir + 'data/FixedCost.csv',
-		outputDir + 'data/VariableCost.csv'
-	shell:
-		'python ' + scriptsDir + 'Costs.py'
+		Path(outputDir, 'data', 'CapitalCost.csv'),
+		Path(outputDir, 'data', 'FixedCost.csv'),
+		Path(outputDir, 'data', 'VariableCost.csv')
+	log:
+		'logs/costs.log'
+	conda:
+		'envs/preprocess.yaml'
+	script:
+		f'{scriptsDir}/Costs.py'
 
-rule EmissionActivityRatio:
+rule emission_activity_ratio:
 	input:
-		inputDir + 'EmissionActivityRatioByTechnology.csv',
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
-		inputDir + 'USA_Data.xlsx'
+		Path(inputDir, 'EmissionActivityRatioByTechnology.csv'),
+		Path(outputDir, 'data', 'YEAR.csv'),
+		Path(outputDir, 'data', 'REGION.csv'),
+		Path(inputDir, 'USA_Data.xlsx')
 	output:
-		outputDir + 'data/EmissionActivityRatio.csv'
-	shell:
-		'python ' + scriptsDir + 'EmissionActivityRatio.py'
+		Path(outputDir, 'data', 'EmissionActivityRatio.csv')
+	log:
+		'logs/emission_activity_ratio.log'
+	conda:
+		'envs/preprocess.yaml'
+	script:
+		f'{scriptsDir}/EmissionActivityRatio.py'
 
-rule InOutActivityRatio:
+rule in_out_activity_ratio:
 	input:
-		inputDir + 'InputActivityRatioByTechnology.csv', 
-		inputDir + 'OutputActivityRatioByTechnology.csv',
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
-		inputDir + 'Trade.csv',
-		inputDir + 'USA_Data.xlsx'
+		Path(inputDir, 'InputActivityRatioByTechnology.csv'), 
+		Path(inputDir, 'OutputActivityRatioByTechnology.csv'),
+		Path(outputDir, 'data', 'YEAR.csv'),
+		Path(outputDir, 'data', 'REGION.csv'),
+		Path(inputDir, 'Trade.csv'),
+		Path(inputDir, 'USA_Data.xlsx')
 	output:
-		outputDir + 'data/InputActivityRatio.csv',
-		outputDir + 'data/OutputActivityRatio.csv'
-	shell:
-		'python ' + scriptsDir + 'InOutActivityRatio.py'
+		Path(outputDir, 'data', 'InputActivityRatio.csv'),
+		Path(outputDir, 'data', 'OutputActivityRatio.csv')
+	log:
+		'logs/in_out_activity_ratio.log'
+	conda:
+		'envs/preprocess.yaml'
+	script:
+		f'{scriptsDir}/InOutActivityRatio.py'
 
-rule ReserveMargin:
+rule reserve_margin:
 	input:
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
-		inputDir + 'ProvincialAnnualDemand.csv',
-		inputDir + 'USA_Demand.xlsx',
-		inputDir + 'USA_Data.xlsx'
+		Path(outputDir, 'data', 'YEAR.csv'),
+		Path(outputDir, 'data', 'REGION.csv'),
+		Path(inputDir, 'ProvincialAnnualDemand.csv'),
+		Path(inputDir, 'USA_Demand.xlsx'),
+		Path(inputDir, 'USA_Data.xlsx')
 	output:
-		outputDir + 'data/ReserveMargin.csv',
-		outputDir + 'data/ReserveMarginTagTechnology.csv',
-		outputDir + 'data/ReserveMarginTagFuel.csv'
-	shell:
-		'python ' + scriptsDir + 'ReserveMargin.py'
+		Path(outputDir, 'data', 'ReserveMargin.csv'),
+		Path(outputDir, 'data', 'ReserveMarginTagTechnology.csv'),
+		Path(outputDir, 'data', 'ReserveMarginTagFuel.csv')
+	log:
+		'logs/reserve_margin.log'
+	conda:
+		'envs/preprocess.yaml'
+	script:
+		f'{scriptsDir}/ReserveMargin.py'
 
-rule ResidualCapacity:
+rule residual_capacity:
 	input:
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
-		inputDir + 'OperationalLifeTechnology.csv',
-		inputDir + 'ResidualCapacitiesByProvince.csv',
-		inputDir + 'Trade.csv',
-		inputDir + 'USA_Data.xlsx'
+		Path(outputDir, 'data', 'YEAR.csv'),
+		Path(outputDir, 'data', 'REGION.csv'),
+		Path(inputDir, 'OperationalLifeTechnology.csv'),
+		Path(inputDir, 'ResidualCapacitiesByProvince.csv'),
+		Path(inputDir, 'Trade.csv'),
+		Path(inputDir, 'USA_Data.xlsx')
 	output:
-		outputDir + 'data/ResidualCapacity.csv',
-		outputDir + 'data/OperationalLife.csv'
-	shell:
-		'python ' + scriptsDir + 'ResidualCapacity.py'
+		Path(outputDir, 'data', 'ResidualCapacity.csv'),
+		Path(outputDir, 'data', 'OperationalLife.csv')
+	log:
+		'logs/residual_capacity.log'
+	conda:
+		'envs/preprocess.yaml'
+	script:
+		f'{scriptsDir}/ResidualCapacity.py'
 
-rule SpecifiedAnnualDemand:
+rule specified_annual_demand:
 	input:
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
-		inputDir + 'ProvincialAnnualDemand.csv',
-		inputDir + 'USA_Data.xlsx'
+		Path(outputDir, 'data', 'YEAR.csv'),
+		Path(outputDir, 'data', 'REGION.csv'),
+		Path(inputDir, 'ProvincialAnnualDemand.csv'),
+		Path(inputDir, 'USA_Data.xlsx')
 	output:
-		outputDir + 'data/SpecifiedAnnualDemand.csv'
-	shell:
-		'python ' + scriptsDir + 'SpecifiedAnnualDemand.py'
+		Path(outputDir, 'data', 'SpecifiedAnnualDemand.csv')
+	log:
+		'logs/specified_annual_demand.log'
+	conda:
+		'envs/preprocess.yaml'
+	script:
+		f'{scriptsDir}/SpecifiedAnnualDemand.py'
 
-rule SpecifiedDemandProfile:
+rule specified_demand_profile:
 	input:
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
-		inputDir + 'ProvincialHourlyLoads.xlsx',
-		inputDir + 'USA_Data.xlsx'
+		Path(outputDir, 'data', 'YEAR.csv'),
+		Path(outputDir, 'data', 'REGION.csv'),
+		Path(inputDir, 'ProvincialHourlyLoads.xlsx'),
+		Path(inputDir, 'USA_Data.xlsx')
 	output:
-		outputDir + 'data/SpecifiedDemandProfile.csv',
-	shell:
-		'python ' + scriptsDir + 'SpecifiedDemandProfile.py'
+		Path(outputDir, 'data', 'SpecifiedDemandProfile.csv')
+	log:
+		'logs/specified_demand_profile.log'
+	conda:
+		'envs/preprocess.yaml'
+	script:
+		f'{scriptsDir}/SpecifiedDemandProfile.py'
 
-rule StorageCosts:
+rule storage_costs:
 	input:
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
-		inputDir + 'USA_Data.xlsx'
+		Path(outputDir, 'data', 'YEAR.csv'),
+		Path(outputDir, 'data', 'REGION.csv'),
+		Path(inputDir, 'USA_Data.xlsx')
 	output:
-		outputDir + 'data/CapitalCostStorage.csv'
-	shell:
-		'python ' + scriptsDir + 'StorageCosts.py'
+		Path(outputDir, 'data', 'CapitalCostStorage.csv')
+	log:
+		'logs/storage_costs.log'
+	conda:
+		'envs/preprocess.yaml'
+	script:
+		f'{scriptsDir}/StorageCosts.py'
 
-rule StorageLife:
+rule storage_life:
 	input:
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
-		inputDir + 'USA_Data.xlsx'
+		Path(outputDir, 'data', 'YEAR.csv'),
+		Path(outputDir, 'data', 'REGION.csv'),
+		Path(inputDir, 'USA_Data.xlsx')
 	output:
-		outputDir + 'data/OperationalLifeStorage.csv'
-	shell:
-		'python ' + scriptsDir + 'StorageLife.py'
+		Path(outputDir, 'data', 'OperationalLifeStorage.csv')
+	log:
+		'logs/storage_life.log'
+	conda:
+		'envs/preprocess.yaml'
+	script:
+		f'{scriptsDir}/StorageLife.py'
 
-rule EmissionPenalty:
+rule emission_penalty:
 	input:
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
-		inputDir + 'EmissionPenaltyByYear.csv',
-		inputDir + 'USA_Data.xlsx'
+		Path(outputDir, 'data', 'YEAR.csv'),
+		Path(outputDir, 'data', 'REGION.csv'),
+		Path(inputDir, 'EmissionPenaltyByYear.csv'),
+		Path(inputDir, 'USA_Data.xlsx')
 	output:
-		outputDir + 'data/EmissionsPenalty.csv'
-	shell:
-		'python ' + scriptsDir + 'EmissionPenalty.py'
+		Path(outputDir, 'data', 'EmissionsPenalty.csv')
+	log:
+		'logs/emission_penalty.log'
+	conda:
+		'envs/preprocess.yaml'
+	script:
+		f'{scriptsDir}/EmissionPenalty.py'
 
-rule RETags:
+rule re_tags:
 	input:
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
-		inputDir + 'USA_Data.xlsx'
+		Path(outputDir, 'data', 'YEAR.csv'),
+		Path(outputDir, 'data', 'REGION.csv'),
+		Path(inputDir, 'USA_Data.xlsx')
 	output:
-		outputDir + 'data/RETagTechnology.csv'
-	shell:
-		'python ' + scriptsDir + 'RETags.py'
+		Path(outputDir, 'data', 'RETagTechnology.csv')
+	log:
+		'logs/re_tags.log'
+	conda:
+		'envs/preprocess.yaml'
+	script:
+		f'{scriptsDir}/RETags.py'
 
-rule TechToFromStorage:
+rule tech_to_from_storage:
 	input:
-		outputDir + 'data/YEAR.csv',
-		outputDir + 'data/REGION.csv',
-		inputDir + 'USA_Data.xlsx'
+		Path(outputDir, 'data', 'YEAR.csv'),
+		Path(outputDir, 'data', 'REGION.csv'),
+		Path(inputDir, 'USA_Data.xlsx')
 	output:
-		outputDir + 'data/TechnologyToStorage.csv',
-		outputDir + 'data/TechnologyFromStorage.csv'
-	shell:
-		'python ' + scriptsDir + 'TechToFromStorage.py'
+		Path(outputDir, 'data', 'TechnologyToStorage.csv'),
+		Path(outputDir, 'data', 'TechnologyFromStorage.csv')
+	log:
+		'logs/tech_to_from_storage.log'
+	conda:
+		'envs/preprocess.yaml'
+	script:
+		f'{scriptsDir}/TechToFromStorage.py'
 
-rule TotalAnnualMaxCapacity:
+rule total_annual_max_capacity:
 	input:
-		inputDir + 'USA_Data.xlsx'
+		Path(inputDir, 'USA_Data.xlsx')
 	output:
-		outputDir + 'data/TotalAnnualMaxCapacity.csv'
-	shell:
-		'python ' + scriptsDir + 'TotalAnnualMaxCapacity.py'
+		Path(outputDir, 'data', 'TotalAnnualMaxCapacity.csv')
+	log:
+		'logs/total_annual_max_capacity.log'
+	conda:
+		'envs/preprocess.yaml'
+	script:
+		f'{scriptsDir}/TotalAnnualMaxCapacity.py'
 
-rule otooleConvert:
+rule otoole_convert:
 	input:
-		datapackage = outputDir + 'datapackage.json',
-		csvFiles = expand(outputDir + 'data/{osemosysFile}', 
+		datapackage = Path(outputDir, 'datapackage.json'),
+		csvFiles = expand(Path(outputDir, 'data', '{osemosysFile}'), 
 			osemosysFile = osemosysFiles)
 	output:
-		outputDir + fileName + '.txt'
+		f'{fileName}.txt'
+	log:
+		'logs/otoole_convert.log'
+	conda:
+		'envs/otoole_convert.yaml'
 	shell:
-		'otoole convert datapackage datafile {input.datapackage} {output}'
+		'otoole convert datapackage datafile '
+		'{input.datapackage} {output} 2> {log}'
 
-rule createLP:
-	input:
-		modelFile = outputDir + 'osemosys_fast_TB.txt',
-		dataFile = outputDir + fileName + '.txt'
-	output:
-		outputDir + fileName + '.lp'
-	shell:
-		'glpsol -m {input.modelFile} -d {input.dataFile} --wlp {output} --check'
-
-
-#####################################
-## CLEANING RULES
-#####################################
+#rule create_lp:
+#	input:
+#		modelFile = Path(outputDir, 'osemosys_fast_TB.txt'),
+#		dataFile = Path(outputDir, fileName, '.txt')
+#	output:
+#		Path(outputDir, fileName, '.lp')
+#	log:
+#		'logs/create_lp.log'
+#	shell:
+#		'glpsol -m {input.modelFile} -d {input.dataFile} '
+#		'--wlp {output} --check 2> {log}'
 

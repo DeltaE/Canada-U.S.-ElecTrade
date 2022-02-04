@@ -4,7 +4,6 @@
 
 import datetime
 import pandas as pd
-from collections import defaultdict
 import yaml
 
 #####################################
@@ -15,25 +14,26 @@ import yaml
 PROVINCIAL_TIME_ZONES = {
     'BC':0,
     'AB':1,
-    'SAS':2,
-    'MAN':2,
-    'ONT':3,
+    'SK':2,
+    'MB':2,
+    'ON':3,
     'QC':3,
     'NB':4,
     'NL':4,
     'NS':4,
-    'PEI':4}
+    'PE':4}
 
 #####################################
 # COMMON FUNCTIONS
 #####################################
-def openYaml():
-    # PURPOSE: Returns the configured config.yaml file, which is a modifiable settings file that contains constants
-    # INPUT: None
+def getFromYaml(name):
+    # PURPOSE: Returns a value from the configured config.yaml file,
+    # which is a modifiable settings file that contains constants
+    # INPUT: name = the name of the value being retrieved
     # OUTPUT: parsedYaml = the ready-to-use yaml file
 
     originalYaml = open("../scripts/config.yaml")
-    parsedYaml = yaml.load(originalYaml, Loader=yaml.FullLoader)
+    parsedYaml = yaml.load(originalYaml, Loader=yaml.FullLoader).get(name)
     return parsedYaml
 
 def getYears():
@@ -41,8 +41,10 @@ def getYears():
     # in the model from the config.yaml file
     # INPUT:   None
     # OUTPUT:  years = list of applicable years in the model
-    startYear = openYaml().get('start_year')
-    endYear = openYaml().get('end_year')
+
+    startYear = getFromYaml('start_year')
+    endYear = getFromYaml('end_year')
+
     return range(startYear, endYear + 1)
 
 def getLoadValues():
@@ -278,21 +280,21 @@ def getELCfuels(region):
 
 def createFuelDataframe(subregions, rnwFuels, mineFuels):
     # PURPOSE: Appends all fuel name lists together and writes them to a CSV
-    # INPUT:   subregions = Dictionary holding Country and regions ({CAN:{WS:[...], ...} USA:[NY:[...],...]})
+    # INPUT:   subregions = Dictionary holding Country and regions ({CAN:{WS:[...], ...}, USA:[NY:[...],...]})
     #          rnwFuels = List of the fuels to print over for getRNWfuels
     #          mineFuels = List of the fuels to print over for getMINfuels
     # OUTPUT:  dfOut = fuel set dataframe
 
     outputFuels = []
-    for country in subregions.items():
+    for region in subregions.items():
         # Renewable fuels
-        rnwFuelList = getRNWfuels(country, rnwFuels)
+        rnwFuelList = getRNWfuels(region, rnwFuels)
 
         # Mining fuels
-        minFuelList = getMINfuels(country, mineFuels)
+        minFuelList = getMINfuels(region, mineFuels)
 
         #ELC fuels
-        elcFuelList = getELCfuels(country)
+        elcFuelList = getELCfuels(region)
 
         #Hydrogen Fuels
         #hy2FuelList = getHY2fuels(countries)
@@ -324,18 +326,18 @@ def createTechDataframe(subregions, techsMaster, mineFuels, rnwFuels, trnTechsCs
     # OUTPUT:  dfOut = tech set dataframe
     # get power generator technology list 
     outputTechs = []
-    for country in subregions.items():
+    for region in subregions.items():
 
-        pwrList = getPWRtechs(country, techsMaster)
+        pwrList = getPWRtechs(region, techsMaster)
 
         # get grid distribution technology list (PWRTRN<Reg><SubReg>)
-        pwrTrnList = getPWRTRNtechs(country)
+        pwrTrnList = getPWRTRNtechs(region)
 
         # get Mining techs list
-        minList = getMINtechs(country, mineFuels)
+        minList = getMINtechs(region, mineFuels)
 
         # get Renewables fuels list 
-        rnwList = getRNWtechs(country, rnwFuels)
+        rnwList = getRNWtechs(region, rnwFuels)
 
         #Append lists together
         outputTechs += pwrList
@@ -390,8 +392,10 @@ def getUsaCapacityOrAvailabilityFactor(isCapacity):
     #df = df.loc[df['YEAR'] == 2016]
     #df.reset_index()
 
-    techMap = openYaml().get('usa_tech_map')
-    region = openYaml().get('regions')[0]
+    techMap = getFromYaml('usa_tech_map')
+    continent = getFromYaml('continent')
+    years = getYears() # years to print capacity factor over
+
     df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'CapacityFactor(r,t,l,y)')
 
     #Initialize filtered dataframe 
@@ -404,9 +408,6 @@ def getUsaCapacityOrAvailabilityFactor(isCapacity):
         dfFiltered = dfFiltered.append(dfTemp)
     df = dfFiltered
     df.reset_index()
-
-    #years to print capacity factor over
-    years = getYears()
 
     #holds output data
     outDataCF = [] # Capacity Factor
@@ -421,9 +422,9 @@ def getUsaCapacityOrAvailabilityFactor(isCapacity):
             value = df['CAPACITYFACTOR'].iloc[i]
             value = round(value, 3)
             if techMapped == 'HYD':
-                outDataAF.append([region,tech,ts,year,value])
+                outDataAF.append([continent,tech,ts,year,value])
             else:
-                outDataCF.append([region,tech,ts,year,value])
+                outDataCF.append([continent,tech,ts,year,value])
 
     #create and return dataframe for CAPACITY FACTOR
     dfOutCF = pd.DataFrame(outDataCF, columns = ['REGION','TECHNOLOGY','TIMESLICE','YEAR','VALUE'])
@@ -442,7 +443,7 @@ def getUsaCapacityOrAvailabilityFactor(isCapacity):
                 dfYear = dfTemp.loc[dfTemp['YEAR'] == year]
                 af = dfYear['VALUE'].mean()
                 af = round(af, 3)
-                outDataAF.append([region,tech,year,af])
+                outDataAF.append([continent,tech,year,af])
         
         # return dataframe for CAPACITY FACTOR
         dfOutAF = pd.DataFrame(outDataAF, columns = ['REGION','TECHNOLOGY','YEAR','VALUE'])
