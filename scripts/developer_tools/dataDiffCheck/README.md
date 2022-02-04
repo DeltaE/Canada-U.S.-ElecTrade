@@ -11,11 +11,7 @@ made to the model, BUT the lines will not necessarily be in the same order.
 
 1. In a terminal, navigate to the directory that contains CanadaUsaTxtDiffCheck.py
 
-2. Run the command  
-  
-python CanadaUsaTxtDiffCheck.py 'path/from/this/location/to/old/CanadaUSA.txt' 'path/from/this/location/to/new/CanadaUSA.txt'  
-  
-, where appropriate relative paths are subbed in for the two paths, for example 'Old Copy/CanadaUSA.txt' and 'New Copy/CanadaUSA.txt'
+2. Run the command $ python CanadaUsaTxtDiffCheck.py 'path/from/this/location/to/old/CanadaUSA.txt' 'path/from/this/location/to/new/CanadaUSA.txt', where appropriate relative paths are subbed in for the two paths, for example 'Old Copy/CanadaUSA.txt' and 'New Copy/CanadaUSA.txt'
 
 ## Interpretation:
 
