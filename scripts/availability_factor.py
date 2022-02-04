@@ -3,7 +3,38 @@
 
 import pandas as pd
 import functions
-import constants as const
+
+# MODULE CONSTANTS
+
+# Residual Hydro Capacity (GW) per province in 2017
+# https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=2510002201&pickMembers%5B0%5D=1.1&pickMembers%5B1%5D=2.1&cubeTimeFrame.startYear=2017&cubeTimeFrame.endYear=2017&referencePeriods=20170101%2C20170101
+_RESIDUAL_HYDRO_CAPACITY = {
+    'BC': 15.407,
+    'AB': 1.218,
+    'SAS': 0.867,
+    'MAN': 5.461,
+    'ONT': 9.122,
+    'QC': 40.438,
+    'NB': 0.968,
+    'NL': 6.762,
+    'NS': 0.370,
+    'PEI': 0.000
+}
+
+# Hydro generation (TWh) per province in 2017
+# https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=2510001501&pickMembers%5B0%5D=1.1&pickMembers%5B1%5D=2.1&cubeTimeFrame.startMonth=01&cubeTimeFrame.startYear=2017&cubeTimeFrame.endMonth=12&cubeTimeFrame.endYear=2017&referencePeriods=20170101%2C20171201
+_HYDRO_GENERATION = {
+    'BC': 66.510,
+    'AB': 2.050,
+    'SAS': 3.862,
+    'MAN': 35.991,
+    'ONT': 39.492,
+    'QC': 202.001,
+    'NB': 2.583,
+    'NL': 36.715,
+    'NS': 0.849,
+    'PEI': 0.000
+}
 
 
 def main():
@@ -16,13 +47,13 @@ def main():
 
     """
 
-    # Parameters
+    # PARAMETERS
 
     region = functions.openYaml().get('regions')
     subregions = (functions.openYaml().get('subregions_dictionary'))['CAN']
     years = functions.getYears()
 
-    # Calculations
+    # CALCULATIONS
 
     # Availability factor for each Canadian province
     af = {}
@@ -31,12 +62,11 @@ def main():
         capacity = 0  #TW
         #calcualte totals for subregion
         for province in subregions[subregion]:
-            capacity = capacity + const.RESIDUAL_HYDRO_CAPACITY[province]
-            generation = generation + const.HYDRO_GENERATION[province]
+            capacity = capacity + _RESIDUAL_HYDRO_CAPACITY[province]
+            generation = generation + _HYDRO_GENERATION[province]
         #save total availability factor
         af[subregion] = (generation * (1000 / 8760)) / capacity
 
-    #list to save data to
     #columns = region, technology, year, value
     out_df = []
 

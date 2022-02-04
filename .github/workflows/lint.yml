@@ -12,14 +12,15 @@ jobs:
     steps:
     - uses: actions/checkout@v2
       with:
-        full-depth: 0
+        fetch-depth: 0
     - name: Lint code
       uses: github/super-linter/slim@v4
       env:
         VALIDATE_ALL_CODEBASE: false
         DEFAULT_BRANCH: main
         PYTHON_PYLINT_CONFIG_FILE: .pylintrc
-        VALIDATE_PYTHON: true
+        VALIDATE_PYTHON_PYLINT: true
+        VALIDATE_YAML: true
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 
