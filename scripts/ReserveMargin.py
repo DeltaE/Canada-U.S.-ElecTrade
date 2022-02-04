@@ -12,11 +12,65 @@ def main():
     # Model Parameters
     ###########################################
 
+    #To include reserve margin in osemosys global naming scheme, we:
+    # Gave a value of 1 for all regions and years of reserve margin 
+    # assigned the regional reserve margin value to ELCCAN<subregion>01 in reserve margin tag fuel
+    # assign a value of one to all relevant PWR<technology>CAN<subregion>01
+
+    #write out all files
+    reserveMargin = getCanReserveMargin()
+    dfReserveMarginUsa = getUsaReserveMargin()
+
+    dfReserveMargin = pd.DataFrame(reserveMargin,columns=['REGION','YEAR','VALUE'])
+    dfReserveMargin = dfReserveMargin.append(dfReserveMarginUsa)
+    dfReserveMargin.to_csv('../src/data/ReserveMargin.csv', index=False)
+
+    reserveMarginTagFuel = getCanReserveMarginTagFuel()
+    dfReserveMarginFuelUsa = getUsaReserveMarginTagFuel()
+
+    dfReserveMarginFuel = pd.DataFrame(reserveMarginTagFuel,columns=['REGION','FUEL','YEAR','VALUE'])
+    dfReserveMarginFuel = dfReserveMarginFuel.append(dfReserveMarginFuelUsa)
+    dfReserveMarginFuel.to_csv('../src/data/ReserveMarginTagFuel.csv', index=False)
+
+    reserveMarginTagTech = getCanReserveMarginTagTechnology()
+    dfReserveMarginTechUsa = getUsaReserveMarginTagTechnology()
+
+    dfReserveMarginTech = pd.DataFrame(reserveMarginTagTech,columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
+    dfReserveMarginTech = dfReserveMarginTech.append(dfReserveMarginTechUsa)
+    dfReserveMarginTech.to_csv('../src/data/ReserveMarginTagTechnology.csv', index=False)
+
+def getCanReserveMarginTagTechnology():
+    # PURPOSE: Creates getReserveMarginTagTechnology file from Canadian data
+    # INPUT:   N/A
+    # OUTPUT:  reserveMarginTagTech = Canadian Reserve Margin Tag Technology Data
+
+    canSubregions = functions.getFromYaml('regions_dict')['CAN'] # Canadian subregions
+    continent = functions.getFromYaml('continent')
+    techTags = functions.getFromYaml('techs_master')
+    variableTechs = functions.getFromYaml('variable_techs')
+    years = functions.getYears()
+
+    # Make list of techs to tag by removing the non-dispachable techs from techTags
+    techTags = [x for x in techTags if x not in variableTechs]
+
+    #reserve margin Tag Technology = Region, Technology, Year, Value
+    reserveMarginTagTech = []
+    for subregion in canSubregions:
+        for year in years:
+            for tech in techTags:
+                techName = 'PWR' + tech + 'CAN' + subregion + '01'
+                reserveMarginTagTech.append([continent, techName, year, 1])
+    
+    return reserveMarginTagTech
+
+def getCanReserveMarginTagFuel():
+    # PURPOSE: Creates ReserveMarginTagFuel file from Canadian data
+    # INPUT:   N/A
+    # OUTPUT:  reserveMarginTagFuel = Canadian Reserve Margin Tag Fuel Data
+
     continent = functions.getFromYaml('continent')
     canSubregions = functions.getFromYaml('regions_dict')['CAN'] # Canadian subregions
     seasons = functions.getFromYaml('seasons')
-    techTags = functions.getFromYaml('techs_master')
-    variableTechs = functions.getFromYaml('variable_techs')
     years = functions.getYears()
     
     # holds baseline reserve margin for each province based on NERC
@@ -36,9 +90,6 @@ def main():
 
     # List of fuels to tag
     # fuelTag = ['ELC']
-
-    # Make list of techs to tag by removing the non-dispachable techs from techTags
-    techTags = [x for x in techTags if x not in variableTechs]
 
     #For timeslicing 
     hours = range(1,25)
@@ -125,16 +176,6 @@ def main():
             #save adjusted regional reserve margin
             reserveMarginRaw.append([subregion, year, regionReserveMargin])
 
-    #To include reserve margin in osemosys global naming scheme, we:
-    # Gave a value of 1 for all regions and years of reserve margin 
-    # assigned the regional reserve margin value to ELCCAN<subregion>01 in reserve margin tag fuel
-    # assign a value of one to all relevant PWR<technology>CAN<subregion>01
-
-    #Reserve Margin = Region, year, value
-    reserveMargin = []
-    for year in years:
-        reserveMargin.append([continent, year, 1])
-
     #reserve margin Tag Fuel = Region, Fuel, Year, Value
     reserveMarginTagFuel = []
     for i in range(len(reserveMarginRaw)):
@@ -144,29 +185,22 @@ def main():
         rm = round(rm,3)
         reserveMarginTagFuel.append([continent, fuelName, year, rm])
     
-    #reserve margin Tag Technology = Region, Technology, Year, Value
-    reserveMarginTagTech = []
-    for subregion in canSubregions:
-        for year in years:
-            for tech in techTags:
-                techName = 'PWR' + tech + 'CAN' + subregion + '01'
-                reserveMarginTagTech.append([continent, techName, year, 1])
+    return reserveMarginTagFuel
 
-    #write out all files
-    dfReserveMargin = pd.DataFrame(reserveMargin,columns=['REGION','YEAR','VALUE'])
-    dfReserveMarginUsa = getUsaReserveMargin()
-    dfReserveMargin = dfReserveMargin.append(dfReserveMarginUsa)
-    dfReserveMargin.to_csv('../src/data/ReserveMargin.csv', index=False)
+def getCanReserveMargin():
+    # PURPOSE: Creates ReserveMargin file from Canadian data
+    # INPUT:   N/A
+    # OUTPUT:  reserveMargin = Base Reserve Margin Data
 
-    dfReserveMarginFuel = pd.DataFrame(reserveMarginTagFuel,columns=['REGION','FUEL','YEAR','VALUE'])
-    dfReserveMarginFuelUsa = getUsaReserveMarginTagFuel()
-    dfReserveMarginFuel = dfReserveMarginFuel.append(dfReserveMarginFuelUsa)
-    dfReserveMarginFuel.to_csv('../src/data/ReserveMarginTagFuel.csv', index=False)
+    continent = functions.getFromYaml('continent')
+    years = functions.getYears()
 
-    dfReserveMarginTech = pd.DataFrame(reserveMarginTagTech,columns=['REGION','TECHNOLOGY','YEAR','VALUE'])
-    dfReserveMarginTechUsa = getUsaReserveMarginTagTechnology()
-    dfReserveMarginTech = dfReserveMarginTech.append(dfReserveMarginTechUsa)
-    dfReserveMarginTech.to_csv('../src/data/ReserveMarginTagTechnology.csv', index=False)
+    #Reserve Margin = Region, year, value
+    reserveMargin = []
+    for year in years:
+        reserveMargin.append([continent, year, 1])
+    
+    return reserveMargin
 
 def getUsaReserveMarginTagTechnology():
     # PURPOSE: Creates getReserveMarginTagTechnology file from USA data
@@ -322,7 +356,7 @@ def getUsaReserveMarginTagFuel():
     return dfOut
 
 def getUsaReserveMargin():
-    # PURPOSE: Creates ReserveMargin file
+    # PURPOSE: Creates ReserveMargin file from USA data
     # INPUT:   N/A
     # OUTPUT:  dfOut = dataframe to be written to a csv
 
