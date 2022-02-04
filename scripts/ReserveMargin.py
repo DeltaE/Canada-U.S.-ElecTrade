@@ -1,9 +1,6 @@
 import pandas as pd
-import os
-import numpy as np
-import datetime
 import functions
-from collections import defaultdict
+
 
 def main():
     # PURPOSE: Creates otoole formatted ReserveMargin, ReserveMarginTagFuel, and 

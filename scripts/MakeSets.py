@@ -1,6 +1,5 @@
 import pandas as pd
 import functions
-from itertools import islice
 
 def main():
     # PURPOSE: Creates Tech and Fuel sets. Writes our files that are referenced by other scripts

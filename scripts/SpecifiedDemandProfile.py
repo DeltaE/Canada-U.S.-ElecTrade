@@ -1,7 +1,5 @@
 import pandas as pd
-import datetime
 import functions
-from collections import defaultdict
 
 def main():
     # PURPOSE: Creates an otoole formatted CSV holding the specified demand profile for the model. Accounts for time zones and daylight saving time   

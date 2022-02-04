@@ -1,6 +1,5 @@
 import pandas as pd
 import functions
-from collections import defaultdict
 
 def main():
     # PURPOSE: Creates an otoole formatted CSV holding the specified annual demand for the model
