@@ -7,7 +7,7 @@ import copy
 # See README for info
 
 def main():
-    # enumerate cmd arguments to get paths to old and new files
+    # Enumerate arguments to get paths to old and new files
     arguments = []
     for argument in enumerate(sys.argv):
         arguments.append(argument)
@@ -75,10 +75,6 @@ def main():
                       ,"VariableCost.csv"
                       ,"YEAR.csv"
                       ,"YearSplit.csv"]
-    
-    # Change these names if the files you are comparing have different names
-    NAME_OF_OLD_FILE = "CanadaUSA.txt"
-    NAME_OF_NEW_FILE = "CanadaUSA.txt"
 
     # Generate results file
     resultsTxt = open("Results.txt", "w")
