@@ -35,8 +35,8 @@ def get_from_yaml(name):
         parsedYaml: the value from the yaml file
     """
 
-    yaml_file = open('../scripts/config.yaml', encoding='utf-8')
-    yaml_parsed = yaml.load(yaml_file, Loader=yaml.FullLoader).get(name)
+    with open('../scripts/config.yaml', encoding='utf-8') as yaml_file:
+        yaml_parsed = yaml.load(yaml_file, Loader=yaml.FullLoader).get(name)
     return yaml_parsed
 
 

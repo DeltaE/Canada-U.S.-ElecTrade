@@ -54,7 +54,7 @@ def get_can_op_life():
     rows_drop = []
     for i in range(len(df_op_life)):
         tech = df_op_life['TECHNOLOGY'].iloc[i]
-        if (tech == 'P2G') or (tech == 'FCL'):
+        if tech in ('P2G', 'FCL'):
             rows_drop.append(i)
     df_op_life = df_op_life.drop(rows_drop)
     df_op_life.reset_index()

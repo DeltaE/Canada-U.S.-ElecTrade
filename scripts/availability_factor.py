@@ -10,14 +10,14 @@ import functions
 # https://www150.statcan.gc.ca/t1/tbl1/en/tv.action?pid=2510002201&pickMembers%5B0%5D=1.1&pickMembers%5B1%5D=2.1&cubeTimeFrame.startYear=2017&cubeTimeFrame.endYear=2017&referencePeriods=20170101%2C20170101
 _RESIDUAL_HYDRO_CAPACITY = {
     'BC': 15.407,
-    'AB': 1.218,   
-    'SK': 0.867,   
-    'MB': 5.461,   
-    'ON': 9.122,   
-    'QC': 40.438,  
-    'NB': 0.968,   
-    'NL': 6.762,   
-    'NS': 0.370,   
+    'AB': 1.218,
+    'SK': 0.867,
+    'MB': 5.461,
+    'ON': 9.122,
+    'QC': 40.438,
+    'NB': 0.968,
+    'NL': 6.762,
+    'NS': 0.370,
     'PE': 0.000
 }
 

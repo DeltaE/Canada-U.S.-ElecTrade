@@ -3,6 +3,8 @@
 import pandas as pd
 import datetime
 import functions
+import sys
+
 
 # MODULE CONSTANTS
 
@@ -348,7 +350,7 @@ def read_nrel(subregions, seasons, years):
                     print(f'There are {len(df_tech)} rows in the {year} \
                         {tech} dataframe')
                     print('DATA NOT WRITTEN!')
-                    exit()
+                    sys.exit()
                 elif len(df_tech) < 1:
                     print(f'{tech} has a capacity factor of one in {year} \
                         for the {subregion} region')

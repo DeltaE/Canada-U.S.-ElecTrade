@@ -109,7 +109,7 @@ def main():
                         [continent, tech_name, out_fuel, 2, year, oar])
 
                 # edge case of storage. This is super hacked together...
-                elif fuel == 'P2G' or fuel == 'FCL':
+                elif fuel in ('P2G', 'FCL'):
                     # P2G will only have input activity ratio
                     if fuel == 'P2G':
                         in_fuel = 'ELC' + 'CAN' + subregion + '02'

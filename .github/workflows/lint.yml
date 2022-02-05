@@ -21,6 +21,7 @@ jobs:
         PYTHON_PYLINT_CONFIG_FILE: .pylintrc
         VALIDATE_PYTHON_PYLINT: true
         VALIDATE_YAML: true
+        VALIDATE_SNAKEMAKE: true
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
 

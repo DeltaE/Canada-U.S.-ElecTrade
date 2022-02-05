@@ -331,7 +331,7 @@ def get_usa_rm_tag_fuel():
     df_profile['MN'] = df_profile['NW']
 
     #Get total annual demand
-    annual_demand = dict()
+    annual_demand = {}
     for subregion, provinces in usa_subregions.items():
         regional_demand = 0
         for province in provinces:

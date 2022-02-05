@@ -50,7 +50,7 @@ def main():
 
 # EXTRA FUNCTIONS
 
-def get_storages(subregions, storages):
+def get_storages(regions, storages):
     """Creates storage names.
 
     Reads in storage parameters from configuration file and generates
@@ -72,7 +72,7 @@ def get_storages(subregions, storages):
         return storages
 
     # Loop to create all technology names
-    for region, subregions in subregions.items():
+    for region, subregions in regions.items():
         for subregion in subregions['CAN']:
             for storage in storages:
                 storage_name = 'STO' + storage + region + subregion

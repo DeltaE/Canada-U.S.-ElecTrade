@@ -2,6 +2,7 @@
 
 import pandas as pd
 import functions
+import sys
 
 
 def main():
@@ -36,7 +37,7 @@ def main():
             out_file = 'VariableCost.csv'
         else:
             print('Need to select a cost type. SCRIPT NOT RUN!')
-            exit()
+            sys.exit()
 
         # COST CALCULATIONS
 
@@ -183,7 +184,7 @@ def read_nrel(cost_type, subregions, years):
                             f'{tech} dataframe for {cost_type[0]}'
                         )
                         print('DATA NOT WRITTEN!')
-                        exit()
+                        sys.exit()
                     elif len(df_end) < 1:
                         # print(f'{tech} has a {cost} cost of zero in {year}
                         # for the {region} region')
