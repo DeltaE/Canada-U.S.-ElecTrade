@@ -13,10 +13,10 @@ def main():
 
     # PARAMETERS
 
-    region = functions.openYaml().get('regions')
-    subregions = functions.openYaml().get('subregions_dictionary')
-    years = functions.getYears()
-    fuels = functions.openYaml().get('rnw_fuels')
+    region = functions.get_from_yaml('continent')
+    subregions = functions.get_from_yaml('regions_dict')
+    years = functions.get_years()
+    fuels = functions.get_from_yaml('rnw_fuels')
 
     # PROCESSINGS
 

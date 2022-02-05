@@ -1,450 +1,554 @@
-#####################################
-## This file is for functions and constants common between multiple files
-#####################################
+"""Functions and constants common between multiple files"""
 
 import datetime
 import pandas as pd
 import yaml
 
-#####################################
-# NON-CONFIGURABLE CONSTANTS
-#####################################
+# CONSTANTS
 
 # Province to Time Zone Mapping
-PROVINCIAL_TIME_ZONES = {
-    'BC':0,
-    'AB':1,
-    'SK':2,
-    'MB':2,
-    'ON':3,
-    'QC':3,
-    'NB':4,
-    'NL':4,
-    'NS':4,
-    'PE':4}
+_PROVINCIAL_TIME_ZONES = {
+    'BC': 0,
+    'AB': 1,
+    'SK': 2,
+    'MB': 2,
+    'ON': 3,
+    'QC': 3,
+    'NB': 4,
+    'NL': 4,
+    'NS': 4,
+    'PE': 4
+}
 
-#####################################
-# COMMON FUNCTIONS
-#####################################
-def getFromYaml(name):
-    # PURPOSE: Returns a value from the configured config.yaml file,
-    # which is a modifiable settings file that contains constants
-    # INPUT: name = the name of the value being retrieved
-    # OUTPUT: parsedYaml = the ready-to-use yaml file
+# SHARED FUNCTIONS
 
-    originalYaml = open("../scripts/config.yaml")
-    parsedYaml = yaml.load(originalYaml, Loader=yaml.FullLoader).get(name)
-    return parsedYaml
+def get_from_yaml(name):
+    """Returns a value from the config.yaml file
 
-def getYears():
-    # PURPOSE: Retrieves a list of years used
-    # in the model from the config.yaml file
-    # INPUT:   None
-    # OUTPUT:  years = list of applicable years in the model
+    The user can modify any values in the config.yaml file for scenario
+    analysis
 
-    startYear = getFromYaml('start_year')
-    endYear = getFromYaml('end_year')
+    Args:
+        name: name of the value being retrieved
 
-    return range(startYear, endYear + 1)
+    Returns:
+        parsedYaml: the value from the yaml file
+    """
 
-def getLoadValues():
-    # PURPOSE: Takes hourly load value excel sheet and converts it into a master df
-    # INPUT: None
-    # OUTPUT: Dataframe with the columns: Province, Month, Day, Hour, Load Value 
-    #Dictionary to hold timezone shifting values 
+    with open('../scripts/config.yaml', encoding='utf-8') as yaml_file:
+        yaml_parsed = yaml.load(yaml_file, Loader=yaml.FullLoader).get(name)
+    return yaml_parsed
+
+
+def get_years():
+    """Gets model horizon from config.yaml file
+
+    Returns:
+        years: list of years over the model horizon
+    """
+
+    start_year = get_from_yaml('start_year')
+    end_year = get_from_yaml('end_year')
+
+    return range(start_year, end_year + 1)
+
+
+def get_load_values():
+    """Parses hourly load values for Canadian provinces
+
+    Returns:
+        df_out: dataframe with load vales for each province
+            columns = Province, Month, Day, Hour, Load Value
+    """
 
     #Read in all provinces
-    sourceFile = '../dataSources/ProvincialHourlyLoads.xlsx'
-    sheets = pd.read_excel(sourceFile, sheet_name=None)
+    source_file = '../dataSources/ProvincialHourlyLoads.xlsx'
+    sheets = pd.read_excel(source_file, sheet_name=None)
 
     #Will store output information with the columns...
     #Province, month, hour, load [MW]
     data = []
 
-    #Loop over sheets and store in a master list 
+    #Loop over sheets and store in a master list
     for province, sheet in sheets.items():
-        dateList = sheet['Date'].tolist()
-        hourList = sheet['HOUR (LOCAL)'].tolist()
-        loadList = sheet['LOAD [MW]'].tolist()
+        date_list = sheet['Date'].tolist()
+        hour_list = sheet['HOUR (LOCAL)'].tolist()
+        load_list = sheet['LOAD [MW]'].tolist()
 
         #loop over list and break out month, day, hour from date
-        for i in range(len(dateList)):
-            dateFull = dateList[i]
-            date = datetime.datetime.strptime(dateFull, '%Y-%m-%d')
+        for i in range(len(date_list)):
+            date_full = date_list[i]
+            date = datetime.datetime.strptime(date_full, '%Y-%m-%d')
 
-            #Shift time values to match BC time (ie. Shift 3pm Alberta time back one hour, so all timeslices represent the asme time)
-            hourAdjusted = int(hourList[i]) - PROVINCIAL_TIME_ZONES[province]
-            if hourAdjusted < 1:
-                hourAdjusted = hourAdjusted + 24
+            # Shift time values to match BC time (ie. Shift 3pm Alberta time
+            # back one hour, so all timeslices represent the asme time)
+            hour_adjusted = int(
+                hour_list[i]) - _PROVINCIAL_TIME_ZONES[province]
+            if hour_adjusted < 1:
+                hour_adjusted = hour_adjusted + 24
 
             #Save data
-            data.append([province, date.month, date.day, hourAdjusted, loadList[i]])
+            data.append(
+                [province, date.month, date.day, hour_adjusted, load_list[i]])
 
-    #process daylight savings time values 
-    data = daylightSavings(data)
+    #process daylight savings time values
+    data = daylight_savings(data)
 
-    #dataframe to output 
-    dfOut = pd.DataFrame(data,columns = ['PROVINCE','MONTH','DAY','HOUR','VALUE'])
-    return dfOut
+    #dataframe to output
+    df_out = pd.DataFrame(
+        data, columns=['PROVINCE', 'MONTH', 'DAY', 'HOUR', 'VALUE'])
+    return df_out
 
-def daylightSavings(inData):
-# PURPOSE: Processess a input list to accout for daylight savings 
-#          1) For a load of zero - the load at the same time in the previous day is used
-#          2) For a double load - uses same load as previous adjacent hour  
-# INPUT: list with the columns: Province, Month, Day, Hour, Load Value
-# OUTPUT: list with the columns: Province, Month, Day, Hour, Load Value
 
-############################################################################
-# ASSUMES DAYLIGHT SAVINGS DAY IS NOT IN THE FIRST OR LAST DAY of the list #
-############################################################################
+def daylight_savings(in_data):
+    """Processess a dataset to accout for daylight savings time
 
-    #Split this into two for loop for user clarity when reading output file. The faster option will 
-    #be to just append the added values to the end of the list in the first list
+    Assumes daylight savings time is not in the first of last day of the list.
+    The following logic is used to deal with the dst reported values
+        1. If the DST gives a load of zero -> the load at the same time in the
+           previous day is used.
+        2. If the DST lists a double load -> the same load as the previous hour
+           is used.
 
-    #keep track of what rows to remove data for 
-    rowsToRemove = []
-    rowsToAdd = []
+    Args:
+        in_data: list with the columns: Province, Month, Day, Hour, Load Value
 
-    for i in range(len(inData) - 1):
-        #check if one hour is the same as the next 
-        if inData[i][3] == inData[i+1][3]:
-            #Check that regions are the same 
-            if(inData[i][0] == inData[i+1][0]): 
-                average = (inData[i][4] + inData[i+1][4]) / 2
-                inData[i+1][4] = average
-                rowsToRemove.append(i)
-                #print(f'hour averaged for {inData[i][0]} on month {inData[i][1]}, day {inData[i][2]}, hour {inData[i][3]}')
+    Returns:
+        out_data: list with the columns: Province, Month, Day, Hour, Load Value
+    """
 
-    #Remove the rows in reverse order so we are counting starting from the start of the list
-    for i in reversed(rowsToRemove):
-        inData.pop(i)
+    # Split this into two for loop for user clarity when reading output file.
+    # The faster option willbe to just append the added values to the end of
+    # the list in the first list
+
+    #keep track of what rows to remove data for
+    rows_to_remove = []
+    rows_to_add = []
+
+    for i in range(len(in_data) - 1):
+        #check if one hour is the same as the next
+        if in_data[i][3] == in_data[i + 1][3]:
+            #Check that regions are the same
+            if in_data[i][0] == in_data[i + 1][0]:
+                average = (in_data[i][4] + in_data[i + 1][4]) / 2
+                in_data[i + 1][4] = average
+                rows_to_remove.append(i)
+                # print(f'hour averaged for {in_data[i][0]} on month'
+                # f'{in_data[i][1]}, day {in_data[i][2]}, hour {in_data[i][3]}')
+
+    #Remove the rows in reverse order so  counting starts from start of the list
+    for i in reversed(rows_to_remove):
+        in_data.pop(i)
 
     #check if hour is missing a load
-    for i in range(len(inData)-1):
-        #first condition if data marks the load as zero 
-        if (inData[i][4] < 1): 
-            inData[i][4] = inData[i-1][4]
-            #print(f'hour modified for {inData[i][0]} on month {inData[i][1]}, day {inData[i][2]}, hour {inData[i][3]}')
-        #second adn third conditions for if data just skips the time step 
-        elif (int(inData[i+1][3]) - int(inData[i][3]) == 2) or (int(inData[i][3]) - int(inData[i+1][3]) == 22):
-            rowsToAdd.append(i)
-            #print(f'hour added for {inData[i][0]} on month {inData[i][1]}, day {inData[i][2]}, hour {inData[i][3]}')
+    for i in range(len(in_data) - 1):
+        #first condition if data marks the load as zero
+        if in_data[i][4] < 1:
+            in_data[i][4] = in_data[i - 1][4]
+            # print(f'hour modified for {in_data[i][0]} on month'
+            # f'{in_data[i][1]}, day {in_data[i][2]}, hour {in_data[i][3]}')
+        #second and third conditions for if data just skips the time step
+        elif (int(in_data[i + 1][3]) - int(in_data[i][3]) == 2) or (
+            int(in_data[i][3]) - int(in_data[i + 1][3]) == 22):
+            rows_to_add.append(i)
+            # print(f'hour added for {in_data[i][0]} on month '
+            # f'{in_data[i][1]}, day {in_data[i][2]}, hour {in_data[i][3]}')
 
-    #Add the rows in reverse order so we are counting starting from the start of the list
-    for i in reversed(rowsToAdd):
-        rowAfter = inData[i+1]
-        newHour = rowAfter[3] - 1
-        newRow = [rowAfter[0], rowAfter[1], rowAfter[2], newHour, rowAfter[4]]
-        inData.insert(i, newRow)
+    #Add the rows in reverse order to count from the start of the list
+    for i in reversed(rows_to_add):
+        row_after = in_data[i + 1]
+        new_hour = row_after[3] - 1
+        new_row = [
+            row_after[0], row_after[1], row_after[2], new_hour, row_after[4]]
+        in_data.insert(i, new_row)
 
-    return inData
+    return in_data
 
-def getPWRtechs(region, techs):
-    # PURPOSE: Creates all the PWR naming technologies
-    # INPUT:   region =  Tuple holding country as the key and subregion as the values in a dictionary
-    #                     (CAN, {WS:[...], MW:[]...},)
-    #          techs =    List of the technologies to print over 
-    # OUTPUT:  outList =  List of all the PWR technologies
+
+def get_pwr_techs(region, techs):
+    """Creates PWR naming technologies.
+
+    Args:
+        region: Tuple holding country as the key and subregion as the values
+                in a dictionary (CAN, {WS:[...], MW:[]...},)
+        tech: List of the technologies to print over
+
+    Returns:
+        out_list: List of all the PWR technologies
+    """
 
     # list to hold technologies
-    outList = []
+    out_list = []
 
     # Loop to create all technology names
     for subregion in region[1].keys():
         for tech in techs:
-            techName = 'PWR' + tech + region[0] + subregion + '01'
-            outList.append(techName)
-    
-    # Return list of pwr Technologes
-    return outList
+            tech_name = 'PWR' + tech + region[0] + subregion + '01'
+            out_list.append(tech_name)
 
-def getPWRTRNtechs(region):
-    # PURPOSE: Creates all the PWRTRN naming technologies
-    # INPUT:   region =  Tuple holding country as the key and subregion as the values in a dictionary
-    #                     (CAN, {WS:[...], MW:[]...},)
-    # OUTPUT:  outList =  List of all the PWR technologies
+    # Return list of pwr Technologes
+    return out_list
+
+
+def get_pwrtrn_techs(region):
+    """Creates PWRTRN naming technologies.
+
+    Args:
+        region: Tuple holding country as the key and subregion as the values
+                in a dictionary (CAN, {WS:[...], MW:[]...},)
+
+    Returns:
+        out_list: List of all the PWRTRN technologies
+    """
 
     # list to hold technologies
-    outList = []
+    out_list = []
 
     # Loop to create all technology names
     for subregion in region[1].keys():
-        techName = 'PWR' + 'TRN' + region[0] + subregion
-        outList.append(techName)
-    
-    # Return list of pwr Technologes
-    return outList
+        tech_name = 'PWR' + 'TRN' + region[0] + subregion
+        out_list.append(tech_name)
 
-def getMINtechs(region, techs):
-    # PURPOSE: Creates all the MIN naming technologies
-    # INPUT:   region =  Tuple holding country as the key and subregion as the values in a dictionary
-    #                     (CAN, {WS:[...], MW:[]...},)
-    #          techs =    List of the technologies to print over 
-    # OUTPUT:  outList =  List of all the MIN technologies
+    # Return list of pwr Technologes
+    return out_list
+
+
+def get_min_techs(region, techs):
+    """Creates MIN naming technologies.
+
+    Args:
+        region: Tuple holding country as the key and subregion as the values
+                in a dictionary (CAN, {WS:[...], MW:[]...},)
+        tech: List of the technologies to print over
+
+    Returns:
+        out_list: List of all the MIN technologies
+    """
 
     # list to hold technologies
-    outList = []
+    out_list = []
 
     # Loop to create all regionalized technology names
     for tech in techs:
-        techName = 'MIN' + tech + region[0]
-        outList.append(techName)
+        tech_name = 'MIN' + tech + region[0]
+        out_list.append(tech_name)
 
     # Return list of min Technologes
-    return outList
+    return out_list
 
-def getRNWtechs(region, techs):
-    # PURPOSE: Creates all the RNW naming technologies
-    # INPUT:   region =  Tuple holding country as the key and subregion as the values in a dictionary
-    #                     (CAN, {WS:[...], MW:[]...},)
-    #          techs =    List of the technologies to print over 
-    # OUTPUT:  outList =  List of all the RNW technologies
+
+def get_rnw_techs(region, techs):
+    """Creates RNW naming technologies.
+
+    Args:
+        region: Tuple holding country as the key and subregion as the values
+                in a dictionary (CAN, {WS:[...], MW:[]...},)
+        tech: List of the technologies to print over
+
+    Returns:
+        out_list: List of all the RNW technologies
+    """
 
     # list to hold technologies
-    outList = []
+    out_list = []
 
     # Loop to create all technology names
     for subregion in region[1].keys():
         for tech in techs:
-            techName = 'RNW' + tech + region[0] + subregion
-            outList.append(techName)
-    
+            tech_name = 'RNW' + tech + region[0] + subregion
+            out_list.append(tech_name)
+
     # Return list of rnw Technologes
-    return outList
+    return out_list
 
-def getTRNtechs(csvPath):
-    # PURPOSE: Creates all the TRN naming technologies
-    # INPUT:   csvPath = Transmission csv path
-    # OUTPUT:  outList =  List of all the TRN technologies
 
-    df = pd.read_csv(csvPath)
-    outList = df['TECHNOLOGY'].tolist()
-    outList = list(set(outList)) # remove duplicates
+def get_trn_techs(csv_path):
+    """Creates TRN naming technologies.
 
-    return outList
+    Args:
+        csv_path: Transmission data csv path
 
-def getRNWfuels(region, techs):
-    # PURPOSE: Creates fuels names for Renewable technologies
-    # INPUT:   region =  Tuple holding country as the key and subregion as the values in a dictionary
-    #                     (CAN, {WS:[...], MW:[]...},)
-    #          techs =    List of the technologies to print over 
-    # OUTPUT:  outList =  List of all the RNW technologies
+    Returns:
+        out_list: List of all the TRN technologies
+    """
+
+    df = pd.read_csv(csv_path)
+    out_list = df['TECHNOLOGY'].tolist()
+    out_list = list(set(out_list))  # remove duplicates
+
+    return out_list
+
+
+def get_rnw_fuels(region, techs):
+    """Creates fuels for RNW technologies.
+
+    Args:
+        region: Tuple holding country as the key and subregion as the values
+                in a dictionary (CAN, {WS:[...], MW:[]...},)
+        tech: List of the RNW technologies to print over
+
+    Returns:
+        out_list: List of all fuels for RNW technologies
+    """
 
     # list to hold technologies
-    outList = []
+    out_list = []
 
     # Loop to create all technology names
     for subregion in region[1].keys():
         for tech in techs:
-            fuelName = tech + region[0] + subregion
-            outList.append(fuelName)
-    
-    # Return list of rnw fuels
-    return outList
+            fuel_name = tech + region[0] + subregion
+            out_list.append(fuel_name)
 
-def getMINfuels(region, techs):
-    # PURPOSE: Creates Fuel names for Mined Fuels
-    # INPUT:   region =  Tuple holding country as the key and subregion as the values in a dictionary
-    #                     (CAN, {WS:[...], MW:[]...},)
-    #          techs =    List of the technologies to print over 
-    # OUTPUT:  outList =  List of all the MIN Fuels 
+    # Return list of rnw fuels
+    return out_list
+
+
+def get_min_fuels(region, techs):
+    """Creates fuels for MIN technologies.
+
+    Args:
+        region: Tuple holding country as the key and subregion as the values
+                in a dictionary (CAN, {WS:[...], MW:[]...},)
+        tech: List of the MIN technologies to print over
+
+    Returns:
+        out_list: List of all fuels for MIN technologies
+    """
 
     # list to hold technologies
-    outList = []
+    out_list = []
 
     # Loop to create all technology names based on region
     for tech in techs:
-        fuelName = tech + region[0]
-        outList.append(fuelName)
+        fuel_name = tech + region[0]
+        out_list.append(fuel_name)
 
     # Return list of min TFuels
-    return outList
+    return out_list
 
-def getELCfuels(region):
-    # PURPOSE: Creates Fuel electricity use fuel names
-    # INPUT:   region =  Tuple holding country as the key and subregion as the values in a dictionary
-    #                     (CAN, {WS:[...], MW:[]...},)
-    # OUTPUT:  outList =  List of all the ELC Fuels 
+
+def get_elc_fuels(region):
+    """Creates electricity fuel names:
+
+    Args:
+        region: Tuple holding country as the key and subregion as the values
+                in a dictionary (CAN, {WS:[...], MW:[]...},)
+
+    Returns:
+        out_list: list of all ELC fuels
+    """
 
     # list to hold technologies
-    outList = []
+    out_list = []
 
     # Loop to create all technology names
     for subregion in region[1].keys():
-        elcOne = 'ELC' + region[0] + subregion + '01'
-        elcTwo = 'ELC' + region[0] + subregion + '02'
-        outList.extend([elcOne, elcTwo])
-    
+        elc_one = 'ELC' + region[0] + subregion + '01'
+        elc_two = 'ELC' + region[0] + subregion + '02'
+        out_list.extend([elc_one, elc_two])
+
     # Return list of electricty fuels
-    return outList
+    return out_list
 
-def createFuelDataframe(subregions, rnwFuels, mineFuels):
-    # PURPOSE: Appends all fuel name lists together and writes them to a CSV
-    # INPUT:   subregions = Dictionary holding Country and regions ({CAN:{WS:[...], ...}, USA:[NY:[...],...]})
-    #          rnwFuels = List of the fuels to print over for getRNWfuels
-    #          mineFuels = List of the fuels to print over for getMINfuels
-    # OUTPUT:  dfOut = fuel set dataframe
 
-    outputFuels = []
+def create_fuel_df(subregions, rnw_fuels, mine_fuels):
+    """Creates all national and international fuels
+
+    Args:
+        subregions = Dictionary holding Country and regions
+            ({CAN:{WS:[...], ...}, USA:[NY:[...],...]})
+        rnw_fuels = List of the fuels to print over for get_rnw_fuels
+        mine_fuels = List of the fuels to print over for get_min_fuels
+
+    Returns:
+        df_out: fuel set dataframe
+    """
+
+    output_fuels = []
     for region in subregions.items():
         # Renewable fuels
-        rnwFuelList = getRNWfuels(region, rnwFuels)
+        rnw_fuel_list = get_rnw_fuels(region, rnw_fuels)
 
         # Mining fuels
-        minFuelList = getMINfuels(region, mineFuels)
+        min_fuel_list = get_min_fuels(region, mine_fuels)
 
         #ELC fuels
-        elcFuelList = getELCfuels(region)
+        elc_fuel_list = get_elc_fuels(region)
 
         #Hydrogen Fuels
         #hy2FuelList = getHY2fuels(countries)
 
         #Append lists together
-        outputFuels += rnwFuelList
-        outputFuels += minFuelList
-        outputFuels += elcFuelList
-        #outputFuels.append(hy2FuelList)
-    
+        output_fuels += rnw_fuel_list
+        output_fuels += min_fuel_list
+        output_fuels += elc_fuel_list
+        #output_fuels.append(hy2FuelList)
+
     # Loop to create all technology names for international import/export
-    for fuel in mineFuels:
-        fuelName = fuel + 'INT'
-        outputFuels.append(fuelName)
-    for fuel in mineFuels:
-        outputFuels.append(fuel)
+    for fuel in mine_fuels:
+        fuel_name = fuel + 'INT'
+        output_fuels.append(fuel_name)
+    for fuel in mine_fuels:
+        output_fuels.append(fuel)
 
-    dfOut = pd.DataFrame(outputFuels, columns=['VALUE'])
-    
-    return dfOut
+    df_out = pd.DataFrame(output_fuels, columns=['VALUE'])
 
-def createTechDataframe(subregions, techsMaster, mineFuels, rnwFuels, trnTechsCsvPath):
-    # PURPOSE: Appends technology and fuel name lists together and returns them as a CSV dataframe
-    # INPUT:   subregions = Dictionary holding Country and regions ({CAN:{WS:[...], ...} USA:[NY:[...],...]})
-    #          techsMaster = List of the technologies to print over for getPWRtechs
-    #          mineFuels = List of the fuels to print over for getMINfuels
-    #          rnwFuels = List of the fuels to print over for getRNWfuels
-    #          trnTechsCsvPath = Transmission csv information locations
-    # OUTPUT:  dfOut = tech set dataframe
-    # get power generator technology list 
-    outputTechs = []
+    return df_out
+
+
+def create_tech_df(subregions, techs_master, mine_fuels, rnw_fuels,
+                        trn_techs_csv_path):
+    """Describes all technologies in dataframe format
+
+    Args:
+        subregions = Dictionary holding Country and regions
+            ({CAN:{WS:[...], ...} USA:[NY:[...],...]})
+        techs_master = List of the technologies to print over for get_pwr_techs
+        mine_fuels = List of the fuels to print over for get_min_fuels
+        rnw_fuels = List of the fuels to print over for get_rnw_fuels
+        trn_techs_csv_path = Transmission csv information locations
+
+    Returns:
+        df_out = tech set dataframe
+    """
+
+    # get power generator technology list
+    output_techs = []
     for region in subregions.items():
 
-        pwrList = getPWRtechs(region, techsMaster)
+        pwr_list = get_pwr_techs(region, techs_master)
 
         # get grid distribution technology list (PWRTRN<Reg><SubReg>)
-        pwrTrnList = getPWRTRNtechs(region)
+        pwr_trn_list = get_pwrtrn_techs(region)
 
         # get Mining techs list
-        minList = getMINtechs(region, mineFuels)
+        min_list = get_min_techs(region, mine_fuels)
 
-        # get Renewables fuels list 
-        rnwList = getRNWtechs(region, rnwFuels)
+        # get Renewables fuels list
+        rnw_list = get_rnw_techs(region, rnw_fuels)
 
         #Append lists together
-        outputTechs += pwrList
-        outputTechs += pwrTrnList
-        outputTechs += minList
-        outputTechs += rnwList 
+        output_techs += pwr_list
+        output_techs += pwr_trn_list
+        output_techs += min_list
+        output_techs += rnw_list
 
-    # get trade technology list 
-    trnList = getTRNtechs(trnTechsCsvPath)
-    outputTechs += trnList
-    
-    #Generate international trade 
-    for tech in mineFuels:
-        techName = 'MIN' + tech + 'INT'
-        outputTechs.append(techName)
+    # get trade technology list
+    trn_list = get_trn_techs(trn_techs_csv_path)
+    output_techs += trn_list
 
-    dfOut = pd.DataFrame(outputTechs, columns=['VALUE'])
+    #Generate international trade
+    for tech in mine_fuels:
+        tech_name = 'MIN' + tech + 'INT'
+        output_techs.append(tech_name)
 
-    return dfOut
+    df_out = pd.DataFrame(output_techs, columns=['VALUE'])
 
-def createTechList(techsMaster, rnwTechs, mineTechs, stoTechs):
-    # PURPOSE: Merges several tech lists into 'data' so that they can be printed over
-    # INPUT:   techsMaster = List of the technologies to print over for power techs
-    #          rnwTechs = List of the technologies to print over for renewable techs
-    #          mineTechs = List of the technologies to print over for mining techs
-    #          stoTechs = List of the technologies to print over for storage techs
-    # OUTPUT:  data = Merged tech lists
-    # get power generator technology list 
+    return df_out
+
+
+def create_tech_list(techs_master, rnw_techs, mine_techs, sto_techs):
+    """Describes all technologies in list format
+
+    Args:
+        techs_master = List of the technologies to print over for power techs
+        rnw_techs = List of the technologies to print over for renewable techs
+        mine_techs = List of the technologies to print over for mining techs
+        sto_techs = List of the technologies to print over for storage techs
+
+    Returns:
+        data: list of all technologies
+    """
+
+    # get power generator technology list
     data = []
 
-    for i in range(len(techsMaster)):
-        data.append(['PWR',techsMaster[i]])
+    for i in range(len(techs_master)):
+        data.append(['PWR', techs_master[i]])
 
-    for i in range(len(rnwTechs)):
-        data.append(['RNW',rnwTechs[i]])
+    for i in range(len(rnw_techs)):
+        data.append(['RNW', rnw_techs[i]])
 
-    for i in range(len(mineTechs)):
-        data.append(['MIN',mineTechs[i]])
+    for i in range(len(mine_techs)):
+        data.append(['MIN', mine_techs[i]])
 
-    for i in range(len(stoTechs)):
-        data.append(['STO',stoTechs[i]])
-    
+    for i in range(len(sto_techs)):
+        data.append(['STO', sto_techs[i]])
+
     return data
 
-def getUsaCapacityOrAvailabilityFactor(isCapacity):
-    # PURPOSE: Creates CapacityFactor or AvailabilityFactor file from USA data
-    # INPUT:   isCapacity = Boolean indicating Capacity Factor should be returned
-    # when True, and Availabiltiy Factor otherwise
-    # OUTPUT:  dfOut = dataframe to be written to a csv
 
-    #capacity factor only specified for 2015 and 2016
-    #df = df.loc[df['YEAR'] == 2016]
-    #df.reset_index()
+def get_usa_capacity_availability_factor(is_capacity):
+    """Creates CapacityFactor or AvailabilityFactor file from USA data.
 
-    techMap = getFromYaml('usa_tech_map')
-    continent = getFromYaml('continent')
-    years = getYears() # years to print capacity factor over
+    Args:
+        is_capacity = Boolean indicating Capacity Factor should be returned
+            when true. Availability factor otherwise
 
-    df = pd.read_excel('../dataSources/USA_Data.xlsx', sheet_name = 'CapacityFactor(r,t,l,y)')
+    Returns:
+        df_out: dataframe of USA capacity facotor or availability factor data
+    """
 
-    #Initialize filtered dataframe 
+    tech_map = get_from_yaml('usa_tech_map')
+    continent = get_from_yaml('continent')
+    years = get_years()
+
+    df = pd.read_excel('../dataSources/USA_Data.xlsx',
+                       sheet_name='CapacityFactor(r,t,l,y)')
+
+    #Initialize filtered dataframe
     columns = list(df)
-    dfFiltered = pd.DataFrame(columns=columns)
+    df_filtered = pd.DataFrame(columns=columns)
 
-    #get rid of all techs we are not using 
-    for tech in techMap:
-        dfTemp = df.loc[df['TECHNOLOGY'] == tech]
-        dfFiltered = dfFiltered.append(dfTemp)
-    df = dfFiltered
+    #get rid of all techs we are not using
+    for tech in tech_map:
+        df_temp = df.loc[df['TECHNOLOGY'] == tech]
+        df_filtered = df_filtered.append(df_temp)
+    df = df_filtered
     df.reset_index()
 
     #holds output data
-    outDataCF = [] # Capacity Factor
-    outDataAF = [] # Availability Factor
+    out_data_cf = []  # Capacity Factor
+    out_data_af = []  # Availability Factor
 
     #map data
     for year in years:
         for i in range(len(df)):
-            techMapped = techMap[df['TECHNOLOGY'].iloc[i]]
-            tech = 'PWR' + techMapped + 'USA' + df['REGION'].iloc[i] + '01'
+            tech_mapped = tech_map[df['TECHNOLOGY'].iloc[i]]
+            tech = 'PWR' + tech_mapped + 'USA' + df['REGION'].iloc[i] + '01'
             ts = df['TIMESLICE'].iloc[i]
             value = df['CAPACITYFACTOR'].iloc[i]
             value = round(value, 3)
-            if techMapped == 'HYD':
-                outDataAF.append([continent,tech,ts,year,value])
+            if tech_mapped == 'HYD':
+                out_data_af.append([continent, tech, ts, year, value])
             else:
-                outDataCF.append([continent,tech,ts,year,value])
+                out_data_cf.append([continent, tech, ts, year, value])
 
     #create and return dataframe for CAPACITY FACTOR
-    dfOutCF = pd.DataFrame(outDataCF, columns = ['REGION','TECHNOLOGY','TIMESLICE','YEAR','VALUE'])
+    df_out_cf = pd.DataFrame(
+        out_data_cf,
+        columns=['REGION', 'TECHNOLOGY', 'TIMESLICE', 'YEAR', 'VALUE'])
 
-    if isCapacity: # Return Capacity Factor
-        return dfOutCF
-    else: # Return Availability Factor
-        dfAf = pd.DataFrame(outDataAF, columns = ['REGION','TECHNOLOGY','TIMESLICE','YEAR','VALUE'])
-        afTechs = dfAf['TECHNOLOGY'].to_list()
-        afTechs = list(set(afTechs))
+    if is_capacity:  # Return Capacity Factor
+        return df_out_cf
+    else:  # Return Availability Factor
+        df_af = pd.DataFrame(
+            out_data_af,
+            columns=['REGION', 'TECHNOLOGY', 'TIMESLICE', 'YEAR', 'VALUE'])
+        af_techs = df_af['TECHNOLOGY'].to_list()
+        af_techs = list(set(af_techs))
 
-        outDataAF = [] 
-        for tech in afTechs:
-            dfTemp = dfAf.loc[dfAf['TECHNOLOGY'] == tech]
+        out_data_af = []
+        for tech in af_techs:
+            df_temp = df_af.loc[df_af['TECHNOLOGY'] == tech]
             for year in years:
-                dfYear = dfTemp.loc[dfTemp['YEAR'] == year]
-                af = dfYear['VALUE'].mean()
+                df_year = df_temp.loc[df_temp['YEAR'] == year]
+                af = df_year['VALUE'].mean()
                 af = round(af, 3)
-                outDataAF.append([continent,tech,year,af])
-        
+                out_data_af.append([continent, tech, year, af])
+
         # return dataframe for CAPACITY FACTOR
-        dfOutAF = pd.DataFrame(outDataAF, columns = ['REGION','TECHNOLOGY','YEAR','VALUE'])
-        return dfOutAF
+        df_out_af = pd.DataFrame(
+            out_data_af, columns=['REGION', 'TECHNOLOGY', 'YEAR', 'VALUE'])
+        return df_out_af

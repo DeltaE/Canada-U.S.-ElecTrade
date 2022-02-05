@@ -11,14 +11,14 @@ import functions
 _RESIDUAL_HYDRO_CAPACITY = {
     'BC': 15.407,
     'AB': 1.218,
-    'SAS': 0.867,
-    'MAN': 5.461,
-    'ONT': 9.122,
+    'SK': 0.867,
+    'MB': 5.461,
+    'ON': 9.122,
     'QC': 40.438,
     'NB': 0.968,
     'NL': 6.762,
     'NS': 0.370,
-    'PEI': 0.000
+    'PE': 0.000
 }
 
 # Hydro generation (TWh) per province in 2017
@@ -26,14 +26,14 @@ _RESIDUAL_HYDRO_CAPACITY = {
 _HYDRO_GENERATION = {
     'BC': 66.510,
     'AB': 2.050,
-    'SAS': 3.862,
-    'MAN': 35.991,
-    'ONT': 39.492,
+    'SK': 3.862,
+    'MB': 35.991,
+    'ON': 39.492,
     'QC': 202.001,
     'NB': 2.583,
     'NL': 36.715,
     'NS': 0.849,
-    'PEI': 0.000
+    'PE': 0.000
 }
 
 
@@ -44,14 +44,13 @@ def main():
     2017 capacity and generation levels. These values are copied over for the
     entire time horizon. USA hydro availability factors are generated from the
     existing USA dataset's capacity factors.
-
     """
 
     # PARAMETERS
 
-    region = functions.openYaml().get('regions')
-    subregions = (functions.openYaml().get('subregions_dictionary'))['CAN']
-    years = functions.getYears()
+    region = functions.get_from_yaml('continent')
+    subregions = functions.get_from_yaml('regions_dict')['CAN']
+    years = functions.get_years()
 
     # CALCULATIONS
 
@@ -80,7 +79,7 @@ def main():
 
     df = pd.DataFrame(out_df,
                       columns=['REGION', 'TECHNOLOGY', 'YEAR', 'VALUE'])
-    df_usa = functions.getUsaCapacityOrAvailabilityFactor(False)
+    df_usa = functions.get_usa_capacity_availability_factor(False)
     df = df.append(df_usa)
 
     df.to_csv('../src/data/AvailabilityFactor.csv', index=False)
