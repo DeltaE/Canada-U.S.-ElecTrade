@@ -117,7 +117,7 @@ rule make_sets:
 	conda:
 		'envs/preprocess.yaml'
 	script:
-		f'{scriptsDir}/MakeSets.py'
+		f'{scriptsDir}/make_sets.py'
 
 rule availability_factor:
 	input:
@@ -131,7 +131,7 @@ rule availability_factor:
 	conda:
 		'envs/preprocess.yaml'
 	script:
-		f'{scriptsDir}/AvailabilityFactor.py'
+		f'{scriptsDir}/availability_factor.py'
 
 rule capacity_factor:
 	input:
@@ -150,7 +150,7 @@ rule capacity_factor:
 	conda:
 		'envs/preprocess.yaml'
 	script:
-		f'{scriptsDir}/CapacityFactor.py'
+		f'{scriptsDir}/capacity_factor.py'
 
 rule capacity_activity_unit:
 	input:
@@ -165,7 +165,7 @@ rule capacity_activity_unit:
 	conda:
 		'envs/preprocess.yaml'
 	script:
-		f'{scriptsDir}/CapacityToActivity.py'
+		f'{scriptsDir}/capacity_activity_unit.py'
 
 rule costs:
 	input:
@@ -184,7 +184,7 @@ rule costs:
 	conda:
 		'envs/preprocess.yaml'
 	script:
-		f'{scriptsDir}/Costs.py'
+		f'{scriptsDir}/costs.py'
 
 rule emission_activity_ratio:
 	input:
@@ -199,7 +199,7 @@ rule emission_activity_ratio:
 	conda:
 		'envs/preprocess.yaml'
 	script:
-		f'{scriptsDir}/EmissionActivityRatio.py'
+		f'{scriptsDir}/emission_activity_ratio.py'
 
 rule in_out_activity_ratio:
 	input:
@@ -217,7 +217,7 @@ rule in_out_activity_ratio:
 	conda:
 		'envs/preprocess.yaml'
 	script:
-		f'{scriptsDir}/InOutActivityRatio.py'
+		f'{scriptsDir}/in_out_activity_ratio.py'
 
 rule reserve_margin:
 	input:
@@ -235,7 +235,7 @@ rule reserve_margin:
 	conda:
 		'envs/preprocess.yaml'
 	script:
-		f'{scriptsDir}/ReserveMargin.py'
+		f'{scriptsDir}/reserve_margin.py'
 
 rule residual_capacity:
 	input:
@@ -253,7 +253,7 @@ rule residual_capacity:
 	conda:
 		'envs/preprocess.yaml'
 	script:
-		f'{scriptsDir}/ResidualCapacity.py'
+		f'{scriptsDir}/residual_capacity.py'
 
 rule specified_annual_demand:
 	input:
@@ -268,7 +268,7 @@ rule specified_annual_demand:
 	conda:
 		'envs/preprocess.yaml'
 	script:
-		f'{scriptsDir}/SpecifiedAnnualDemand.py'
+		f'{scriptsDir}/specified_annual_demand.py'
 
 rule specified_demand_profile:
 	input:
@@ -283,7 +283,7 @@ rule specified_demand_profile:
 	conda:
 		'envs/preprocess.yaml'
 	script:
-		f'{scriptsDir}/SpecifiedDemandProfile.py'
+		f'{scriptsDir}/specified_demand_profile.py'
 
 rule storage_costs:
 	input:
@@ -297,7 +297,7 @@ rule storage_costs:
 	conda:
 		'envs/preprocess.yaml'
 	script:
-		f'{scriptsDir}/StorageCosts.py'
+		f'{scriptsDir}/storage_costs.py'
 
 rule storage_life:
 	input:
@@ -311,7 +311,7 @@ rule storage_life:
 	conda:
 		'envs/preprocess.yaml'
 	script:
-		f'{scriptsDir}/StorageLife.py'
+		f'{scriptsDir}/storage_life.py'
 
 rule emission_penalty:
 	input:
@@ -326,7 +326,7 @@ rule emission_penalty:
 	conda:
 		'envs/preprocess.yaml'
 	script:
-		f'{scriptsDir}/EmissionPenalty.py'
+		f'{scriptsDir}/emission_penalty.py'
 
 rule re_tags:
 	input:
@@ -340,7 +340,7 @@ rule re_tags:
 	conda:
 		'envs/preprocess.yaml'
 	script:
-		f'{scriptsDir}/RETags.py'
+		f'{scriptsDir}/re_tags.py'
 
 rule tech_to_from_storage:
 	input:
@@ -355,7 +355,7 @@ rule tech_to_from_storage:
 	conda:
 		'envs/preprocess.yaml'
 	script:
-		f'{scriptsDir}/TechToFromStorage.py'
+		f'{scriptsDir}/tech_to_from_storage.py'
 
 rule total_annual_max_capacity:
 	input:
@@ -367,7 +367,7 @@ rule total_annual_max_capacity:
 	conda:
 		'envs/preprocess.yaml'
 	script:
-		f'{scriptsDir}/TotalAnnualMaxCapacity.py'
+		f'{scriptsDir}/total_annual_max_capacity.py'
 
 rule otoole_convert:
 	input:
