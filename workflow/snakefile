@@ -1,0 +1,29 @@
+"""Rules for user interaction."""
+
+from pathlib import Path
+
+
+# PARAMETERS
+
+configfile: 'config/config.yaml'
+scenario_name = config['scenario']
+results = 'results'
+
+include: 'rules/input_data.smk'
+include: 'rules/model.smk'
+
+# TARGET RULES
+
+rule all:
+	input: 
+		Path(results, f'{scenario_name}.txt')
+
+rule data_file:
+	input:
+		Path(results, f'{scenario_name}.txt')
+
+'''
+rule lp_file:
+	input: 
+		Path(results, scenario_name, '.lp')
+'''
