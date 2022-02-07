@@ -73,7 +73,7 @@ def get_usa_specified_annual_demand():
     # GET DATA
 
     df = pd.read_excel(Path(Path(__file__).resolve().parent,
-        '../../resources/USA_Data.xlsx'), 
+        '../../resources/USA_Data.xlsx'),
         sheet_name='SpecifiedAnnualDemand(r,f,y)')
 
     # MAP DATA

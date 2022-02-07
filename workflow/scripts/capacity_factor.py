@@ -307,7 +307,7 @@ def read_nrel(subregions, seasons, years):
     }
 
     #read in file
-    source_file =  Path(Path(__file__).resolve().parent, 
+    source_file =  Path(Path(__file__).resolve().parent,
         '../../resources/NREL_Costs.csv')
     df_raw = pd.read_csv(source_file, index_col=0)
 

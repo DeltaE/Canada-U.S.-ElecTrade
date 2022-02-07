@@ -24,19 +24,19 @@ def main():
 
     # Years set
     df_out = pd.DataFrame(years, columns=['VALUE'])
-    output_dir = Path(Path(__file__).resolve().parent, 
+    output_dir = Path(Path(__file__).resolve().parent,
         '../../results/data/YEAR.csv')
     df_out.to_csv(output_dir, index=False)
 
     #Regions set
     df_out = pd.DataFrame([continent], columns=['VALUE'])
-    output_dir = Path(Path(__file__).resolve().parent, 
+    output_dir = Path(Path(__file__).resolve().parent,
         '../../results/data/REGION.csv')
     df_out.to_csv(output_dir, index=False)
 
     # Emissions set
     df_out = pd.DataFrame(emissions, columns=['VALUE'])
-    output_dir = Path(Path(__file__).resolve().parent, 
+    output_dir = Path(Path(__file__).resolve().parent,
         '../../results/data/EMISSION.csv')
     df_out.to_csv(output_dir, index=False)
 
@@ -44,20 +44,20 @@ def main():
     df_out = functions.create_tech_df(subregions, techs_master,
                                            mine_fuels, rnw_fuels,
                                            'Trade.csv')
-    output_dir = Path(Path(__file__).resolve().parent, 
+    output_dir = Path(Path(__file__).resolve().parent,
         '../../results/data/TECHNOLOGY.csv')
     df_out.to_csv(output_dir, index=False)
 
     # Fuel set
     df_out = functions.create_fuel_df(subregions, rnw_fuels, mine_fuels)
-    output_dir = Path(Path(__file__).resolve().parent, 
+    output_dir = Path(Path(__file__).resolve().parent,
         '../../results/data/FUEL.csv')
     df_out.to_csv(output_dir, index=False)
 
     # Storage set
     storage_list = get_storages(subregions, sto_techs)
     df_out = pd.DataFrame(storage_list, columns=['VALUE'])
-    output_dir = Path(Path(__file__).resolve().parent, 
+    output_dir = Path(Path(__file__).resolve().parent,
         '../../results/data/STORAGE.csv')
     df_out.to_csv(output_dir, index=False)
 

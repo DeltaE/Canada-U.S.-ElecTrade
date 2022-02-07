@@ -36,7 +36,7 @@ def main():
     #write to a csv
     df_out = pd.DataFrame(data_out,
                           columns=['REGION', 'EMISSION', 'YEAR', 'VALUE'])
-    output_dir = Path(Path(__file__).resolve().parent, 
+    output_dir = Path(Path(__file__).resolve().parent,
         '../../results/data/EmissionsPenalty.csv')
     df_out.to_csv(output_dir, index=False)
 
