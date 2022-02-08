@@ -1,0 +1,10 @@
+name: preprocess
+channels:
+  - conda-forge
+dependencies:
+  - openpyxl
+  - pandas
+  - ca-certificates
+  - openssl
+  - yaml
+  - pyyaml

@@ -1,0 +1,106 @@
+# Scenario Name
+scenario: 'CanadaUSA'
+
+# month to season mapping
+seasons:
+  'W': [ 1, 2, 12 ]
+  'SP': [ 3, 4, 5 ]
+  'S': [ 6, 7, 8 ]
+  'F': [ 9, 10, 11 ]
+
+# Osemosys defined region
+continent: 'NAmerica'
+
+# Provinces to subregions mapping
+regions_dict:
+  'CAN':
+    'WS': [ 'BC', 'AB' ]
+    'MW': [ 'SK', 'MB' ]
+    'ON': [ 'ON' ]
+    'QC': [ 'QC' ]
+    'AT': [ 'NB', 'NS', 'PE', 'NL' ]
+  'USA':
+    'NW': [ 'WA', 'OR' ]
+    'CA': [ 'CA' ]
+    'MN': [ 'MT', 'ID', 'WY', 'NV', 'UT', 'CO' ]
+    'SW': [ 'AZ', 'NM' ]
+    'CE': [ 'ND', 'SD', 'NE', 'KS', 'OK' ]
+    'TX': [ 'TX' ]
+    'MW': [ 'MN', 'WI', 'IA', 'IL', 'IN', 'MI', 'MO' ]
+    'AL': [ 'AR', 'LA' ]
+    'MA': [ 'OH', 'PA', 'WV', 'KY', 'VA', 'NJ', 'DE', 'MD' ]
+    'SE': [ 'TN', 'NC', 'SC', 'MS', 'AL', 'GA' ]
+    'FL': [ 'FL' ]
+    'NY': [ 'NY' ]
+    'NE': [ 'VT', 'NH', 'ME', 'MA', 'CT', 'RI' ]
+
+# Initial year used in model (inclusive)
+start_year: 2019
+
+# Final year used in model (inclusive)
+end_year: 2050
+
+# types of emissions
+emissions:
+  - 'CO2'
+
+# master list of techs
+techs_master:
+  - 'BIO' # Biomass
+  - 'CCG' # Gas Combined Cycle 
+  - 'CTG' # Gas Combustion Turbine
+  - 'COA' # Coal
+  - 'COC' # Coal CCS
+  - 'HYD' # Hydro 
+  - 'SPV' # Solar
+  - 'URN' # Nuclear
+  - 'WND' # Wind
+   #'P2G' # Power to Gas
+   #'FCL' # Fuel Cell
+
+# list of renewable fuels
+rnw_fuels:
+  - 'HYD' # Hydro 
+  - 'SPV' # Solar
+  - 'WND' # Wind
+  - 'BIO' # Biomass
+
+# list of mining fuels
+mine_fuels:
+  - 'COA' # Coal
+  - 'GAS' # Gas
+  - 'URN' # Nuclear
+
+# list of variable techs
+variable_techs:
+  - 'SPV'
+  - 'WND'
+
+# list of storage technologies (In the future may have 'TNK' # Tank)
+sto_techs: []
+
+# mapping of technologies to fuels
+tech_to_fuel:
+  'BIO': 'BIO'
+  'CCG': 'GAS'
+  'CTG': 'GAS'
+  'COA': 'COA'
+  'COC': 'COA'
+  'HYD': 'HYD'
+  'SPV': 'SPV'
+  'URN': 'URN'
+  'WND': 'WND'
+ #'P2G': 'ELC' # Power to Gas
+ #'FCL': 'HY2' # Fuel Cell
+
+# tech mapping USA Name -> Our Name
+usa_tech_map:
+  'BIOPP': 'BIO'   # Biomass
+  'NGCC': 'CCG'    # Gas Combind Cycle 
+  'NGCT': 'CTG'    # Gas Combustion Turbine
+  'COALPP': 'COA'  # Coal
+  'COALCCS': 'COC' # Coal CCS
+  'HYDROPP': 'HYD' # Hydro 
+  'PV': 'SPV'      # Solar
+  'NUC': 'URN'     # Nuclear
+  'WINDPP': 'WND'  # Wind
