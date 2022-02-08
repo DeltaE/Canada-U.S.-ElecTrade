@@ -12,7 +12,7 @@ def main():
     Generates capital cost, fixed cost and variable cost parameters files.
     Canadian values come from the NREL database and assumes no geographical
     weighting on costs. United States values are taken from origianl dataset
-    and do include capex weighting factors.
+    and do include capital cost weighting factors.
     """
 
     # PARAMETERS
@@ -26,7 +26,7 @@ def main():
         #Cost type
         if trigger == 1:
             cost_type = ['CAPEX']
-            df_usa = get_usa_capex()
+            df_usa = get_usa_capital_cost()
             out_file = 'CapitalCost.csv'
         elif trigger == 2:
             cost_type = ['Fixed O&M']
@@ -385,7 +385,7 @@ def trade_costs(cost_type, years):
     return df_out
 
 
-def get_usa_capex():
+def get_usa_capital_cost():
     """Gets capital costs (excluding transmission) for USA data.
 
     Returns:

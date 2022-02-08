@@ -9,9 +9,9 @@ def main():
     """Generates global emission penalty data.
 
     Creates otoole formatted emission penalty data for both countries in units
-    of M$/MT. Since emission penalty is defined over region, the value is
-    defined at a global level, rather then a provicial, subregional, or
-    regional level.
+    of M$/MT. Since emission penalty is defined over each osemosys region, the
+    value is defined at a global level, rather then a provicial or subregional
+    level
     """
 
     # PARAMETERS

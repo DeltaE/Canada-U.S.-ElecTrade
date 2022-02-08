@@ -8,6 +8,8 @@ import collections
 from datetime import datetime
 import copy
 
+# See README for info
+
 # CONSTANTS
 
 _LIST_OF_SHEETS = ["AccumulatedAnnualDemand.csv"
@@ -73,8 +75,6 @@ _LIST_OF_SHEETS = ["AccumulatedAnnualDemand.csv"
                       ,"VariableCost.csv"
                       ,"YEAR.csv"
                       ,"YearSplit.csv"]
-
-# See README for info
 
 def main():
     """Add description."""

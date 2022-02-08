@@ -70,7 +70,7 @@ def get_storages(regions, storages):
     formatted list of storage name.
 
     Args:
-        subregions: Dictionary holding Country and regions
+        regions: Dictionary holding Country and regions
             ({CAN:{WS:[...], ...} USA:[NY:[...],...]})
         storages: names of storage technologies
 

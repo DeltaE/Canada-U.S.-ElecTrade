@@ -49,19 +49,19 @@ def main():
 
     # PARAMETERS
 
-    region = functions.get_from_yaml('continent')
-    subregions = functions.get_from_yaml('regions_dict')['CAN']
+    continent = functions.get_from_yaml('continent')
+    can_subregions = functions.get_from_yaml('regions_dict')['CAN']
     years = functions.get_years()
 
     # CALCULATIONS
 
     # Availability factor for each Canadian province
     af = {}
-    for subregion in subregions:
+    for subregion in can_subregions:
         generation = 0  #TWh
         capacity = 0  #TW
         #calcualte totals for subregion
-        for province in subregions[subregion]:
+        for province in can_subregions[subregion]:
             capacity = capacity + _RESIDUAL_HYDRO_CAPACITY[province]
             generation = generation + _HYDRO_GENERATION[province]
         #save total availability factor
@@ -73,10 +73,10 @@ def main():
     #Populate output lsit
     for year in years:
         print(f'Hydro {year}')
-        for subregion in subregions:
+        for subregion in can_subregions:
             tech_name = 'PWR' + 'HYD' + 'CAN' + subregion + '01'
             af_value = round(af[subregion], 3)
-            out_df.append([region, tech_name, year, af_value])
+            out_df.append([continent, tech_name, year, af_value])
 
     df = pd.DataFrame(out_df,
                       columns=['REGION', 'TECHNOLOGY', 'YEAR', 'VALUE'])

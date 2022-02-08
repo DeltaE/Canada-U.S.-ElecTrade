@@ -24,7 +24,7 @@ _PROVINCIAL_RESERVE_MARGIN = {
 
 
 def main():
-    """Creates reserve margin vales and tags appropitae fuels/techs
+    """Creates reserve margin vales and tags appropiate fuels/techs
 
     Creates a reserve margin value that takes into account the temporal
     resolution reducing demand peaks. Tags any non-variable technology as

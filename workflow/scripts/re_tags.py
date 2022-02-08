@@ -14,10 +14,10 @@ def main():
 
     # PARAMETERS
 
-    region = functions.get_from_yaml('continent')
+    continent = functions.get_from_yaml('continent')
     subregions = functions.get_from_yaml('regions_dict')
-    years = functions.get_years()
     fuels = functions.get_from_yaml('rnw_fuels')
+    years = functions.get_years()
 
     # PROCESSINGS
 
@@ -26,11 +26,11 @@ def main():
 
     #print all values
     for year in years:
-        for country in subregions.keys():
-            for subregion in subregions[country].keys():
+        for region in subregions.keys():
+            for subregion in subregions[region].keys():
                 for fuel in fuels:
-                    tech_name = 'PWR' + fuel + country + subregion + '01'
-                    data_out.append([region, tech_name, year, 1])
+                    tech_name = 'PWR' + fuel + region + subregion + '01'
+                    data_out.append([continent, tech_name, year, 1])
 
     #write to a csv
     df_out = pd.DataFrame(data_out,

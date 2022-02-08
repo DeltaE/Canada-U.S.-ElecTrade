@@ -39,8 +39,8 @@ def main():
 
     # CALCULATIONS
 
-    df_wind = variable_cap_factor('WND', can_subregions, seasons, years)
-    df_pv = variable_cap_factor('SPV', can_subregions, seasons, years)
+    df_wind = get_variable_cap_factor('WND', can_subregions, seasons, years)
+    df_pv = get_variable_cap_factor('SPV', can_subregions, seasons, years)
     df_fossil = read_nrel(can_subregions, seasons, years)
     df_usa = functions.get_usa_capacity_availability_factor(True)
 
@@ -58,7 +58,7 @@ def main():
         '../../results/data/CapacityFactor.csv')
     df.to_csv(output_dir, index=False)
 
-def variable_cap_factor(tech, subregions, seasons, years):
+def get_variable_cap_factor(tech, subregions, seasons, years):
     """Generates variable renewable capacity factor data for Canada.
 
     Takes a folder of CSVs created by renewable Ninja and formats a dataframe
@@ -352,13 +352,13 @@ def read_nrel(subregions, seasons, years):
 
                 #There should only be one line item left at this point
                 if len(df_tech) > 1:
-                    print(f'There are {len(df_tech)} rows in the {year} \
-                        {tech} dataframe')
+                    print(f'There are {len(df_tech)} rows in the {year}'
+                          f'{tech} dataframe')
                     print('DATA NOT WRITTEN!')
                     sys.exit()
                 elif len(df_tech) < 1:
-                    print(f'{tech} has a capacity factor of one in {year} \
-                        for the {subregion} region')
+                    print(f'{tech} has a capacity factor of one in {year}'
+                          f'for the {subregion} region')
                     cf = 1
                 else:
                     #extract capaity factor

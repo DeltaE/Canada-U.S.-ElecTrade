@@ -34,7 +34,7 @@ def get_from_yaml(name):
         name: name of the value being retrieved
 
     Returns:
-        parsedYaml: the value from the yaml file
+        parsed_yaml: the value from the yaml file
     """
 
     p = Path(Path(__file__).resolve().parent, '../../config/config.yaml')
@@ -122,7 +122,7 @@ def daylight_savings(in_data):
     """
 
     # Split this into two for loop for user clarity when reading output file.
-    # The faster option willbe to just append the added values to the end of
+    # The faster option will be to just append the added values to the end of
     # the list in the first list
 
     #keep track of what rows to remove data for
@@ -175,7 +175,7 @@ def get_pwr_techs(region, techs):
     Args:
         region: Tuple holding country as the key and subregion as the values
                 in a dictionary (CAN, {WS:[...], MW:[]...},)
-        tech: List of the technologies to print over
+        techs: List of the technologies to print over
 
     Returns:
         out_list: List of all the PWR technologies
@@ -223,7 +223,7 @@ def get_min_techs(region, techs):
     Args:
         region: Tuple holding country as the key and subregion as the values
                 in a dictionary (CAN, {WS:[...], MW:[]...},)
-        tech: List of the technologies to print over
+        techs: List of the technologies to print over
 
     Returns:
         out_list: List of all the MIN technologies
@@ -247,7 +247,7 @@ def get_rnw_techs(region, techs):
     Args:
         region: Tuple holding country as the key and subregion as the values
                 in a dictionary (CAN, {WS:[...], MW:[]...},)
-        tech: List of the technologies to print over
+        techs: List of the technologies to print over
 
     Returns:
         out_list: List of all the RNW technologies
@@ -270,7 +270,7 @@ def get_trn_techs(csv_name):
     """Creates TRN naming technologies.
 
     Args:
-        csv_path: Transmission data csv name in resources folder
+        csv_name: Transmission data csv name in resources folder
 
     Returns:
         out_list: List of all the TRN technologies
@@ -289,7 +289,7 @@ def get_rnw_fuels(region, techs):
     Args:
         region: Tuple holding country as the key and subregion as the values
                 in a dictionary (CAN, {WS:[...], MW:[]...},)
-        tech: List of the RNW technologies to print over
+        techs: List of the RNW technologies to print over
 
     Returns:
         out_list: List of all fuels for RNW technologies
@@ -314,7 +314,7 @@ def get_min_fuels(region, techs):
     Args:
         region: Tuple holding country as the key and subregion as the values
                 in a dictionary (CAN, {WS:[...], MW:[]...},)
-        tech: List of the MIN technologies to print over
+        techs: List of the MIN technologies to print over
 
     Returns:
         out_list: List of all fuels for MIN technologies

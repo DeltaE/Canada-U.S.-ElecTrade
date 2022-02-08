@@ -57,12 +57,12 @@ def get_can_op_life():
         '../../resources/OperationalLifeTechnology.csv'))
 
     #remove P2G and FCL columns
-    rows_drop = []
+    rows_to_drop = []
     for i in range(len(df_op_life)):
         tech = df_op_life['TECHNOLOGY'].iloc[i]
         if tech in ('P2G', 'FCL'):
-            rows_drop.append(i)
-    df_op_life = df_op_life.drop(rows_drop)
+            rows_to_drop.append(i)
+    df_op_life = df_op_life.drop(rows_to_drop)
     df_op_life.reset_index()
 
     #Create a dictionary from the tech, year values for use with residual capacity
