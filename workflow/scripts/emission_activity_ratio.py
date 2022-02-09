@@ -55,7 +55,7 @@ def get_can_emission_activity_ratio():
     tech_list = list(df_raw)
 
     #Techs that operate on two modes of operation
-    mode_two_techs = ['CCG', 'CCG', 'COA', 'COC', 'URN']
+    mode_two_techs = ['CCG', 'CTG', 'COA', 'COC', 'URN']
 
     #print all values
     for year in years:
