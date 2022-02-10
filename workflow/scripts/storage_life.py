@@ -14,7 +14,7 @@ def main():
     # PARAMETERS
 
     continent = functions.get_from_yaml('continent')
-    subregions = functions.get_from_yaml('regions_dict')['CAN'].keys()
+    can_subregions = functions.get_from_yaml('regions_dict')['CAN'].keys()
     storages = functions.get_from_yaml('sto_techs')
 
     # MAPPING DATA
@@ -33,7 +33,7 @@ def main():
     #columns = region, storage, value
     data = []
 
-    for subregion in subregions:
+    for subregion in can_subregions:
         for storage in storages:
             storage_name = 'STO' + storage + 'CAN' + subregion
             life = storage_op_life[storage]

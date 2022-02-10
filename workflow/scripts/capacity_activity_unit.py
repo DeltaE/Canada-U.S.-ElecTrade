@@ -17,10 +17,10 @@ def main():
     techs_master = functions.get_from_yaml('techs_master')
     rnw_fuels = functions.get_from_yaml('rnw_fuels')
     mine_fuels = functions.get_from_yaml('mine_fuels')
-    subregions = functions.get_from_yaml('regions_dict')
+    regions = functions.get_from_yaml('regions_dict')
 
     technologies = functions.create_tech_df(
-                        subregions, techs_master, mine_fuels, rnw_fuels, 'Trade.csv')
+                        regions, techs_master, mine_fuels, rnw_fuels, 'Trade.csv')
     technologies_list = technologies['VALUE'].tolist()
 
     # CREATES FILE

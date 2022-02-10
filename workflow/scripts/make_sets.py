@@ -17,7 +17,7 @@ def main():
     rnw_fuels = functions.get_from_yaml('rnw_fuels')
     mine_fuels = functions.get_from_yaml('mine_fuels')
     sto_techs = functions.get_from_yaml('sto_techs')
-    subregions = functions.get_from_yaml('regions_dict')
+    regions = functions.get_from_yaml('regions_dict')
     years = functions.get_years()
 
     # WRITING SETS
@@ -41,7 +41,7 @@ def main():
     df_out.to_csv(output_dir, index=False)
 
     # Technology set
-    df_out = functions.create_tech_df(subregions, techs_master,
+    df_out = functions.create_tech_df(regions, techs_master,
                                            mine_fuels, rnw_fuels,
                                            'Trade.csv')
     output_dir = Path(Path(__file__).resolve().parent,
@@ -49,13 +49,13 @@ def main():
     df_out.to_csv(output_dir, index=False)
 
     # Fuel set
-    df_out = functions.create_fuel_df(subregions, rnw_fuels, mine_fuels)
+    df_out = functions.create_fuel_df(regions, rnw_fuels, mine_fuels)
     output_dir = Path(Path(__file__).resolve().parent,
         '../../results/data/FUEL.csv')
     df_out.to_csv(output_dir, index=False)
 
     # Storage set
-    storage_list = get_storages(subregions, sto_techs)
+    storage_list = get_storages(regions, sto_techs)
     df_out = pd.DataFrame(storage_list, columns=['VALUE'])
     output_dir = Path(Path(__file__).resolve().parent,
         '../../results/data/STORAGE.csv')
