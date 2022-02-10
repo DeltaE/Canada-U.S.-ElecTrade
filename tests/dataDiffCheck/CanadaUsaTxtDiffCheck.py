@@ -1,6 +1,4 @@
-# pylint: skip-file
-
-"""Add description. """
+"""Compares two CanadaUSA.txt files for differences. """
 
 import os
 import sys
@@ -77,7 +75,13 @@ _LIST_OF_SHEETS = ["AccumulatedAnnualDemand.csv"
                       ,"YearSplit.csv"]
 
 def main():
-    """Add description."""
+    """Compares two CanadaUSA.txt files for differences.
+    
+    Compares two CanadaUSA.txt files to make sure that they have the same
+    unordered contents within each section. Outputs exact changes between
+    the files, if there are any, to Results.txt. More info in associated README.
+    """
+
     # Enumerate arguments to get paths to old and new files
     arguments = []
     for argument in enumerate(sys.argv):
@@ -141,26 +145,36 @@ def main():
                 resultsTxt.write(addedElements[i])
 
 def printTimestamp(resultsTxt):
-    """Add description.
+    """Prints a timestamp.
+
+    Prints the current time in the format MM/DD/YYYY, HH:MM:SS, so that users
+    can be sure that something actually happened.
     
     Args:
-        resultsTxt: add description
+        resultsTxt: A reference to the output file.
     """
+
     timestamp = datetime.now().strftime("%m/%d/%Y, %H:%M:%S")
     resultsTxt.write("\n\n" + "Timestamp:" + "\n")
     resultsTxt.write(timestamp)
 
 def populateListList(listList, txt):
-    """Add description.
+    """Creates a list of list of lines.
+
+    Creates a list of items that are each associated with a specific CSV output
+    file, each of item of which is a list containing all relevant lines for that
+    CSV output. To reiterate, this function reads lines into a list of list of
+    lines in the Format [[...],[...],[...]...], where each of the inner lists
+    correspondes to a particular set of output data.
     
     Args:
-        listList: add description
-        txt: add description
+        listList: The list of lists, to be populated.
+        txt: The location of the directory being read from, that contains CanadaUSA.txt.
+    
+    Returns:
+        listlist: The finalized list of list of lines.
     """
 
-    # Reads lines by CSV into a list of list of lines.
-    # In Format [[...],[...],[...]...] where each of the inner
-    # lists correspondes to a particular CSV, in order
     current_sheet_id = 0
     listList.append([])
     for line in txt:
