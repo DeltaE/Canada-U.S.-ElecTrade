@@ -87,82 +87,77 @@ def main():
     for argument in enumerate(sys.argv):
         arguments.append(argument)
 
-    # Generate results file
-    results_txt = open('Results.txt', 'w')
-
     # Reading from files
     script_dir = os.path.dirname(__file__)
     old_dir = os.path.join(script_dir, arguments[1][1])
     new_dir = os.path.join(script_dir, arguments[2][1])
 
-    old_txt = open(old_dir, 'r')
-    new_txt = open(new_dir, 'r')
+    # open files and generate results file
+    with open('Results.txt', 'w', encoding='utf-8') as results_txt, \
+         open(old_dir, 'r', encoding='utf-8') as old_txt, \
+         open(new_dir, 'r', encoding='utf-8') as new_txt:
 
-    # Lists of lists of lines
-    old_list_list = []
-    new_list_list = []
+        # Lists of lists of lines
+        old_list_list = []
+        new_list_list = []
 
-    old_list_list = populate_list_list(old_list_list, old_txt)
-    new_list_list = populate_list_list(new_list_list, new_txt)
+        old_list_list = populate_list_list(old_list_list, old_txt)
+        new_list_list = populate_list_list(new_list_list, new_txt)
 
-    # Lists of counters of lines
+        # Lists of counters of lines
 
-    # This conversion from lists to counters allows for the diff to check sublist contents
-    # "unordered" rather than "ordered". This is important because the order of lines
-    # within each CanadaUSA.txt sublist are non-deterministic -- they change each time the
-    # scripts are run.
-    old_counter_list = []
-    new_counter_list = []
+        # This conversion from lists to counters allows for the diff to check sublist
+        # contents "unordered" rather than "ordered". This is important because the
+        # order of lines within each CanadaUSA.txt sublist are non-deterministic --
+        # they change each time the scripts are run.
+        old_counter_list = []
+        new_counter_list = []
 
-    for i in range(0, len(_LIST_OF_SHEETS)):
-        old_counter_list.append(collections.Counter(old_list_list[i]))
-        new_counter_list.append(collections.Counter(new_list_list[i]))
+        for i in range(0, len(_LIST_OF_SHEETS)):
+            old_counter_list.append(collections.Counter(old_list_list[i]))
+            new_counter_list.append(collections.Counter(new_list_list[i]))
 
-    print_timestamp(results_txt)
+        print_timestamp(results_txt)
 
-    # Compare files
-    for i in range(0, len(_LIST_OF_SHEETS)):
-        results_txt.write('\n\n' + _LIST_OF_SHEETS[i] + '\n')
-        if old_counter_list[i] == new_counter_list[i]:
-            results_txt.write('Both files are the same.')
-        else: # oldCounterList[i] != newCounterList[i]
-            results_txt.write('The two files are different.')
+        # Compare files
+        for i in range(0, len(_LIST_OF_SHEETS)):
+            results_txt.write('\n\n' + _LIST_OF_SHEETS[i] + '\n')
+            if old_counter_list[i] == new_counter_list[i]:
+                results_txt.write('Both files are the same.')
+            else: # oldCounterList[i] != newCounterList[i]
+                results_txt.write('The two files are different.')
 
-            # These copies are to avoid calling already modified counters
-            old_counter_copy = copy.deepcopy(old_counter_list[i])
-            new_counter_copy = copy.deepcopy(new_counter_list[i])
+                # These copies are to avoid calling already modified counters
+                old_counter_copy = copy.deepcopy(old_counter_list[i])
+                new_counter_copy = copy.deepcopy(new_counter_list[i])
 
-            old_counter_list[i].subtract(new_counter_copy) # Deletions
-            deleted_elements = list(old_counter_list[i].elements())
+                old_counter_list[i].subtract(new_counter_copy) # Deletions
+                deleted_elements = list(old_counter_list[i].elements())
 
-            new_counter_list[i].subtract(old_counter_copy) # Additions
-            added_elements = list(new_counter_list[i].elements())
+                new_counter_list[i].subtract(old_counter_copy) # Additions
+                added_elements = list(new_counter_list[i].elements())
 
-            results_txt.write('\n\n' + 'Deleted Elements:' + '\n')
-            for j in range(0, len(deleted_elements)):
-                results_txt.write(deleted_elements[j])
+                results_txt.write('\n\n' + 'Deleted Elements:' + '\n')
+                for j in range(0, len(deleted_elements)):
+                    results_txt.write(deleted_elements[j])
 
-            results_txt.write('\n' + 'Added Elements:"' + '\n')
-            for j in range(0, len(added_elements)):
-                results_txt.write(added_elements[j])
+                results_txt.write('\n' + 'Added Elements:"' + '\n')
+                for j in range(0, len(added_elements)):
+                    results_txt.write(added_elements[j])
 
-    results_txt.close()
-    old_txt.close()
-    new_txt.close()
-
-def print_timestamp(resultsTxt):
+def print_timestamp(results_txt):
     """Prints a timestamp.
 
     Prints the current time in the format MM/DD/YYYY, HH:MM:SS, so that users
     can be sure that something actually happened.
 
     Args:
-        resultsTxt: A reference to the output file.
+        results_txt: A reference to the output file.
     """
 
     timestamp = datetime.now().strftime('%m/%d/%Y, %H:%M:%S')
-    resultsTxt.write('\n\n' + 'Timestamp:' + '\n')
-    resultsTxt.write(timestamp)
+    results_txt.write('\n\n' + 'Timestamp:' + '\n')
+    results_txt.write(timestamp)
 
 def populate_list_list(list_list, txt):
     """Creates a list of list of lines.
