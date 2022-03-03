@@ -4,12 +4,10 @@
 Contains post-processing files.
 
 ## 2. rules
-Contains internal files for snakemake.
+Contains internal files for snakemake, listing the relationships between raw data files in the resources folder, the scripts, and the processed files in the results/data folder.
 
 ## 3. Snakefile
 A [snakemake](https://snakemake.readthedocs.io/en/stable/) workflow has been implemented to eaisly create new datafiles when iterating through scenarios.
-
-The snakemake file, the 'snakefile' also lists the relationships between raw data files in the dataSources folder, the scripts, and the processed files in the src/data folder.
 
 ## 3. envs
 Contains dependencies for different snakemake rules.
