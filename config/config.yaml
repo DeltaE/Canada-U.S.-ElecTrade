@@ -33,11 +33,13 @@ regions_dict:
     'FL': [ 'FL' ]
     'NY': [ 'NY' ]
     'NE': [ 'VT', 'NH', 'ME', 'MA', 'CT', 'RI' ]
+    # USA regions can't be changed due to the set data for each region selected from a particular source (not given for each state separately)
 
 # Initial year used in model (inclusive)
 start_year: 2019
 
 # Final year used in model (inclusive)
+# Max year for the model
 end_year: 2050
 
 # types of emissions
