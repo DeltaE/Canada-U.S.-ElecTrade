@@ -1,24 +1,22 @@
 # Folder Contents
 
-## 1. OSeMOSYS Model file 
-The OSeMOSYS model, `osemosys_fast.txt`, is a modified version of the original [OSeMOSYS_fast](https://github.com/OSeMOSYS/OSeMOSYS_GNU_MathProg/tree/master/src#installation) code. Specific modifications are outlined in the [wiki](https://github.com/DeltaE/Canada-U.S.-ElecTrade/wiki). 
+## 1. notebooks
+Contains post-processing files.
 
-## 2. Data File 
-The data file, `CanadaUSA.txt` holds all data read in during the solving process. 
+## 2. rules
+Contains internal files for snakemake, listing the relationships between raw data files in the resources folder, the scripts, and the processed files in the results/data folder.
 
 ## 3. Snakefile
 A [snakemake](https://snakemake.readthedocs.io/en/stable/) workflow has been implemented to eaisly create new datafiles when iterating through scenarios.
 
-The snakemake file, the 'snakefile' also lists the relationships between raw data files in the dataSources folder, the scripts, and the processed files in the src/data folder.
+## 3. envs
+Contains dependencies for different snakemake rules.
 
-## 4. data folder 
-Contains CSV files that holds all parameter data
-
-## 5. datapackage.json file 
-Used by [otoole](https://github.com/OSeMOSYS/otoole) to create the datafile from the folder of CSVs
+## 5. scripts
+Contains python files for processing input data into data ready for being run through otoole, then osemosys.
 
 # Running the Model
-To run the model, you will first need to install the [GUN Linear Programming Kit](https://www.gnu.org/software/glpk/). Installation instructions can be found on the [OSeMOSYS repository](https://github.com/OSeMOSYS/OSeMOSYS_GNU_MathProg/tree/master/src#installation). Ensure you follow the optional steps to install [otoole]()https://github.com/OSeMOSYS/otoole and the CBC open-source solver. 
+To run the model, you will first need to install the [GNU Linear Programming Kit](https://www.gnu.org/software/glpk/). Installation instructions can be found on the [OSeMOSYS repository](https://github.com/OSeMOSYS/OSeMOSYS_GNU_MathProg/tree/master/src#installation). Ensure you follow the optional steps to install [otoole]()https://github.com/OSeMOSYS/otoole and the CBC open-source solver. 
 
 ## Dependencies 
 ### Python Packages 
@@ -30,9 +28,10 @@ The base model requires extensive computer resources.
 - 9hr Run Time using CPLEX 
 
 ## How to Run 
-1. Navigate to the `/src` folder in the command line 
-2. Run the command `snakemake <input_argument> -c1` from the command line, replacing `<input_argument>` with  
-a.  `dataFile` to generate the file holding all data in .txt format  
+1. Navigate to the model folder in the command line 
+2. Run the command `conda activate snakemake` to open the snakemake environment (assuming you are using conda)
+3. Run the command `snakemake <input_argument> -F -c1` from the command line, replacing `<input_argument>` with  
+a.  `data_file` to generate the file holding all data in .txt format  
 b.  `lpFile` to generate the file to input into the solver  
 c.  `solveCBC` to generate the input datafiles and solve the model using CPLEX  
 d. `solveCPLEX` to generate the input datafiles and solve the model using CPLEX
